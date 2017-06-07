@@ -1,0 +1,23 @@
+{%- import 'swift-utils.twig' as utils -%}
+
+import Foundation
+
+/// {{ description }}
+///
+{% for value in values -%}
+/// - {{ utils.decapitalize(value.name) }}: {{ value.description }}
+{% endfor -%}
+enum {{ name }}: {% if valuesTypes == "STRING" -%}
+String
+{%- elseif valuesTypes == "INT" -%}
+Int
+{%- endif %} {
+
+    {% for value in values -%}
+        case {{ utils.decapitalize(value.name) }} = {% if valuesTypes == "STRING" -%}
+        "{{ value.value }}"
+    {% else %}
+        {{- value.value }}
+    {% endif -%}
+    {% endfor %}
+}
