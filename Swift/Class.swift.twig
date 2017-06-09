@@ -10,6 +10,8 @@ import ObjectMapper
 
     {% include 'Class.fields.swig' with { fields: fields } %}
     {% include 'Class.date-transformers.swig' with { fields: fields } %}
+    // MARK: - Initializer
+
     required init(map: Map) throws {
         {%- include 'Class.fields-mapping.swig' with { fields: fields } -%}
         {% if parent is not null %}

@@ -9,7 +9,7 @@
 {%- endfor -%}
 
 {%- if hasDateFields -%}
-    // MARK - Date transformers
+    // MARK: - Date transformers
     {%- for field in fields %}
     {% if field.type.type.baseTypeName == "DateTime" -%}
     static let {{ field.name }}Transform = ApiDateFormattingService.shared.mappingTransform(for: "{{ field.type.dateFormat }}")
