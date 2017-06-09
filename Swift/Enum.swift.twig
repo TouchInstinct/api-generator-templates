@@ -1,4 +1,4 @@
-{%- import 'swift-utils.twig' as utils -%}
+{%- import 'utils.twig' as utils -%}
 
 import Foundation
 
@@ -8,12 +8,6 @@ import Foundation
 /// - {{ utils.decapitalize(value.name) }}: {{ value.description }}
 {% endfor -%}
 enum {{ name }}: {{ utils.enumType(valuesTypes) }} {
+    {% include 'blocks/enum/cases.twig' with { values: values } %}
 
-    {% for value in values -%}
-        case {{ utils.decapitalize(value.name) }} = {% if valuesTypes == "STRING" -%}
-        "{{ value.value }}"
-    {% else %}
-        {{- value.value }}
-    {% endif -%}
-    {% endfor %}
 }

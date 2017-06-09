@@ -1,0 +1,12 @@
+{%- import '../../utils.twig' as utils -%}
+{%- for value in values -%}
+    {%- if valuesTypes == "STRING" %}
+{%- if value.name != value.value %}
+   case {{ utils.decapitalize(value.name) }} = "{{ value.value }}"
+{%- else %}
+    case {{ utils.decapitalize(value.name) -}}
+{% endif -%}
+{%- else %}
+    case {{ utils.decapitalize(value.name) }} = {{ value.value }}
+{%- endif -%}
+{%- endfor -%}
