@@ -7,11 +7,7 @@ import Foundation
 {% for value in values -%}
 /// - {{ utils.decapitalize(value.name) }}: {{ value.description }}
 {% endfor -%}
-enum {{ name }}: {% if valuesTypes == "STRING" -%}
-String
-{%- elseif valuesTypes == "INT" -%}
-Int
-{%- endif %} {
+enum {{ name }}: {{ utils.enumType(valuesTypes) }} {
 
     {% for value in values -%}
         case {{ utils.decapitalize(value.name) }} = {% if valuesTypes == "STRING" -%}

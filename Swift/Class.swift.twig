@@ -1,0 +1,19 @@
+{%- import 'swift-utils.twig' as utils -%}
+
+{%- set className = utils.formatClassType(type.baseTypeName, type.typeParameters) -%}
+{%- set parentClassName = utils.formatClassType(utils.parentClassType(parent), type.parentTypeParameters) -%}
+
+import ObjectMapper
+
+/// {{ description }}
+{% if hasChilds is empty -%}final {% endif %}class {{ className }}: {{ parentClassName }} {
+
+    {% include 'Class.fields.swig' with { fields: fields } %}
+    {% include 'Class.date-transformers.swig' with { fields: fields } %}
+    required init(map: Map) throws {
+        {%- include 'Class.fields-mapping.swig' with { fields: fields } -%}
+        {% if parent is not null %}
+        try super.init(map: map)
+        {%- endif %}
+    }
+}

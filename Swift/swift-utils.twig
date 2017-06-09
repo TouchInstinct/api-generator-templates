@@ -1,3 +1,50 @@
-{% macro decapitalize (text) %}
+{% macro decapitalize(text) %}
 {{- concat(slice(text, 0, 1) | lower, slice(text, 1, text | length)) -}}
+{% endmacro %}
+
+{% macro enumType(valuesTypes) %}
+{%- if valuesTypes == "STRING" -%}
+String
+{%- elseif valuesTypes == "INT" -%}
+Int
+{%- endif -%}
+{% endmacro %}
+
+{% macro formatClassType(baseTypeName, typeParameters) %}
+{{- baseTypeName -}}
+{%- if typeParameters is not empty -%}
+<{{ join(typeParameters, ', ') }}>
+{%- endif -%}
+{% endmacro %}
+
+{% macro parentClassType(parent) %}
+{%- if parent is not null %}
+{{- parent.type.baseTypeName -}}
+{%- else -%}
+ImmutableMappable
+{%- endif -%}
+{% endmacro %}
+
+{% macro formatNullable(expr, nullable) %}
+{{- expr -}}{%- if nullable -%}?{%- endif -%}
+{% endmacro %}
+
+{% macro formatFieldValueType(valueType) %}
+{%- if valueType.baseTypeName == "Array" -%}
+[{{ valueType.itemsType.baseTypeName }}]
+{%- elseif valueType.baseTypeName == "Map" -%}
+[{{ valueType.keysType.baseTypeName }}: {{ valueType.valuesType.baseTypeName }}]
+{%- elseif valueType.baseTypeName == "DateTime" -%}
+Date
+{%- else -%}
+{{ valueType.baseTypeName }}
+{%- endif -%}
+{% endmacro %}
+
+{% macro mappingForField(field, className) %}
+{%- if field.type.type.baseTypeName == "DateTime" -%}
+map.value("{{ field.jsonName }}", using: {{ className -}}.{{- field.name -}}Transform)
+{%- else -%}
+map.value("{{ field.jsonName }}")
+{%- endif -%}
 {% endmacro %}
