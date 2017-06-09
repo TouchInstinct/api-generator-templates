@@ -6,7 +6,7 @@
 import ObjectMapper
 
 /// {{ description }}
-{% if hasChilds is empty -%}final {% endif %}class {{ className }}: {{ parentClassName }} {
+{% if (not hasChilds) -%}final {% endif %}class {{ className }}: {{ parentClassName }} {
 
     {% include 'Class.fields.swig' with { fields: fields } %}
     {% include 'Class.date-transformers.swig' with { fields: fields } %}
