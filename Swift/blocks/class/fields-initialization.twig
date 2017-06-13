@@ -1,0 +1,4 @@
+{%- import '../../utils.twig' as utils -%}
+        {%- for field in fields %}
+        self.{{ field.name }} = {{ field.name }}
+{%- endfor -%}

@@ -11,7 +11,14 @@ import ObjectMapper
 
     {% include 'blocks/class/fields.twig' with { fields: fields } %}
     {% include 'blocks/class/date-transformers.twig' with { fields: fields } %}
-    // MARK: - Initializer
+    // MARK: - Initializers
+
+    {% if (hasParent and (fields is empty)) %} override {% endif %}init({%- include 'blocks/class/init-parameters-fields.twig' with { fields: merge(fields, superclassesFields) } -%}) {
+        {%- include 'blocks/class/fields-initialization.twig' with { fields: fields } -%}
+        {% if hasParent %}
+        super.init({%- include 'blocks/class/fields-super-initialization.twig' with { fields:  superclassesFields } -%})
+        {%- endif %}
+    }
 
     required init(map: Map) throws {
         {%- include 'blocks/class/fields-mapping-from-map.twig' with { fields: fields } -%}
