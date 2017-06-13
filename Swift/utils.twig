@@ -41,10 +41,18 @@ Date
 {%- endif -%}
 {% endmacro %}
 
-{% macro mappingForField(field, className) %}
+{% macro mappingFromMapForField(field, className) %}
 {%- if field.type.type.baseTypeName == "DateTime" -%}
 map.value("{{ field.jsonName }}", using: {{ className -}}.{{- field.name -}}Transform)
 {%- else -%}
 map.value("{{ field.jsonName }}")
+{%- endif -%}
+{% endmacro %}
+
+{% macro mappingToMapForField(field, className) %}
+{%- if field.type.type.baseTypeName == "DateTime" -%}
+(map["{{ field.jsonName }}"], {{ className -}}.{{- field.name -}}Transform)
+{%- else -%}
+map["{{ field.jsonName }}"]
 {%- endif -%}
 {% endmacro %}
