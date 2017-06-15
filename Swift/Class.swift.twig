@@ -1,16 +1,15 @@
 {%- import 'utils.twig' as utils -%}
 
-{%- set className = utils.formatClassType(type.baseTypeName, type.typeParameters) -%}
-{%- set parentClassName = utils.formatClassType(utils.parentClassType(parent), type.parentTypeParameters) -%}
 {%- set hasParent = parent is not null -%}
 
 import ObjectMapper
 
+{%- include 'blocks/class/date-transformers.twig' with { fields: fields } %}
+
 /// {{ description }}
-{% if (not hasChilds) -%}final {% endif %}class {{ className }}: {{ parentClassName }} {
+{% if (not hasChilds) -%}final {% endif %}class {% include 'blocks/class/classtype.twig' with { type: type } %}: {% include 'blocks/class/supertype.twig' with { type: type, parent: parent } %} {
 
     {% include 'blocks/class/fields.twig' with { fields: fields } %}
-    {% include 'blocks/class/date-transformers.twig' with { fields: fields } %}
     // MARK: - Initializers
 
     {% if (hasParent and (fields is empty)) %} override {% endif %}init({%- include 'blocks/class/init-parameters-fields.twig' with { fields: merge(fields, superclassesFields) } -%}) {
