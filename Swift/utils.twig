@@ -18,8 +18,8 @@ ImmutableMappable
 {%- endif -%}
 {% endmacro %}
 
-{% macro formatNullable(expr, nullable) %}
-{{- expr -}}{%- if nullable -%}?{%- endif -%}
+{% macro formatNullable(expr, nullable, optional) %}
+{{- expr -}}{%- if nullable or optional -%}?{%- endif -%}
 {% endmacro %}
 
 {% macro formatValueType(valueType) %}
