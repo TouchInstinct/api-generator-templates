@@ -1,4 +1,10 @@
 {%- import '../../utils.twig' as utils -%}
         {%- for field in fields %}
+        {%- if field.optional %}
+        if {{ field.name }} != nil {
+            {{ field.name }} >>> {{ utils.mappingToMapForField(field) }}
+        }
+        {%- else %}
         {{ field.name }} >>> {{ utils.mappingToMapForField(field) }}
+        {%- endif -%}
 {%- endfor -%}
