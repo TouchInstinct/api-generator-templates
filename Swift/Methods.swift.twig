@@ -1,0 +1,11 @@
+import LeadKit
+import RxSwift
+import Alamofire
+
+extension NetworkService {
+
+    {% for method in methods %}
+    {%- include 'blocks/method/method-func.twig' with { method: method } %}
+
+    {% endfor %}
+}

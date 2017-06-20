@@ -1,0 +1,18 @@
+{%- import '../../utils.twig' as utils -%}
+
+{%- set bodyParamName = utils.decapitalize(method.bodyType.type.typeName) -%}
+{%- set funcName = utils.decapitalize(method.name) -%}
+
+    /// {{ description }}
+    func {{ funcName }}({{ bodyParamName }}: {{ method.bodyType.type.typeName }},
+                   encoding: ParameterEncoding = URLEncoding.default,
+                   headers: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}> {
+
+        let parameters = ApiRequestParameters(url: "{{ method.url }}",
+                                              method: .post,
+                                              parameters: {{ bodyParamName }}.toJSON(),
+                                              encoding: encoding,
+                                              headers: headers)
+
+        return rxRequest(with: parameters).map { $0.model }.asSingle()
+    }
