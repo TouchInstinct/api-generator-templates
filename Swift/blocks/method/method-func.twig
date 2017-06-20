@@ -3,7 +3,7 @@
 {%- set bodyParamName = utils.decapitalize(method.bodyType.type.typeName) -%}
 {%- set funcName = utils.decapitalize(method.name) -%}
 
-    /// {{ description }}
+    /// {{ method.description }}
     func {{ funcName }}({{ bodyParamName }}: {{ method.bodyType.type.typeName }},
                    encoding: ParameterEncoding = URLEncoding.default,
                    headers: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}> {
