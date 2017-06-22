@@ -1,0 +1,11 @@
+{%- import '../../utils.twig' as utils -%}
+{%- for field in fields %}
+{%- if field.type.type.baseTypeName == "List" %}
+		this.{{ field.name }} = new ArrayList<>({{ field.name }});
+{%- elseif field.type.type.baseTypeName == "Map" %}
+		this.{{ field.name }} = new HashMap<>({{ field.name }});
+{%- else %}
+//TODO NULLABLE COLLECTIONS
+		this.{{ field.name }} = {{ field.name }};
+{%- endif -%}
+{%- endfor -%}

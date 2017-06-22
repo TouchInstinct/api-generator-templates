@@ -23,7 +23,7 @@ LoganSquareJsonModel
 @NonNull
 {%- elseif nullable -%}
 @Nullable
-{%- elseif not (baseTypeName == "Int" or baseTypeName == "Long" or baseTypeName == "Double" or baseTypeName == "Decimal" or baseTypeName == "Bool") -%}
+{%- elseif not (baseTypeName == "Int" or baseTypeName == "Long" or baseTypeName == "Double" or baseTypeName == "Bool") -%}
 @NonNull
 {%- endif -%}
 {% endmacro %}
