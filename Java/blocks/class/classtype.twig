@@ -1,0 +1,3 @@
+{%- import '../../utils.twig' as utils -%}
+
+{{- type.baseTypeName -}}{%- include 'type-parameters.twig' with { typeParameters: type.typeParameters } -%}
