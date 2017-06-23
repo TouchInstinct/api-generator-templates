@@ -1,0 +1,20 @@
+{%- import '../utils.twig' as utils -%}
+
+<div class="row-body">
+    <div>{{ field.jsonName }}</div>
+    <div>
+    {%- set link = null -%}
+    {%- for name, path in objectsLinks -%}
+        {%- if name == field.type.type.baseTypeName -%}
+            {%- set link = path -%}
+        {%- endif -%}
+    {%- endfor -%}
+    {%- if link is not null -%}
+        <a class="info" href="{{ link }}">{{- utils.formatNullable(field.type.type.typeName, field.nullable) -}}</a>
+    {% else %}
+        {{- utils.formatNullable(field.type.type.typeName, field.nullable) -}}
+    {%- endif -%}
+    </div>
+    <div>{{ field.description }}</div>
+    <div>{{ utils.optionalDescription(field.optional) }}</div>
+</div>

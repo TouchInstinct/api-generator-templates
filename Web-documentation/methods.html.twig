@@ -1,0 +1,126 @@
+{%- include 'blocks/head.html.twig' with { title: pageTitle, cssFolderPath: cssFolderPath } %}
+
+<body class="main-page">
+<div class="aside aside-left">
+    <div class="header">
+        <div class="title">{{ pageTitle }}</div>
+    </div>
+    <div class="content">
+        {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
+
+        <menu class="secondary">
+        {% for menu in menus %}
+        {% include 'blocks/secondary-menu.html.twig' with {
+        menu: menu,
+        menuTitle: menu.title,
+        activeItemTypeName: name
+        } %}
+        {% endfor %}
+        </menu>
+
+    </div>
+</div>
+
+<div class="aside aside-right">
+    {%- include 'blocks/header.html.twig' with { imagesFolderPath: imagesFolderPath } %}
+
+    <div class="content">
+        <div class="page-data">
+            <h2>Метод</h2>
+            <p class="sub-header">POST {{ url }}</p>
+
+            <h2>Параметры</h2>
+            <div class="table example-response-expanded">
+                <div class="part-table">
+                    <div class="row-header">
+                        <div>Название параметра</div>
+                        <div>Тип параметра</div>
+                        <div class="text-centered">Описание</div>
+                        <div>Обязательность</div>
+                    </div>
+                    {% for field in requestFields -%}
+                    {%- include 'blocks/field-row.html.twig' with {
+                        field: field,
+                        objectsLinks: objectsLinks
+                    } %}
+                    {%- endfor %}
+                </div>
+                <div class="part-block">
+                    <a class="show-example-response">Пример запроса</a>
+                </div>
+                <div class="part-example-response">
+                    <div class="inputs">
+                        {% for field in requestFields -%}
+                            <label>
+                            {{ field.jsonName }}<br>
+                            {% if field.type.values is not empty -%}
+                                <div class="styled-select">
+                                    <select data-name="{{ field.jsonName }}">
+                                        {% for value in field.type.values %}
+                                        <option>{{ value.value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {%- else %}
+                                {%- if field.optional or field.nullable -%}
+                                    <div class="styled-input">
+                                        <input type="text" data-name="{{ field.jsonName }}">
+                                        {% if field.optional -%}
+                                            <div class="clear-btn">×</div>
+                                        {%- endif -%}
+                                        {% if field.nullable -%}
+                                            <div class="null-btn">NULL</div>
+                                        {%- endif %}
+                                    </div>
+                                {%- else %}
+                                    <input type="text" data-name="{{ field.jsonName }}">
+                                {% endif %}
+                            {%- endif %}
+                            </label>
+                        {% endfor %}
+
+                        <button class="btn run-btn">
+                            Выполнить
+                        </button>
+                    </div>
+                    <div class="text-response"></div>
+                </div>
+            </div>
+
+            <h2>Возможные ошибки</h2>
+            {% for value in errorsEnumeration.values -%}
+                {%- if value.value in errorsEnumeration.allowedValues %}
+            <p class="sub-header">#Код {{ value.value }} — {{ value.description }}</p>
+                {%- endif -%}
+            {%- endfor %}
+
+            <h2>Результат</h2>
+            <p>Объект следующей структуры:</p>
+
+            <div class="table example-response-expanded">
+                <div class="part-table">
+                    <div class="row-header">
+                        <div>Название поля</div>
+                        <div>Тип поля</div>
+                        <div class="text-centered">Описание</div>
+                        <div>Обязательность</div>
+                    </div>
+                    {% for field in responseFields -%}
+                    {%- include 'blocks/field-row.html.twig' with {
+                        field: field,
+                        objectsLinks: objectsLinks
+                    } %}
+                    {%- endfor %}
+                </div>
+            </div>
+
+            <h2>Комментарий</h2>
+            <p class="sub-header">{{ description }}</p>
+        </div>
+    </div>
+</div>
+
+{%- include 'blocks/scripts.html.twig' with { jsFolderPath: jsFolderPath } %}
+
+</body>
+</html>

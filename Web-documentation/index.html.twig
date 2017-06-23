@@ -1,0 +1,86 @@
+{%- include 'blocks/head.html.twig' with { title: pageTitle, cssFolderPath: cssFolderPath } %}
+
+<body class="main-page">
+<div class="aside aside-left">
+    <div class="header">
+        <div class="title">{{ pageTitle }}</div>
+    </div>
+    <div class="content">
+        {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
+    </div>
+</div>
+
+<div class="aside aside-right">
+    {%- include 'blocks/header.html.twig' with { imagesFolderPath: imagesFolderPath } %}
+
+    <div class="content">
+        <div class="page-data">
+            <h2>Протокол общения между сервером и клиентом</h2>
+            <p class="sub-header">HTTPS</p>
+
+            <h2>Стиль построения API</h2>
+            <p class="sub-header">REST</p>
+
+            <h2>Используемая кодировка</h2>
+            <p class="sub-header">UTF-8</p>
+
+            <h2>Допустимые задержки</h2>
+            <p class="sub-header">Генерация ответа на сервере в среднем занимает меньше 1 секунды.</p>
+
+            <h2>Передача параметров</h2>
+            <p>Параметры передаются в виде JSON-объекта в теле запроса. Для всех запросов должен быть выставлен
+                Content-Type: application/json. Url Query String не содержит параметров.</p>
+
+            <h2>Перечисления</h2>
+            <p class="sub-header">Перечисления в JSON-объектах передаются в виде типа string.</p>
+
+
+            <h2>Общий вид ответа сервера</h2>
+            <p>Результат вызова любого метода представляет собоий JSON-объект следующеий структуры:</p>
+            <div class="table">
+                <div class="part-table">
+                    <div class="row-header">
+                        <div>Название поля</div>
+                        <div>Тип поля</div>
+                        <div class="text-centered">Название</div>
+                        <div>Обязательность</div>
+                    </div>
+                    <div class="row-body">
+                        <div>result</div>
+                        <div>object</div>
+                        <div>
+                            <p>В случае ошибки содержит null.</p>
+                            <p>В случае успеха содержит результат вызова метода.</p>
+                        </div>
+                        <div>Да</div>
+                    </div>
+                    <div class="row-body">
+                        <div>error_code</div>
+                        <div>int</div>
+                        <div>
+                            <p>В случае ошибки содержит код ошибки 1..999.</p>
+                            <p>В случае успеха содержит 0.</p>
+                        </div>
+                        <div>Да</div>
+                    </div>
+                    <div class="row-body">
+                        <div>error_message</div>
+                        <div>string</div>
+                        <div>
+                            <p>В случае ошибки содержит текстовое описание ошибки.</p>
+                            <p>В случае успеха содержит null.</p>
+                        </div>
+                        <div>Да</div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+{%- include 'blocks/scripts.html.twig' with { jsFolderPath: jsFolderPath } %}
+
+</body>
+</html>

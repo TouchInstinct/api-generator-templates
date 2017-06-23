@@ -1,0 +1,8 @@
+<li {%- if menu.active %} class="active" {%- endif -%}>
+    <a href="{{ first(menu.items).path }}">{{ menuTitle }}</a>
+    <menu class="child">
+        {% for item in menu.items %}
+        <li {%- if item.active %} class="active" {%- endif -%}><a href="{{ item.path }}">{{ item.title }}</a></li>
+        {% endfor %}
+    </menu>
+</li>
