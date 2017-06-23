@@ -45,33 +45,12 @@
                         <div class="text-centered">Название</div>
                         <div>Обязательность</div>
                     </div>
-                    <div class="row-body">
-                        <div>result</div>
-                        <div>object</div>
-                        <div>
-                            <p>В случае ошибки содержит null.</p>
-                            <p>В случае успеха содержит результат вызова метода.</p>
-                        </div>
-                        <div>Да</div>
-                    </div>
-                    <div class="row-body">
-                        <div>error_code</div>
-                        <div>int</div>
-                        <div>
-                            <p>В случае ошибки содержит код ошибки 1..999.</p>
-                            <p>В случае успеха содержит 0.</p>
-                        </div>
-                        <div>Да</div>
-                    </div>
-                    <div class="row-body">
-                        <div>error_message</div>
-                        <div>string</div>
-                        <div>
-                            <p>В случае ошибки содержит текстовое описание ошибки.</p>
-                            <p>В случае успеха содержит null.</p>
-                        </div>
-                        <div>Да</div>
-                    </div>
+                    {% for field in responseClass.fields -%}
+                    {%- include 'blocks/field-row.html.twig' with {
+                        field: field,
+                        objectsLinks: objectsLinks
+                    } %}
+                    {%- endfor %}
                 </div>
             </div>
 
