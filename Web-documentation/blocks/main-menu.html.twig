@@ -1,0 +1,8 @@
+<menu class="main">
+    <li {%- if mainMenu.indexMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.indexMenuItem.path }}">Общие принципы построения API</a></li>
+    <li {%- if mainMenu.methodsMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.methodsMenuItem.path }}">Методы</a></li>
+    <li {%- if mainMenu.notificationsMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.notificationsMenuItem.path }}">PUSH-нотификации</a></li>
+    <li {%- if mainMenu.structuresMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.structuresMenuItem.path }}">Структура данных</a></li>
+    <li {%- if mainMenu.versioningMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.versioningMenuItem.path }}">Версионнирование API</a></li>
+    <li {%- if mainMenu.errorsMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.errorsMenuItem.path }}">Список возможных ошибок</a></li>
+</menu>

@@ -1,0 +1,64 @@
+{%- include 'blocks/head.html.twig' with { title: pageTitle, cssFolderPath: cssFolderPath } %}
+
+<body class="main-page">
+<div class="aside aside-left">
+    <div class="header">
+        <div class="title">{{ pageTitle }}</div>
+    </div>
+    <div class="content">
+        {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
+
+        <menu class="secondary">
+            <li><a>Android</a></li>
+            <li class="active"><a>iOS</a></li>
+            <li><a>Windows Phone</a></li>
+        </menu>
+
+    </div>
+</div>
+
+<div class="aside aside-right">
+    {%- include 'blocks/header.html.twig' with { imagesFolderPath: imagesFolderPath } %}
+
+    <div class="content">
+        <div class="page-data">
+            <h2>Официальная документация</h2>
+            <p class="sub-header"><a href="http://apple.com" class="info" target="_blank">Ссылка от Apple</a></p>
+
+            <h2>Структура объекта нотификации</h2>
+            <div class="example-response">
+<div class="text-response">{
+    "response": <span class="text-digit"></span>{
+    "count": <span class="text-digit">2428</span>,
+    "items": <span class="text-digit"></span>
+        [
+            {
+                "id": <span class="text-digit">54832560</span>,
+                "first_name": <span class="text-digit"></span><span class="text-string">"Anyutka"</span>,
+                "last_name": <span class="text-digit"></span><span class="text-string">"Kiseleva"</span>,
+                "photo_50": <span class="text-digit"></span><span class="text-string">"http://cs417830.v...4a7/Y-zZa02zvmQ.jpg"</span>
+            },
+            {
+                "id": <span class="text-digit">221194575</span>,
+                "first_name": <span class="text-digit"></span><span class="text-string">"Lera"</span>,
+                "last_name": <span class="text-digit"></span><span class="text-string">"Chistova"</span>,
+                "photo_50": <span class="text-digit"></span><span class="text-string">"http://cs322328.v...0fb/qi2nofkqneI.jpg"</span>
+            }
+        ]
+    }
+}</div>
+            </div>
+
+            <p class="sub-header">
+                &lt;type&gt; - Тип PUSH-нотификации. ( <a href="/methods.html" class="info">PushType</a> ) <br/>
+                &lt;data_id&gt; - Идентификатор карты или акции<br/>
+                &lt;text&gt; - Текст PUSH-нотификации.</p>
+
+        </div>
+    </div>
+</div>
+
+{%- include 'blocks/scripts.html.twig' with { jsFolderPath: jsFolderPath } %}
+
+</body>
+</html>

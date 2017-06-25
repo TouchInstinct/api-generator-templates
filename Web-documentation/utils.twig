@@ -1,0 +1,7 @@
+{% macro formatNullable(expr, nullable) %}
+{{- expr -}}{%- if nullable -%}?{%- endif -%}
+{% endmacro %}
+
+{% macro optionalDescription(optional) %}
+{%- if optional -%}Нет{%- else -%}Да{%- endif -%}
+{% endmacro %}
