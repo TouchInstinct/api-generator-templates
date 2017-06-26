@@ -66,6 +66,8 @@ $(function () {
 
         $(document).on('keyup', '.search-block input', function (e) {
             var $searchInput = $(this);
+            var methodsUrl = $searchInput.data("methodsPath");
+            var relativeUrl = $searchInput.data("relativeToRootPath");
             var $typeaheadContainer = $searchInput.closest('.search-block').find('.typeahead-container');
             var $typeaheadContent = $typeaheadContainer.find('.typeahead-content');
 
@@ -73,7 +75,7 @@ $(function () {
                     type: 'POST',
                     contentType: 'application/json',
                     dataType: 'json',
-                    url: 'json/methods.json'
+                    url: methodsUrl
                 })
                 .done(
                     function (response) {
@@ -83,7 +85,7 @@ $(function () {
                                 return item.name.toLowerCase().indexOf($searchInput.val().toLowerCase()) >= 0;
                             })
                             .forEach(function (item) {
-                                itemsLink += '<a href="' + item.url + '">' + item.name + '</a>'
+                                itemsLink += '<a href="' + (relativeUrl ? relativeUrl + "/" : "") + item.url + '">' + item.name + '</a>'
                             });
                         $typeaheadContent.html(itemsLink);
 
