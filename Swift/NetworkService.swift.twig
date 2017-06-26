@@ -1,0 +1,17 @@
+import LeadKit
+import LeadKitAdditions
+
+{% set serviceName = concat(networkServiceName, "NetworkService") -%}
+class {{ serviceName }}: ApiNetworkService {
+
+    static let shared = {{ serviceName }}()
+
+    private convenience init() {
+        self.init(sessionManager: {{ serviceName }}.sessionManager)
+    }
+
+    override class var baseUrl: String {
+        return "{{ apiUrl }}"
+    }
+
+}
