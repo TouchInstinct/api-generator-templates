@@ -22,7 +22,11 @@
 </div>
 
 <div class="aside aside-right">
-    {%- include 'blocks/header.html.twig' with { imagesFolderPath: imagesFolderPath } %}
+    {%- include 'blocks/header.html.twig' with {
+     imagesFolderPath: imagesFolderPath,
+     methodsPath: methodsPath,
+     relativeToRootPath: relativeToRootPath
+    } %}
 
     <div class="content">
         <div class="page-data">
@@ -79,7 +83,7 @@
                             </label>
                         {% endfor %}
 
-                        <button class="btn run-btn">
+                        <button class="btn run-btn" data-server-method-path="{{ serverMethodPath }}">
                             Выполнить
                         </button>
                     </div>

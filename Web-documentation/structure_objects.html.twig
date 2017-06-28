@@ -23,12 +23,16 @@
 </div>
 
 <div class="aside aside-right">
-    {%- include 'blocks/header.html.twig' with { imagesFolderPath: imagesFolderPath } %}
+    {%- include 'blocks/header.html.twig' with {
+     imagesFolderPath: imagesFolderPath,
+     methodsPath: methodsPath,
+     relativeToRootPath: relativeToRootPath
+    } %}
 
     <div class="content">
         <div class="page-data">
             <h2>Описание</h2>
-            <p class="sub-header">Карта</p>
+            <p class="sub-header">{{ description }}</p>
 
             <h2>Структура данных</h2>
             <div class="table">
@@ -39,7 +43,7 @@
                         <div class="text-centered">Описание</div>
                         <div>Обязательность</div>
                     </div>
-                    {% for field in fields -%}
+                    {% for field in allFieldsOrdered -%}
                     {%- include 'blocks/field-row.html.twig' with {
                         field: field,
                         objectsLinks: objectsLinks

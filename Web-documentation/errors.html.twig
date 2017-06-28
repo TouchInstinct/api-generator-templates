@@ -10,7 +10,11 @@
 </div>
 
 <div class="aside aside-right">
-    {%- include 'blocks/header.html.twig' with { imagesFolderPath: imagesFolderPath } %}
+    {%- include 'blocks/header.html.twig' with {
+     imagesFolderPath: imagesFolderPath,
+     methodsPath: methodsPath,
+     relativeToRootPath: relativeToRootPath
+    } %}
 
     <div class="content">
         <div class="page-data">

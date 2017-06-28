@@ -40,6 +40,7 @@ $(function () {
 
         $(document).on('click', '.run-btn', function (e) {
             var model = serializeInputs('.inputs');
+            var serverMethodPath = $(this).data('serverMethodPath')
 
             console.log('Send data: ' + JSON.stringify(model));
 
@@ -48,7 +49,7 @@ $(function () {
                     data: JSON.stringify(model),
                     contentType: 'application/json',
                     dataType: 'json',
-                    url: 'json/response.json'
+                    url: serverMethodPath
                 })
                 .done(
                     function (response) {
@@ -66,6 +67,8 @@ $(function () {
 
         $(document).on('keyup', '.search-block input', function (e) {
             var $searchInput = $(this);
+            var methodsUrl = $searchInput.data('methodsPath');
+            var relativeUrl = $searchInput.data('relativeToRootPath');
             var $typeaheadContainer = $searchInput.closest('.search-block').find('.typeahead-container');
             var $typeaheadContent = $typeaheadContainer.find('.typeahead-content');
 
@@ -73,7 +76,7 @@ $(function () {
                     type: 'POST',
                     contentType: 'application/json',
                     dataType: 'json',
-                    url: 'json/methods.json'
+                    url: methodsUrl
                 })
                 .done(
                     function (response) {
@@ -83,7 +86,7 @@ $(function () {
                                 return item.name.toLowerCase().indexOf($searchInput.val().toLowerCase()) >= 0;
                             })
                             .forEach(function (item) {
-                                itemsLink += '<a href="' + item.url + '">' + item.name + '</a>'
+                                itemsLink += '<a href="' + (relativeUrl ? relativeUrl + "/" : "") + item.url + '">' + item.name + '</a>'
                             });
                         $typeaheadContent.html(itemsLink);
 
