@@ -2,6 +2,10 @@
 {{- concat(slice(text, 0, 1) | lower, slice(text, 1, text | length)) -}}
 {% endmacro %}
 
+{% macro capitalize(text) %}
+{{- concat(slice(text, 0, 1) | upper, slice(text, 1, text | length)) -}}
+{% endmacro %}
+
 {% macro enumType(valuesTypes) %}
 {%- if valuesTypes == "STRING" -%}
 String
@@ -61,6 +65,64 @@ JsonOptional<{{ self.formatNonOptionalValueType(valueType, false) }}>
 {% macro formatSimpleValueType(valueType) %}
 {%- import _self as self -%}
 {{- self.formatValueType(valueType, true, false) -}}
+{% endmacro %}
+
+{% macro formatNullableValueSetter(fieldName, valueType, nullable) %}
+{%- if valueType == "List" -%}
+{%- if nullable -%}
+{{ fieldName }} != null ? new ArrayList<>({{ fieldName }}) : null
+{%- else -%}
+new ArrayList<>({{ fieldName }})
+{%- endif -%}
+{%- elseif valueType == "Map" -%}
+{%- if nullable -%}
+{{ fieldName }} != null ? new HashMap<>({{ fieldName }}) : null
+{%- else -%}
+new HashMap<>({{ fieldName }})
+{%- endif -%}
+{%- else -%}
+{{ fieldName }}
+{%- endif -%}
+{% endmacro %}
+
+{% macro formatValueSetter(fieldName, valueType, nullable, optional) %}
+{% import _self as self %}
+{%- if optional -%}
+this.{{ fieldName }} = new JsonOptional({{- self.formatNullableValueSetter(fieldName, valueType, nullable) -}});
+{%- elseif nullable -%}
+this.{{ fieldName }} = self.formatNullableValueSetter(fieldName, valueType, nullable) -}};
+{%- else -%}
+this.{{ fieldName }} = {{ fieldName }};
+{%- endif -%}
+{% endmacro %}
+
+{% macro formatNullableValueGetter(fieldName, valueType, nullable) %}
+{%- if valueType == "List" -%}
+{%- if nullable -%}
+{{ fieldName }} != null ? Collections.unmodifiableList({{ fieldName }}) : null
+{%- else -%}
+Collections.unmodifiableList({{ fieldName }})
+{%- endif -%}
+{%- elseif valueType == "Map" -%}
+{%- if nullable -%}
+{{ fieldName }} != null ? Collections.unmodifiableMap({{ fieldName }}) : null
+{%- else -%}
+Collections.unmodifiableMap({{ fieldName }})
+{%- endif -%}
+{%- else -%}
+{{ fieldName }}
+{%- endif -%}
+{% endmacro %}
+
+{% macro formatValueGetter(fieldName, valueType, nullable, optional) %}
+{% import _self as self %}
+{%- if optional -%}
+return new JsonOptional({{- self.formatNullableValueGetter(fieldName, valueType, nullable) -}});
+{%- elseif nullable -%}
+return self.formatNullableValueGetter(fieldName, valueType, nullable) -}};
+{%- else -%}
+return this.{{ fieldName }};
+{%- endif -%}
 {% endmacro %}
 
 {% macro escapeIfNeeded(expr) %}
