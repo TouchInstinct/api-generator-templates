@@ -3,7 +3,7 @@
     {%- import '../utils.twig' as utils -%}
 
     {%- if valueType.baseTypeName == "Map" -%}
-        Map<{{- self.formatValueType(valueType.keysType, false, objectsLinks) -}}, {{- self.formatValueType(valueType.valuesType, false, objectsLinks) -}}>
+        Map&lt;{{- self.formatValueType(valueType.keysType, false, objectsLinks) -}}, {{- self.formatValueType(valueType.valuesType, false, objectsLinks) -}}&gt;
     {%- elseif valueType.baseTypeName == "Array" -%}
         {{- self.formatValueType(valueType.itemsType, false, objectsLinks) -}}[]
     {%- else -%}
