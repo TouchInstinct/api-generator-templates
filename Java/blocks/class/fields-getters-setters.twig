@@ -16,7 +16,7 @@
 	 */
 	//TODO: setter with is****
 	public void set{{ utils.capitalize(field.name) }}({{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable, field.optional) }} final {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }} {{ field.name }}) {
-		{{ utils.formatValueSetter(field.name, field.type.type.baseTypeName, fiel.nullable, field.optional ) }}
+		{{ utils.formatValueSetter("this", field.name, field.type.type.baseTypeName, fiel.nullable, field.optional ) }}
 	}
 {% endfor -%}
 {%- endif -%}
