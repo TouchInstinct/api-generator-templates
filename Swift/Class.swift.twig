@@ -37,3 +37,13 @@ import ObjectMapper
     }
 
 }
+{% if not hasChilds %}
+extension {{ type.baseTypeName }}: Equatable {
+
+    static func ==(lhs: {{ classType }}, rhs: {{ classType }}) -> Bool {
+        return {%- for field in allFieldsOrdered %} lhs.{{ field.name }} == rhs.{{ field.name }} {% if not (loop.last) -%} && {%- endif %}
+        {% endfor %}
+    }
+
+}
+{% endif -%}
