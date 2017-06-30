@@ -1,0 +1,43 @@
+{% macro decapitalize(text) %}
+    {{- concat(slice(text, 0, 1) | lower, slice(text, 1, text | length)) -}}
+{% endmacro %}
+
+{% macro formatNullableOrOptional(expr, nullable, optional) %}
+    {{- expr -}}{%- if nullable or optional -%}?{%- endif -%}
+{% endmacro %}
+
+{% macro formatValueType(valueType) %}
+    {%- if valueType.baseTypeName == "Array" -%}
+        [{{ valueType.itemsType.baseTypeName }}]
+    {%- elseif valueType.baseTypeName == "Map" -%}
+        [{{ valueType.keysType.baseTypeName }}: {{ valueType.valuesType.baseTypeName }}]
+    {%- elseif valueType.baseTypeName == "DateTime" -%}
+        Date
+    {%- else -%}
+        {{ valueType.baseTypeName }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro escapeIfNeeded(expr) %}
+    {%- if expr == "default" -%}
+        `{{ expr }}`
+    {%- else -%}
+        {{ expr }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro mappingFromMapForField(field) %}
+    {%- if field.type.type.baseTypeName == "DateTime" -%}
+        map.value("{{ field.jsonName }}", using: {{ field.name -}}Transform)
+    {%- else -%}
+        map.value("{{ field.jsonName }}")
+    {%- endif -%}
+{% endmacro %}
+
+{% macro mappingToMapForField(field) %}
+    {%- if field.type.type.baseTypeName == "DateTime" -%}
+        (map["{{ field.jsonName }}"], {{ field.name -}}Transform)
+    {%- else -%}
+        map["{{ field.jsonName }}"]
+    {%- endif -%}
+{% endmacro %}

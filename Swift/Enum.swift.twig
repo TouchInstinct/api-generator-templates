@@ -1,4 +1,5 @@
-{%- import 'utils.twig' as utils -%}
+{%- import 'macroses/common.utils.twig' as utils -%}
+{%- import 'macroses/enum.utils.twig' as enumutils -%}
 
 import Foundation
 
@@ -7,7 +8,7 @@ import Foundation
 {% for value in values -%}
 /// - {{ utils.decapitalize(value.name) }}: {{ value.description }}
 {% endfor -%}
-enum {{ name }}: {{ utils.enumType(valuesTypes) }} {
+enum {{ name }}: {{ enumutils.enumType(valuesTypes) }} {
     {% include 'blocks/enum/cases.twig' with { values: values } %}
 
 }

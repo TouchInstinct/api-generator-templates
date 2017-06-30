@@ -1,13 +1,16 @@
-{%- import 'utils.twig' as utils -%}
+{%- import 'macroses/common.utils.twig' as utils -%}
+{%- import 'macroses/class.utils.twig' as classUtils -%}
 
 {%- set hasParent = parent is not null -%}
+{%- set classType = classUtils.classType(type) -%}
+{%- set parentClassType = classUtils.parentClassType(parent, type.parentTypeParameters) -%}
 
 import ObjectMapper
 
 {%- include 'blocks/class/date-transformers.twig' with { fields: fields } %}
 
 /// {{ description }}
-{% if (not hasChilds) -%}final {% endif %}class {% include 'blocks/class/classtype.twig' with { type: type } %}: {% include 'blocks/class/supertype.twig' with { type: type, parent: parent } %} {
+{% if (not hasChilds) -%}final {% endif %}class {{ classType }}: {{ parentClassType }} {
 
     {% include 'blocks/class/fields.twig' with { fields: fields } %}
     // MARK: - Initializers
