@@ -59,4 +59,13 @@ public class {% include 'blocks/class/classtype.twig' with { type: type } %} ext
 				{%- include 'blocks/class/fields-equals.twig' with { fields: fields } -%};
 	}
 
+	private void writeObject(@NonNull final ObjectOutputStream outputStream) {
+		{%- include 'blocks/class/fields-write-object.twig' with { fields: fields } %}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readObject(@NonNull final ObjectInputStream inputStream) {
+		{%- include 'blocks/class/fields-read-object.twig' with { fields: fields } %}
+	}
+
 }

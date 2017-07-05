@@ -159,3 +159,44 @@ map.value("{{ field.jsonName }}")
 map["{{ field.jsonName }}"]
 {%- endif -%}
 {% endmacro %}
+
+{% macro formatWriteObject(fieldName, valueType, nullable, optional) %}
+{%- if nullable or optional -%}
+writeObject({{ fieldName }})
+{%- else -%}
+{%- if valueType.baseTypeName == "Int" -%}
+writeInt({{ fieldName }})
+{%- elseif valueType.baseTypeName == "Long" -%}
+writeLong({{ fieldName }})
+{%- elseif valueType.baseTypeName == "Double" -%}
+writeDouble({{ fieldName }})
+{%- elseif valueType.baseTypeName == "String" -%}
+writeUTF({{ fieldName }})
+{%- elseif valueType.baseTypeName == "Bool" -%}
+writeBoolean({{ fieldName }})
+{%- else -%}
+writeObject({{ fieldName }})
+{%- endif -%}
+{%- endif -%}
+{% endmacro %}
+
+{% macro formatReadObject(valueType, nullable, optional) %}
+{% import _self as self %}
+{%- if nullable or optional -%}
+({{ self.formatValueType(valueType, nullable, optional) }}) readObject()
+{%- else -%}
+{%- if valueType.baseTypeName == "Int" -%}
+readInt()
+{%- elseif valueType.baseTypeName == "Long" -%}
+readLong()
+{%- elseif valueType.baseTypeName == "Double" -%}
+readDouble()
+{%- elseif valueType.baseTypeName == "String" -%}
+readUTF()
+{%- elseif valueType.baseTypeName == "Bool" -%}
+readBoolean()
+{%- else -%}
+({{ self.formatValueType(valueType, nullable, optional) }}) readObject()
+{%- endif -%}
+{%- endif -%}
+{% endmacro %}
