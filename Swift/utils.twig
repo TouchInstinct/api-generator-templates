@@ -18,7 +18,7 @@ ImmutableMappable
 {%- endif -%}
 {% endmacro %}
 
-{% macro formatNullable(expr, nullable, optional) %}
+{% macro formatNullableOrOptional(expr, nullable, optional) %}
 {{- expr -}}{%- if nullable or optional -%}?{%- endif -%}
 {% endmacro %}
 

@@ -4,6 +4,6 @@
 // MARK: - Fields
 {% for field in fields %}
     /// {{ field.description }}
-    let {{ field.name }}: {{ utils.formatNullable(utils.formatValueType(field.type.type), field.nullable, field.optional) }}
+    let {{ field.name }}: {{ utils.formatNullableOrOptional(utils.formatValueType(field.type.type), field.nullable, field.optional) }}
 {% endfor -%}
 {% endif %}

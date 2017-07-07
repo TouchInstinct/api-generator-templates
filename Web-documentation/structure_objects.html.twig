@@ -1,0 +1,61 @@
+{%- include 'blocks/head.html.twig' with { title: pageTitle, cssFolderPath: cssFolderPath } %}
+
+<body class="main-page">
+<div class="aside aside-left">
+    <div class="header">
+        <div class="title">{{ pageTitle }}</div>
+    </div>
+    <div class="content">
+        {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
+
+        <menu class="secondary">
+        {% include 'blocks/secondary-menu.html.twig' with {
+        menu: enumsMenu,
+        menuTitle: "Перечисления"
+        } %}
+        {% include 'blocks/secondary-menu.html.twig' with {
+        menu: classesMenu,
+        menuTitle: "Объекты"
+        } %}
+        </menu>
+
+    </div>
+</div>
+
+<div class="aside aside-right">
+    {%- include 'blocks/header.html.twig' with {
+     imagesFolderPath: imagesFolderPath,
+     methodsPath: methodsPath,
+     relativeToRootPath: relativeToRootPath
+    } %}
+
+    <div class="content">
+        <div class="page-data">
+            <h2>Описание</h2>
+            <p class="sub-header">{{ description }}</p>
+
+            <h2>Структура данных</h2>
+            <div class="table">
+                <div class="part-table">
+                    <div class="row-header">
+                        <div>Название поля</div>
+                        <div>Тип поля</div>
+                        <div class="text-centered">Описание</div>
+                        <div>Обязательность</div>
+                    </div>
+                    {% for field in allFieldsOrdered -%}
+                    {%- include 'blocks/field-row.html.twig' with {
+                        field: field,
+                        objectsLinks: objectsLinks
+                    } %}
+                    {%- endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%- include 'blocks/scripts.html.twig' with { jsFolderPath: jsFolderPath } %}
+
+</body>
+</html>

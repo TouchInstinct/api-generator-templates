@@ -1,0 +1,35 @@
+{%- macro formatValueType(valueType, nullable, objectsLinks) -%}
+    {%- import _self as self -%}
+    {%- import '../utils.twig' as utils -%}
+
+    {%- if valueType.baseTypeName == "Map" -%}
+        Map<{{- self.formatValueType(valueType.keysType, false, objectsLinks) -}}, {{- self.formatValueType(valueType.valuesType, false, objectsLinks) -}}>
+    {%- elseif valueType.baseTypeName == "Array" -%}
+        {{- self.formatValueType(valueType.itemsType, false, objectsLinks) -}}[]
+    {%- else -%}
+        {%- set link = null -%}
+
+        {%- for name, path in objectsLinks -%}
+            {%- if name == valueType.baseTypeName -%}
+                {%- set link = path -%}
+            {%- endif -%}
+        {%- endfor -%}
+
+        {%- if link is not null -%}
+            <a class="info" href="{{ link }}">{{- utils.formatNullable(valueType.typeName, nullable) -}}</a>
+        {%- else -%}
+            {{- utils.formatNullable(valueType.typeName, nullable) -}}
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{% import _self as self %}
+
+<div class="row-body">
+    <div>{{ field.jsonName }}</div>
+    <div>
+    {{ self.formatValueType(field.type.type, field.nullable, objectsLinks) }}
+    </div>
+    <div>{{ field.description }}</div>
+    <div>{{ utils.optionalDescription(field.optional) }}</div>
+</div>
