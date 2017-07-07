@@ -200,3 +200,31 @@ readBoolean()
 {%- endif -%}
 {%- endif -%}
 {% endmacro %}
+
+{% macro formatValidateObject(object, valueType, nullable) %}
+{% import _self as self %}
+{%- if not nullable and valueType.baseTypeName != "Int" and valueType.baseTypeName != "Long" and valueType.baseTypeName != "Double" and valueType.baseTypeName != "Bool" %}
+		validateNotNull({{ object }});
+{%- endif -%}
+{%- if valueType.baseTypeName == "Map" %}
+{%- if nullable -%}
+		if ({{ object }} != null) {
+			validateCollection({{ object }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+		}
+{%- else -%}
+		validateCollection({{ object }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+{%- endif -%}	
+{%- elseif valueType.baseTypeName == "Array" %}
+{%- if nullable -%}
+		if ({{ object }} != null) {
+			validateCollection({{ object }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+		}
+{%- else -%}
+		validateCollection({{ object }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+{%- endif -%}
+{%- elseif valueType.baseTypeName != "Int" and valueType.baseTypeName != "Long" and valueType.baseTypeName != "Double" and valueType.baseTypeName != "Bool" and valueType.baseTypeName != "String" and valueType.baseTypeName != "Decimal" and valueType.baseTypeName != "DateTime" %}
+		if ({{ object }} instanceof ApiModel) {
+			((ApiModel) {{ object }}).validate();
+		}
+{%- endif -%}
+{% endmacro %}
