@@ -43,7 +43,7 @@ LoganSquareJsonModel
 {%- elseif valueType.baseTypeName == "Decimal" -%}
 BigDecimal
 {%- elseif valueType.baseTypeName == "Bool" -%}
-{%- if tryUsePrimitive -%}bool{%- else -%}Boolean{%- endif -%}
+{%- if tryUsePrimitive -%}boolean{%- else -%}Boolean{%- endif -%}
 {%- elseif valueType.baseTypeName == "Map" -%}
 Map<{{ self.formatNonOptionalValueType(valueType.keysType, false) }}, {{ self.formatNonOptionalValueType(valueType.valuesType, false) }}>
 {%- elseif valueType.baseTypeName == "Array" -%}
@@ -90,7 +90,7 @@ new HashMap<>({{ fieldName }})
 {%- if optional -%}
 {{ object }}.{{ fieldName }} = new JsonOptional({{- self.formatNullableValueSetter(fieldName, valueType, nullable) -}});
 {%- elseif nullable -%}
-{{ object }}.{{ fieldName }} = self.formatNullableValueSetter(fieldName, valueType, nullable) -}};
+{{ object }}.{{ fieldName }} = self.formatNullableValueSetter(fieldName, valueType, nullable);
 {%- else -%}
 {{ object }}.{{ fieldName }} = {{ fieldName }};
 {%- endif -%}
@@ -119,7 +119,7 @@ Collections.unmodifiableMap({{ fieldName }})
 {%- if optional -%}
 return new JsonOptional({{- self.formatNullableValueGetter(fieldName, valueType, nullable) -}});
 {%- elseif nullable -%}
-return self.formatNullableValueGetter(fieldName, valueType, nullable) -}};
+return self.formatNullableValueGetter(fieldName, valueType, nullable);
 {%- else -%}
 return this.{{ fieldName }};
 {%- endif -%}
@@ -183,20 +183,20 @@ writeObject({{ fieldName }})
 {% macro formatReadObject(valueType, nullable, optional) %}
 {% import _self as self %}
 {%- if nullable or optional -%}
-({{ self.formatValueType(valueType, nullable, optional) }}) readObject()
+({{ self.formatValueType(valueType, nullable, optional) }}) inputStream.readObject()
 {%- else -%}
 {%- if valueType.baseTypeName == "Int" -%}
-readInt()
+inputStream.readInt()
 {%- elseif valueType.baseTypeName == "Long" -%}
-readLong()
+inputStream.readLong()
 {%- elseif valueType.baseTypeName == "Double" -%}
-readDouble()
+inputStream.readDouble()
 {%- elseif valueType.baseTypeName == "String" -%}
-readUTF()
+inputStream.readUTF()
 {%- elseif valueType.baseTypeName == "Bool" -%}
-readBoolean()
+inputStream.readBoolean()
 {%- else -%}
-({{ self.formatValueType(valueType, nullable, optional) }}) readObject()
+({{ self.formatValueType(valueType, nullable, optional) }}) inputStream.readObject()
 {%- endif -%}
 {%- endif -%}
 {% endmacro %}
