@@ -29,6 +29,8 @@ ImmutableMappable
 [{{ valueType.keysType.baseTypeName }}: {{ valueType.valuesType.baseTypeName }}]
 {%- elseif valueType.baseTypeName == "DateTime" -%}
 Date
+{%- elseif valueType.baseTypeName == "Long" -%}
+Int64
 {%- else -%}
 {{ valueType.baseTypeName }}
 {%- endif -%}
