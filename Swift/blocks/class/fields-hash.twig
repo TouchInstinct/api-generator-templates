@@ -1,0 +1,21 @@
+{%- import '../../macroses/common.utils.twig' as utils -%}
+{%- macro hashOf(name, type, optional, nullable, ) -%}
+    {%- if type.baseTypeName == "Array" -%}
+        {#- implement hash for Array -#}
+    {%- elseif type.baseTypeName == "Map" -%}
+        {#- implement hash for Map -#}
+    {%- else -%}
+        {#- implement hash for regular value -#}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- for field in fields %}
+    {#- FIXME: Value of type '[T]' has no member 'hashValue'} -#}
+    {#- FIXME: The same for [TKey: TValue] -#}
+    {%- if field.optional or field.nullable %}
+        ({{ field.name }}?.hashValue ?? 0)
+    {%- else %}
+        {{ field.name }}.hashValue
+    {%- endif -%}
+    {% if not (loop.last) %} ^ {%- endif %}
+{%- endfor -%}

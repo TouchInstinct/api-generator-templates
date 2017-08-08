@@ -1,0 +1,7 @@
+{% macro enumType(valuesTypes) %}
+    {%- if valuesTypes == "STRING" -%}
+    String
+    {%- elseif valuesTypes == "INT" -%}
+    Int
+    {%- endif -%}
+{% endmacro %}
