@@ -23,7 +23,8 @@
     {%- endif -%}
 {%- endmacro -%}
 
-{% import _self as self %}
+{%- import _self as self -%}
+{%- import '../utils.twig' as utils -%}
 
 <div class="row-body">
     <div>{{ field.jsonName }}</div>
