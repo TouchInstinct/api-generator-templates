@@ -118,8 +118,13 @@
                 </div>
             </div>
 
-            <h2>Комментарий</h2>
+            <h2>Описание</h2>
             <p class="sub-header">{{ description }}</p>
+
+            {% if comment is not null -%}
+                <h2>Комментарий</h2>
+                <p class="sub-header">{{ comment }}</p>
+            {%- endif %}
         </div>
     </div>
 </div>

@@ -31,6 +31,11 @@
             <h2>Описание</h2>
             <p class="sub-header">{{ description }}</p>
 
+            {% if comment is not null -%}
+                <h2>Комментарий</h2>
+                <p class="sub-header">{{ comment }}</p>
+            {%- endif %}
+
             <h2>Возможные значения</h2>
             <div class="table table--small">
                 <div class="part-table">
