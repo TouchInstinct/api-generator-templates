@@ -64,17 +64,15 @@
                                         <option>{{ value.value }}</option>
                                         {% endfor %}
                                     </select>
+                                {%- if field.optional or field.nullable -%}
+                                    {% include 'blocks/sandbox-optional-nullable.html.twig' with { field: field } %}
+                                {% endif %}
                                 </div>
                             {%- else %}
                                 {%- if field.optional or field.nullable -%}
                                     <div class="styled-input">
                                         <input type="text" data-name="{{ field.jsonName }}">
-                                        {% if field.optional -%}
-                                            <div class="clear-btn">×</div>
-                                        {%- endif -%}
-                                        {% if field.nullable -%}
-                                            <div class="null-btn">NULL</div>
-                                        {%- endif %}
+                                        {% include 'blocks/sandbox-optional-nullable.html.twig' with { field: field } %}
                                     </div>
                                 {%- else %}
                                     <input type="text" data-name="{{ field.jsonName }}">
