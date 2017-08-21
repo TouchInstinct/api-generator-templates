@@ -1,5 +1,7 @@
 {%- include 'blocks/head.html.twig' with { title: pageTitle, cssFolderPath: cssFolderPath } %}
 
+{%- set outOfDateError = first(errorType.values) -%}
+
 <body class="main-page">
 <div class="aside aside-left">
     <div class="header">
@@ -23,7 +25,7 @@
             <p class="sub-header">Необходимо иметь возможность поддержки нескольких версий API (для одновременной работы нескольких версий приложения). Также необходимо предусмотреть принудительное обновление какой-либо из версий.</p>
             <p class="sub-header"> Версии API будут размещаться на url-адресах вида &lt;base_url&gt;/v&lt;version_number&gt;/, где &lt;version_number&gt; - версия API.</p>
             <p class="sub-header">При вызове любого метода в случае, если вызываемая версия API требует обновления приложения, сервер должен вернуть ошибку:<br/>
-                "Версия приложения устарела. Необходимо обновить приложение. Код 1."</p>
+                "{{ outOfDateError.description }} <a href="{{ errorsPagePath }}">Код {{ outOfDateError.value }}.</a>"</p>
             <p class="sub-header">При этом приложение должно показать пользователю диалог с предложением установить новую версию из маркета, а остальные функции должны стать недоступными.
             </p>
 
@@ -33,24 +35,9 @@
             <div class="example-response">
 
 <div class="text-response">{
-    "response": <span class="text-digit"></span>{
-    "count": <span class="text-digit">2428</span>,
-    "items": <span class="text-digit"></span>
-        [
-            {
-                "id": <span class="text-digit">54832560</span>,
-                "first_name": <span class="text-digit"></span><span class="text-string">"Anyutka"</span>,
-                "last_name": <span class="text-digit"></span><span class="text-string">"Kiseleva"</span>,
-                "photo_50": <span class="text-digit"></span><span class="text-string">"http://cs417830.v...4a7/Y-zZa02zvmQ.jpg"</span>
-            },
-            {
-                "id": <span class="text-digit">221194575</span>,
-                "first_name": <span class="text-digit"></span><span class="text-string">"Lera"</span>,
-                "last_name": <span class="text-digit"></span><span class="text-string">"Chistova"</span>,
-                "photo_50": <span class="text-digit"></span><span class="text-string">"http://cs322328.v...0fb/qi2nofkqneI.jpg"</span>
-            }
-        ]
-    }
+    "result": <span class="text-digit">null</span>
+    "error_code": <span class="text-digit">{{ outOfDateError.value }}</span>,
+    "error_message": <span class="text-digit">"{{ outOfDateError.description }}"</span>
 }</div>
             </div>
         </div>
