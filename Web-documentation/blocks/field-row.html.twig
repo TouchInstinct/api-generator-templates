@@ -36,7 +36,7 @@
 <div class="row-body">
     <div>{{ field.jsonName }}</div>
     <div>
-    {{ self.formatValueType(field.type.type, field.nullable, objectsLinks) }}
+    {{ self.formatValueType(field.type.type, default(isNullable, field.nullable), objectsLinks) }}
     </div>
     <div>{{ field.description }}</div>
     <div>{{ utils.optionalDescription(field.optional) }}</div>
