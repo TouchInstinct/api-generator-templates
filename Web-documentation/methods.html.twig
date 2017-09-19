@@ -110,7 +110,6 @@
                     {% for field in responseFields -%}
                     {%- include 'blocks/field-row.html.twig' with {
                         field: field,
-                        isNullable: false,
                         objectsLinks: objectsLinks
                     } %}
                     {%- endfor %}
