@@ -119,10 +119,8 @@
             <h2>Описание</h2>
             <p class="sub-header">{{ description }}</p>
 
-            {% if comment is not null -%}
-                <h2>Комментарий</h2>
-                <p class="sub-header">{{ comment }}</p>
-            {%- endif %}
+            {%- include 'blocks/comment.html.twig' with { comment: comment } %}
+
         </div>
     </div>
 </div>
