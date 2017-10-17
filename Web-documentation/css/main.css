@@ -21,6 +21,17 @@ body {
     font-weight: 400;
 }
 
+.main-page {
+    display: flex;
+}
+.gutter {
+    cursor: col-resize;
+    background-image: url("../images/vertical-split.png");
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
 .aside {
     display: inline-block;
     vertical-align: top;
@@ -39,7 +50,7 @@ body {
 }
 
 .aside-left {
-    width: 38.85rem;
+    min-width: 300px;
 }
 
 .aside-left .header {
@@ -138,7 +149,6 @@ body {
 
 .aside-left .content {
     background-color: #222933;
-    border-right: 1px solid #888d94;
 }
 
 menu li {
@@ -161,7 +171,7 @@ menu li {
     font-size: 1.57rem;
     color: #BEBFC1;
     text-decoration: none;
-    transition: line-height .3s ease-out 0s;
+    transition: color .25s, background .25s linear;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -169,10 +179,9 @@ menu li {
 
 .aside-left menu.main>li a:hover,
 .aside-left menu.main>li.active a {
-    line-height: 5.28rem;
     background-color: #222933;
     padding-left: 3.14rem;
-    border-left: 6px solid #0ca9e6;
+    border-left: 0.43rem solid #0ca9e6;
     color: white
 }
 
@@ -183,7 +192,7 @@ menu li {
 .aside-left menu.secondary {
     list-style: none;
     margin: 0;
-    padding: 3.57rem 0 0 6.28rem;
+    padding: 3.57rem 0 3.57rem 6.28rem;
 }
 
 .aside-left menu.secondary li a {
@@ -217,9 +226,10 @@ menu li {
     display: none;
     list-style: none;
     margin: 6px 0;
-    padding-left: 1.57rem;
+    padding: 0 3.75rem 0 1.57rem;
     border-left: 1px solid #fff;
-    width: 205px;
+    min-width: 205px;
+    width: auto;
 }
 
 .aside-left menu.child>li>a {
@@ -260,7 +270,7 @@ menu li {
     background-color: white;
     min-height: calc(100vh - 9rem);
     border: 1px solid #e9ebee;
-    padding: 5.28rem 14rem 5.28rem 6.14rem;
+    padding: 5.28rem;
 }
 
 .page-data h2 {
@@ -281,17 +291,38 @@ menu li {
     margin: 0.85rem 0 0;
 }
 
-.page-data a.info {
-    color: #0ca9e6;
+.page-data p.sub-header {
+}
+
+.page-data a {
+    color: #000000;
     cursor: pointer;
     text-decoration: none;
 }
 
-.page-data a.info:hover {
+.page-data a:hover {
     text-decoration: underline;
 }
 
-.page-data p.sub-header {
+.page-data a.info,
+.page-data li a {
+    color: #0ca9e6;
+}
+
+.page-data h3 {
+    font-size: 1.75rem;
+    margin: 1.2rem 0;
+    line-height: 2rem;
+    font-weight: 500;
+}
+
+.page-data li {
+    list-style: none;
+    font-size: 1.57rem;
+    color: #838890;
+    line-height: 2.2rem;
+    margin: 0.85rem 0 0;
+    padding-left: 1.5rem;
 }
 
 .table--small.table {

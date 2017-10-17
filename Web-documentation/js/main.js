@@ -1,6 +1,11 @@
 $(function () {
     $(document).ready(function () {
 
+        window.Split(['.aside-left', '.aside-right'], {
+            sizes: [30, 70],
+            minSize: [200, 769]
+        })
+
         $('.part-example-response .text-response').css('height', $('.inputs').height() - 21);
 
         $(document).on('click', 'menu li', function (e) {
