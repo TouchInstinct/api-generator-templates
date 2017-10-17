@@ -23,4 +23,9 @@
     {%- if mainMenu.errorsMenuItem is not null %}
         <li {%- if mainMenu.errorsMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.errorsMenuItem.path }}">Список возможных ошибок</a></li>
     {% endif %}
+
+    {%- if mainMenu.tableOfContents is not null %}
+        <li {%- if mainMenu.tableOfContents.active %} class="active" {%- endif -%}><a href="{{ mainMenu.tableOfContents.path }}">Оглавление</a></li>
+    {% endif %}
+
 </menu>

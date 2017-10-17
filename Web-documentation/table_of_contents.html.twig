@@ -1,0 +1,63 @@
+{%- include 'blocks/head.html.twig' with { title: pageTitle, cssFolderPath: cssFolderPath } %}
+
+<body class="main-page">
+<div class="aside aside-left">
+    <div class="header">
+        <div class="title">{{ pageTitle }}</div>
+    </div>
+    <div class="content">
+        {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
+    </div>
+</div>
+
+<div class="aside aside-right">
+    {%- include 'blocks/header.html.twig' with {
+     imagesFolderPath: imagesFolderPath,
+     methodsPath: methodsPath,
+     relativeToRootPath: relativeToRootPath
+    } %}
+
+    <div class="content">
+        <div class="page-data">
+
+            {%- if tableOfContents.methods is not null %}
+                <h2>
+                    <a href="{{ tableOfContents.methods.path }}">Методы</a>
+                </h2>
+                {% for methodsGroup in tableOfContents.methods.items %}
+                    <h3>
+                        <a href="{{ methodsGroup.path }}">{{ methodsGroup.title }}</a>
+                    </h3>
+                    {% for method in methodsGroup.items -%}
+                        <li><a href="{{ method.path }}">{{ method.title }}</a></li>
+                    {% endfor -%}
+                {% endfor %}
+
+            {%- endif %}
+
+            {%- if tableOfContents.classes is not null %}
+                <h2>
+                    <a href="{{ tableOfContents.classes.path }}">Классы</a>
+                </h2>
+                {% for class in tableOfContents.classes.items -%}
+                    <li><a href="{{ class.path }}">{{ class.title }}</a></li>
+                {% endfor %}
+            {% endif %}
+
+            {%- if tableOfContents.enums is not null %}
+                <h2>
+                    <a href="{{ tableOfContents.enums.path }}">Перечисления</a>
+                </h2>
+                {% for enum in tableOfContents.enums.items -%}
+                    <li><a href="{{ enum.path }}">{{ enum.title }}</a></li>
+                {% endfor %}
+            {%- endif %}
+
+        </div>
+    </div>
+</div>
+
+{%- include 'blocks/scripts.html.twig' with { jsFolderPath: jsFolderPath } %}
+
+</body>
+</html>
