@@ -33,6 +33,11 @@
             <h2>Метод</h2>
             <p class="sub-header">POST {{ url }}</p>
 
+            <h2>Описание</h2>
+            <p class="sub-header">{{ description }}</p>
+
+            {%- include 'blocks/comment.html.twig' with { comment: comment } %}
+
             <h2>Параметры</h2>
             <div class="table example-response-expanded">
                 <div class="part-table">
@@ -115,11 +120,6 @@
                     {%- endfor %}
                 </div>
             </div>
-
-            <h2>Описание</h2>
-            <p class="sub-header">{{ description }}</p>
-
-            {%- include 'blocks/comment.html.twig' with { comment: comment } %}
 
         </div>
     </div>
