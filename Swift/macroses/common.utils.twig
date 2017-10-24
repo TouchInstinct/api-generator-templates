@@ -7,10 +7,12 @@
 {% endmacro %}
 
 {% macro formatValueType(valueType) %}
+    {%- import _self as self -%}
+
     {%- if valueType.baseTypeName == "Array" -%}
-        [{{ valueType.itemsType.baseTypeName }}]
+        [{{ self.formatValueType(valueType.itemsType) }}]
     {%- elseif valueType.baseTypeName == "Map" -%}
-        [{{ valueType.keysType.baseTypeName }}: {{ valueType.valuesType.baseTypeName }}]
+        [{{ self.formatValueType(valueType.keysType) }}: {{ self.formatValueType(valueType.valuesType) }}]
     {%- elseif valueType.baseTypeName == "DateTime" -%}
         Date
     {%- elseif valueType.baseTypeName == "Long" -%}
