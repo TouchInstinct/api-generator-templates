@@ -37,6 +37,7 @@ import ObjectMapper
     }
 
 }
+{#
 {% if not hasChilds %}
 extension {{ type.baseTypeName }}: Equatable {
 
@@ -47,3 +48,4 @@ extension {{ type.baseTypeName }}: Equatable {
 
 }
 {% endif -%}
+#}
