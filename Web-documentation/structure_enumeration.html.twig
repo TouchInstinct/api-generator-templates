@@ -6,7 +6,7 @@
         <div class="title">{{ pageTitle }}</div>
     </div>
     <div class="content">
-        {%- include 'blocks/main-menu.html.twig' %}
+        {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
 
         <menu class="secondary">
         {% include 'blocks/secondary-menu.html.twig' with {
@@ -24,30 +24,14 @@
 </div>
 
 <div class="aside aside-right">
-    {%- include 'blocks/header.html.twig' with { imagesFolderPath: imagesFolderPath } %}
+    {%- include 'blocks/header.html.twig' with {
+     imagesFolderPath: imagesFolderPath,
+     relativeToRootPath: relativeToRootPath
+    } %}
 
     <div class="content">
         <div class="page-data">
-            <h2>Описание</h2>
-            <p class="sub-header">{{ name }} - {{ description }}</p>
-
-            {%- include 'blocks/comment.html.twig' with { comment: comment } %}
-
-            <h2>Возможные значения</h2>
-            <div class="table table--small">
-                <div class="part-table">
-                    <div class="row-header">
-                        <div>Значения</div>
-                        <div>Описание</div>
-                    </div>
-                    {% for value in values %}
-                        <div class="row-body">
-                            <div>{{ value.value }}</div>
-                            <div>{{ value.description }}</div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
+            {%- include 'blocks/enum-body.html.twig' with { structure: structure } %}
         </div>
     </div>
 </div>

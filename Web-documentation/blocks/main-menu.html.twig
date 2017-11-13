@@ -28,4 +28,8 @@
         <li {%- if mainMenu.tableOfContents.active %} class="active" {%- endif -%}><a href="{{ mainMenu.tableOfContents.path }}">Оглавление</a></li>
     {% endif %}
 
+    {%- if mainMenu.allContents is not null %}
+        <li {%- if mainMenu.allContents.active %} class="active" {%- endif -%}><a href="{{ mainMenu.allContents.path }}">Версия для печати</a></li>
+    {% endif %}
+
 </menu>

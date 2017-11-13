@@ -1,0 +1,22 @@
+<h2>Описание</h2>
+<p class="sub-header">{{ structure.type.baseTypeName }} - {{ structure.description }}</p>
+
+{%- include 'comment.html.twig' with { comment: structure.comment } %}
+
+<h2>Структура данных</h2>
+<div class="table">
+    <div class="part-table">
+        <div class="row-header">
+            <div>Название поля</div>
+            <div>Тип поля</div>
+            <div class="text-centered">Описание</div>
+            <div>Обязательность</div>
+        </div>
+        {% for field in structure.allFieldsOrdered -%}
+            {%- include 'field-row.html.twig' with {
+                field: field,
+                objectsLinks: objectsLinks
+            } %}
+        {%- endfor %}
+    </div>
+</div>

@@ -1,0 +1,96 @@
+<h2>Метод</h2>
+<p class="sub-header">POST {{ method.url }}</p>
+
+<h2>Описание</h2>
+<p class="sub-header">{{ method.description }}</p>
+
+{%- include 'comment.html.twig' with { comment: method.comment } %}
+
+<h2>Параметры</h2>
+{% if method.requestFields is not empty %}
+    <div class="table example-response-expanded">
+        <div class="part-table">
+            <div class="row-header">
+                <div>Название параметра</div>
+                <div>Тип параметра</div>
+                <div class="text-centered">Описание</div>
+                <div>Обязательность</div>
+            </div>
+            {% for field in method.requestFields -%}
+                {%- include 'field-row.html.twig' with {
+                    field: field,
+                    objectsLinks: objectsLinks
+                } %}
+            {%- endfor %}
+        </div>
+    {% if default(showSandbox, true) %}
+        <div class="part-block">
+            <a class="show-example-response">Пример запроса</a>
+        </div>
+        <div class="part-example-response">
+            <div class="inputs">
+                {% for field in method.requestFields -%}
+                    <label>
+                    {{ field.jsonName }}<br>
+                    {% if field.type.values is not empty -%}
+                        <div class="styled-select">
+                            <select data-name="{{ field.jsonName }}">
+                                {% for value in field.type.values %}
+                                <option>{{ value.value }}</option>
+                                {% endfor %}
+                            </select>
+                        {%- if field.optional or field.nullable -%}
+                            {% include 'sandbox-optional-nullable.html.twig' with { field: field } %}
+                        {% endif %}
+                        </div>
+                    {%- else %}
+                        {%- if field.optional or field.nullable -%}
+                            <div class="styled-input">
+                                <input type="text" data-name="{{ field.jsonName }}">
+                                {% include 'sandbox-optional-nullable.html.twig' with { field: field } %}
+                            </div>
+                        {%- else %}
+                            <input type="text" data-name="{{ field.jsonName }}">
+                        {% endif %}
+                    {%- endif %}
+                    </label>
+                {% endfor %}
+
+                <button class="btn run-btn" data-server-method-path="{{ serverMethodPath }}">
+                    Выполнить
+                </button>
+            </div>
+            <div class="text-response"></div>
+        </div>
+    {% endif %}
+    </div>
+{% else %}
+    <p class="sub-header">Параметры отсутствуют</p>
+{% endif %}
+
+<h2>Возможные ошибки</h2>
+{% for value in method.errorsEnumeration.values -%}
+    {%- if value.value in method.errorsEnumeration.allowedValues %}
+        <p class="sub-header">#Код {{ value.value }} — {{ value.description }}</p>
+    {%- endif -%}
+{%- endfor %}
+
+<h2>Результат</h2>
+<p>Объект следующей структуры:</p>
+
+<div class="table example-response-expanded">
+    <div class="part-table">
+        <div class="row-header">
+            <div>Название поля</div>
+            <div>Тип поля</div>
+            <div class="text-centered">Описание</div>
+            <div>Обязательность</div>
+        </div>
+        {% for field in method.responseFields -%}
+            {%- include 'field-row.html.twig' with {
+                field: field,
+                objectsLinks: objectsLinks
+            } %}
+        {%- endfor %}
+    </div>
+</div>
