@@ -17,6 +17,8 @@
         Date
     {%- elseif valueType.baseTypeName == "Long" -%}
         Int64
+    {%- elseif valueType.baseTypeName == "Decimal" -%}
+        NSDecimalNumber
     {%- else -%}
         {{ valueType.baseTypeName }}
     {%- endif -%}
@@ -33,6 +35,8 @@
 {% macro mappingFromMapForField(field) %}
     {%- if field.type.type.baseTypeName == "DateTime" -%}
         map.value("{{ field.jsonName }}", using: {{ field.name -}}Transform)
+    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
+        map.value("{{ field.jsonName }}", using: NSDecimalNumberTransform())
     {%- else -%}
         map.value("{{ field.jsonName }}")
     {%- endif -%}
