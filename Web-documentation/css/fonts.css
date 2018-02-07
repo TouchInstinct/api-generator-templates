@@ -1,19 +1,19 @@
 @font-face {
-    font-family: SanFrancisco;
+    font-family: Roboto;
     font-weight: 400;
-    src: url(../fonts/SanFranciscoDisplay-Regular.otf);
+    src: url(../fonts/Roboto-Regular.ttf);
 }
 
 @font-face {
-    font-family: SanFrancisco;
+    font-family: Roboto;
     font-weight: 500;
-    src: url(../fonts/SanFranciscoDisplay-Medium.otf);
+    src: url(../fonts/Roboto-Medium.ttf);
 }
 
 @font-face {
-    font-family: SanFrancisco;
+    font-family: Roboto;
     font-weight: 600;
-    src: url(../fonts/SanFranciscoDisplay-Semibold.otf);
+    src: url(../fonts/Roboto-Bold.ttf);
 }
 
 

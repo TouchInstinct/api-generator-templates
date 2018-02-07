@@ -3,9 +3,16 @@
     {%- import '../utils.twig' as utils -%}
 
     {%- if valueType.baseTypeName == "Map" -%}
-        Map&lt;{{- self.formatValueType(valueType.keysType, false, objectsLinks) -}}, {{- self.formatValueType(valueType.valuesType, false, objectsLinks) -}}&gt;
+        {%- set keysType = self.formatValueType(valueType.keysType, false, objectsLinks) -%}
+        {%- set valuesType = self.formatValueType(valueType.valuesType, false, objectsLinks) -%}
+        {%- set mapType = concat("Map&lt;", keysType, ", ", valuesType, "&gt;") -%}
+
+        {{- utils.formatNullable(mapType, nullable) -}}
     {%- elseif valueType.baseTypeName == "Array" -%}
-        {{- self.formatValueType(valueType.itemsType, false, objectsLinks) -}}[]
+        {%- set itemsType = self.formatValueType(valueType.itemsType, false, objectsLinks) -%}
+        {%- set arrayType = concat(itemsType, "[]") -%}
+
+        {{- utils.formatNullable(arrayType, nullable) -}}
     {%- else -%}
         {%- set link = null -%}
 

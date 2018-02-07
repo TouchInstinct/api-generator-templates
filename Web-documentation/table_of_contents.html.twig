@@ -1,0 +1,33 @@
+{%- include 'blocks/head.html.twig' with { title: pageTitle, cssFolderPath: cssFolderPath } %}
+
+<body class="main-page">
+<div class="aside aside-left">
+    <div class="header">
+        <div class="title">{{ pageTitle }}</div>
+    </div>
+    <div class="content">
+        {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
+    </div>
+</div>
+
+<div class="aside aside-right">
+    {%- include 'blocks/header.html.twig' with {
+     imagesFolderPath: imagesFolderPath,
+     relativeToRootPath: relativeToRootPath
+    } %}
+
+    <div class="content">
+        <div class="page-data">
+            {%- include 'blocks/table-of-contents-body.html.twig' with {
+                methods: tableOfContents.methods,
+                classes: tableOfContents.classes,
+                enums: tableOfContents.enums
+            } %}
+        </div>
+    </div>
+</div>
+
+{%- include 'blocks/scripts.html.twig' with { jsFolderPath: jsFolderPath } %}
+
+</body>
+</html>

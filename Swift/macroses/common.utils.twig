@@ -2,19 +2,27 @@
     {{- concat(slice(text, 0, 1) | lower, slice(text, 1, text | length)) -}}
 {% endmacro %}
 
+{% macro capitalize(text) %}
+    {{- concat(slice(text, 0, 1) | upper, slice(text, 1, text | length)) -}}
+{% endmacro %}
+
 {% macro formatNullableOrOptional(expr, nullable, optional) %}
     {{- expr -}}{%- if nullable or optional -%}?{%- endif -%}
 {% endmacro %}
 
 {% macro formatValueType(valueType) %}
+    {%- import _self as self -%}
+
     {%- if valueType.baseTypeName == "Array" -%}
-        [{{ valueType.itemsType.baseTypeName }}]
+        [{{ self.formatValueType(valueType.itemsType) }}]
     {%- elseif valueType.baseTypeName == "Map" -%}
-        [{{ valueType.keysType.baseTypeName }}: {{ valueType.valuesType.baseTypeName }}]
+        [{{ self.formatValueType(valueType.keysType) }}: {{ self.formatValueType(valueType.valuesType) }}]
     {%- elseif valueType.baseTypeName == "DateTime" -%}
         Date
     {%- elseif valueType.baseTypeName == "Long" -%}
         Int64
+    {%- elseif valueType.baseTypeName == "Decimal" -%}
+        NSDecimalNumber
     {%- else -%}
         {{ valueType.baseTypeName }}
     {%- endif -%}
@@ -28,18 +36,30 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro mappingFromMapForField(field) %}
+{% macro mappingFromMapForField(field, className) %}
+    {%- import _self as self -%}
+
     {%- if field.type.type.baseTypeName == "DateTime" -%}
-        map.value("{{ field.jsonName }}", using: {{ field.name -}}Transform)
+        map.value("{{ field.jsonName }}", using: {{ self.dateTransformName(field.name, className) -}})
+    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
+        map.value("{{ field.jsonName }}", using: NSDecimalNumberTransform())
     {%- else -%}
         map.value("{{ field.jsonName }}")
     {%- endif -%}
 {% endmacro %}
 
-{% macro mappingToMapForField(field) %}
+{% macro mappingToMapForField(field, className) %}
+    {%- import _self as self -%}
+
     {%- if field.type.type.baseTypeName == "DateTime" -%}
-        (map["{{ field.jsonName }}"], {{ field.name -}}Transform)
+        (map["{{ field.jsonName }}"], {{ self.dateTransformName(field.name, className) -}})
     {%- else -%}
         map["{{ field.jsonName }}"]
     {%- endif -%}
 {% endmacro %}
+
+{% macro dateTransformName(fieldName, className) %}
+    {%- import _self as self -%}
+
+    {{ self.decapitalize(className) }}{{ self.capitalize(fieldName) -}}Transform
+{%- endmacro %}

@@ -1,0 +1,20 @@
+<h2>Описание</h2>
+<p class="sub-header">{{ structure.name }} - {{ structure.description }}</p>
+
+{%- include 'comment.html.twig' with { comment: structure.comment } %}
+
+<h2>Возможные значения</h2>
+<div class="table table--small">
+    <div class="part-table">
+        <div class="row-header">
+            <div>Значения</div>
+            <div>Описание</div>
+        </div>
+        {% for value in structure.values %}
+            <div class="row-body">
+                <div>{{ value.value }}</div>
+                <div>{{ value.description }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

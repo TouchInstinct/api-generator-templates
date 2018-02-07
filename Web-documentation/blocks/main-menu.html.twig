@@ -1,8 +1,35 @@
 <menu class="main">
-    <li {%- if mainMenu.indexMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.indexMenuItem.path }}">Общие принципы построения API</a></li>
-    <li {%- if mainMenu.methodsMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.methodsMenuItem.path }}">Методы</a></li>
-    <li {%- if mainMenu.notificationsMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.notificationsMenuItem.path }}">PUSH-нотификации</a></li>
-    <li {%- if mainMenu.structuresMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.structuresMenuItem.path }}">Структуры данных</a></li>
-    <li {%- if mainMenu.versioningMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.versioningMenuItem.path }}">Версионирование API</a></li>
-    <li {%- if mainMenu.errorsMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.errorsMenuItem.path }}">Список возможных ошибок</a></li>
+
+    {%- if mainMenu.indexMenuItem is not null %}
+        <li {%- if mainMenu.indexMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.indexMenuItem.path }}">Общие принципы построения API</a></li>
+    {% endif %}
+
+    {%- if mainMenu.methodsMenuItem is not null %}
+        <li {%- if mainMenu.methodsMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.methodsMenuItem.path }}">Методы</a></li>
+    {% endif %}
+
+    {%- if mainMenu.notificationsMenuItem is not null %}
+        <li {%- if mainMenu.notificationsMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.notificationsMenuItem.path }}">PUSH-нотификации</a></li>
+    {% endif %}
+
+    {%- if mainMenu.structuresMenuItem is not null %}
+        <li {%- if mainMenu.structuresMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.structuresMenuItem.path }}">Структуры данных</a></li>
+    {% endif %}
+
+    {%- if mainMenu.versioningMenuItem is not null %}
+        <li {%- if mainMenu.versioningMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.versioningMenuItem.path }}">Версионирование API</a></li>
+    {% endif %}
+
+    {%- if mainMenu.errorsMenuItem is not null %}
+        <li {%- if mainMenu.errorsMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.errorsMenuItem.path }}">Список возможных ошибок</a></li>
+    {% endif %}
+
+    {%- if mainMenu.tableOfContents is not null %}
+        <li {%- if mainMenu.tableOfContents.active %} class="active" {%- endif -%}><a href="{{ mainMenu.tableOfContents.path }}">Оглавление</a></li>
+    {% endif %}
+
+    {%- if mainMenu.allContents is not null %}
+        <li {%- if mainMenu.allContents.active %} class="active" {%- endif -%}><a href="{{ mainMenu.allContents.path }}">Версия для печати</a></li>
+    {% endif %}
+
 </menu>

@@ -7,7 +7,7 @@
 
 import ObjectMapper
 
-{%- include 'blocks/class/date-transformers.twig' with { fields: fields } %}
+{%- include 'blocks/class/date-transformers.twig' with { fields: fields, classType: classType } %}
 
 /// {{ description }}
 {% if (not hasChilds) -%}final {% endif %}class {{ classType }}: {{ parentClassType }} {
@@ -23,20 +23,27 @@ import ObjectMapper
     }
 
     required init(map: Map) throws {
-        {%- include 'blocks/class/fields-mapping-from-map.twig' with { fields: fields } -%}
+        {%- include 'blocks/class/fields-mapping-from-map.twig' with {
+            fields: fields,
+            classType: classType
+        } -%}
         {% if hasParent %}
         try super.init(map: map)
         {%- endif %}
     }
 
     {% if hasParent %} override {% endif %}func mapping(map: Map) {
-        {%- include 'blocks/class/fields-mapping-to-map.twig' with { fields: fields } -%}
+        {%- include 'blocks/class/fields-mapping-to-map.twig' with {
+            fields: fields,
+            classType: classType
+        } -%}
         {% if hasParent %}
         super.mapping(map: map)
         {%- endif %}
     }
 
 }
+{#
 {% if not hasChilds %}
 extension {{ type.baseTypeName }}: Equatable {
 
@@ -47,3 +54,4 @@ extension {{ type.baseTypeName }}: Equatable {
 
 }
 {% endif -%}
+#}
