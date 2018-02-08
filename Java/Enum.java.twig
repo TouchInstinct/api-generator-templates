@@ -6,32 +6,21 @@ package {{ packageName }}.api;
 
 import android.support.annotation.NonNull;
 
+import com.bluelinelabs.logansquare.annotation.JsonEnum;
+{%- if valuesTypes == "STRING" %}
+import com.bluelinelabs.logansquare.annotation.JsonStringValue;
+{%- elseif valuesTypes == "INT" %}
+import com.bluelinelabs.logansquare.annotation.JsonNumberValue;
+{%- endif %}
+
 import ru.touchin.templates.logansquare.LoganSquareEnum;
 import ru.touchin.templates.logansquare.LoganSquareEnumConverter;
 
 /**
  * {{ description }}
  */
-public enum {{ name }} implements LoganSquareEnum {
+@JsonEnum
+public enum {{ name }} {
 	{% include 'blocks/enum/cases.twig' with { values: values } %}
-
-    @NonNull
-    private final String valueName;
-
-    {{ name }}(final String valueName) {
-        this.valueName = valueName;
-    }
-
-    @Override
-    @NonNull
-    public String getValueName() {
-        return valueName;
-    }
-
-    public static class LoganSquareConverter extends LoganSquareEnumConverter<{{ name }}> {
-        public LoganSquareConverter() {
-            super(values());
-        }
-    }
 
 }

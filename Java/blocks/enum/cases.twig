@@ -4,8 +4,9 @@
 	 * {{ value.description }}
 	 */
 {%- if valuesTypes == "STRING" %}
-	{{ value.nameUpperCaseWithUnderscope }}("{{ value.value }}"){%- if not (loop.last) %},{% else %};{% endif %}
-{%- else %}
-	TODO,
-{%- endif -%}
+    @JsonStringValue("{{ value.value }}")
+{%- elseif valuesTypes == "INT" %}
+    @JsonNumberValue({{ value.value }})
+{%- endif %}
+    {{ value.nameUpperCaseWithUnderscope }}{%- if not (loop.last) %},{% else %};{% endif %}
 {%- endfor -%}
