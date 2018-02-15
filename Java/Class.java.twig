@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
+import com.bluelinelabs.logansquare.JsonOptional;
+import com.bluelinelabs.logansquare.NonNullJsonOptional;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,9 +30,11 @@ import ru.touchin.templates.ApiModel;
 import ru.touchin.roboswag.core.utils.ObjectUtils;
 import ru.touchin.templates.logansquare.LoganSquareJsonModel;
 
+{% if (description is not empty) %}
 /**
  * {{ description }}
  */
+{% endif -%}
 @JsonObject(serializeNullObjects = true)
 public class {% include 'blocks/class/classtype.twig' with { type: type } %} extends {% include 'blocks/class/supertype.twig' with { type: type, parent: parent } %} {
 {% include 'blocks/class/fields.twig' with { fields: fields } %}
@@ -45,7 +49,6 @@ public class {% include 'blocks/class/classtype.twig' with { type: type } %} ext
     }
 {% endif %}
 {%- include 'blocks/class/fields-getters-setters.twig' with { fields: fields } %}
-
 	//TODO: add check for collection if TypeParameter
 	//TODO: do not validate enums as ApiModel
 	@Override
@@ -72,7 +75,8 @@ public class {% include 'blocks/class/classtype.twig' with { type: type } %} ext
 		return ObjectUtils.hashCode({%- if parent is not null -%}super.hashCode(), {% endif -%}{%- include 'blocks/class/fields-super-initialization.twig' with { fields: fields } -%});
 	}
 
-	public boolean equals(@Nullable final Object object) {
+	@SuppressWarnings("unchecked")
+    public boolean equals(@Nullable final Object object) {
 		if (this == object) {
 			return true;
 		}
