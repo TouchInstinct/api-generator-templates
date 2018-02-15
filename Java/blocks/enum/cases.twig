@@ -1,8 +1,10 @@
 {%- import '../../utils.twig' as utils -%}
 {%- for value in values %}
-	/**
+	{% if (value.description is not empty) %}
+    /**
 	 * {{ value.description }}
 	 */
+    {% endif -%}
 {%- if valuesTypes == "STRING" %}
     @JsonStringValue("{{ value.value }}")
 {%- elseif valuesTypes == "INT" %}
