@@ -213,19 +213,19 @@ inputStream.readBoolean()
     {%- endif -%}
     {%- if valueType.baseTypeName == "Map" %}
         {%- if nullable -%}
-                if ({{ object }} != null) {
-                    validateCollection({{ object }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
-                }
+        if ({{ object }} != null) {
+            validateCollection({{ object }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        }
         {%- else -%}
-                validateCollection({{ object }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        validateCollection({{ object }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
         {%- endif -%}
     {%- elseif valueType.baseTypeName == "Array" %}
         {%- if nullable -%}
-                if ({{ object }} != null) {
-                    validateCollection({{ object }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
-                }
+        if ({{ object }} != null) {
+            validateCollection({{ object }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        }
         {%- else -%}
-                validateCollection({{ object }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        validateCollection({{ object }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
         {%- endif -%}
     {%- elseif valueType.baseTypeName != "Int"
                 and valueType.baseTypeName != "Long"
@@ -236,19 +236,19 @@ inputStream.readBoolean()
                 and valueType.baseTypeName != "DateTime"
                 and (valueTopType.values is empty) %}
         {%- if valueTopType.allFieldsOrdered is empty %}
-                if ({{ object }} instanceof ApiModel) {
-                    ((ApiModel) {{ object }}).validate();
-                } else if ({{ object }} instanceof List) {
-                    validateCollection(((List) {{ object }}), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
-                } else if ({{ object }} instanceof Map) {
-                    validateCollection(((Map) {{ object }}).values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
-                }
+        if ({{ object }} instanceof ApiModel) {
+        ((ApiModel) {{ object }}{%- if optional -%} .get() {%- endif -%}).validate();
+        } else if ({{ object }} instanceof List) {
+        validateCollection(((List) {{ object }}), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        } else if ({{ object }} instanceof Map) {
+        validateCollection(((Map) {{ object }}).values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        }
         {%- elseif nullable %}
-                if ({{ object }} != null) {
-                    {{ object }}.validate();
-                }
+        if ({{ object }} != null) {
+            {{ object }}{%- if optional -%} .get() {%- endif -%}.validate();
+        }
         {%- else -%}
-                {{ object }}.validate();
+        {{ object }}{%- if optional -%} .get() {%- endif -%}.validate();
         {%- endif -%}
     {%- endif -%}
 {% endmacro %}
