@@ -126,11 +126,11 @@ Collections.unmodifiableMap({{ fieldName }})
     {%- endif -%}
 {% endmacro %}
 
-{% macro formatEquals(fieldName, valueType) %}
+{% macro formatEquals(fieldName, valueType, optional) %}
     {%- if valueType == "List" -%}
-        ObjectUtils.isCollectionsEquals({{ fieldName }}, that.{{ fieldName }})
+        ObjectUtils.isCollectionsEquals({{ fieldName }}{%- if optional -%} .get() {%- endif -%}, that.{{ fieldName }}{%- if optional -%} .get() {%- endif -%})
     {%- elseif valueType == "Map" -%}
-        ObjectUtils.isMapsEquals({{ fieldName }}, that.{{ fieldName }})
+        ObjectUtils.isMapsEquals({{ fieldName }}{%- if optional -%} .get() {%- endif -%}, that.{{ fieldName }}{%- if optional -%} .get() {%- endif -%})
     {%- else -%}
         ObjectUtils.equals({{ fieldName }}, that.{{ fieldName }})
     {%- endif -%}
@@ -208,24 +208,45 @@ inputStream.readBoolean()
         and valueType.baseTypeName != "Long"
         and valueType.baseTypeName != "Double"
         and valueType.baseTypeName != "Bool" %}
-        {% if optional %}if (!{{ object }}.isEmpty()) {% endif -%}
-        validateNotNull({{ object }}{%- if optional -%} .get() {%- endif -%});
+        {%- if optional %}
+        if (!{{ object }}.isEmpty()) {
+            validateNotNull({{ object }}.get());
+        }
+        {%- else %}
+        validateNotNull({{ object }});
+        {%- endif -%}
     {%- endif -%}
     {%- if valueType.baseTypeName == "Map" %}
-        {%- if nullable -%}
+        {%- if optional %}
+        if ({{ object }}.get() != null) {
+            validateCollection({{ object }}.get().values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        }
+        {%- else -%}
+
+        {%- if nullable %}
         if ({{ object }} != null) {
             validateCollection({{ object }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
         }
-        {%- else -%}
+        {%- else %}
         validateCollection({{ object }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
         {%- endif -%}
+
+        {%- endif -%}
     {%- elseif valueType.baseTypeName == "Array" %}
-        {%- if nullable -%}
+        {%- if optional %}
+        if ({{ object }}.get() != null) {
+            validateCollection({{ object }}.get(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        }
+        {%- else %}
+
+        {%- if nullable %}
         if ({{ object }} != null) {
             validateCollection({{ object }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
         }
-        {%- else -%}
+        {%- else %}
         validateCollection({{ object }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        {%- endif -%}
+
         {%- endif -%}
     {%- elseif valueType.baseTypeName != "Int"
                 and valueType.baseTypeName != "Long"
@@ -243,12 +264,16 @@ inputStream.readBoolean()
         } else if ({{ object }} instanceof Map) {
         validateCollection(((Map) {{ object }}).values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
         }
+        {%- elseif optional %}
+        if ({{ object }}.get() != null) {
+            {{ object }}.get().validate();
+        }
         {%- elseif nullable %}
         if ({{ object }} != null) {
-            {{ object }}{%- if optional -%} .get() {%- endif -%}.validate();
+            {{ object }}.validate();
         }
         {%- else -%}
-        {{ object }}{%- if optional -%} .get() {%- endif -%}.validate();
+        {{ object }}.validate();
         {%- endif -%}
     {%- endif -%}
 {% endmacro %}
