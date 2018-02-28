@@ -31,11 +31,24 @@
         <div class="page-data">
             <div class="numbered-contents">
               <ol>
-            {%- include 'blocks/table-of-contents-body.html.twig' with {
-                methods: tableOfContents.methods,
-                classes: tableOfContents.classes,
-                enums: tableOfContents.enums
-            } %}
+              <li>
+                 <h2 class="numbered-contents__title">
+                    <a href="index.html">Общие принципы построения API</a>
+                 </h2>
+                 <ol>
+                    <li><a href="index.html">Протокол общения между сервером и клиентом</a></li>
+                    <li><a href="index.html">Стиль построения API</a></li>
+                    <li><a href="index.html">Используемая кодировка</a></li>
+                    <li><a href="index.html">Допустимые задержки</a></li>
+                    <li><a href="index.html">Передача параметров</a></li>
+                    <li><a href="index.html">Перечисления</a></li>
+                    <li><a href="index.html">бщий вид ответа сервера</a></li>
+                 </ol>
+                {%- include 'blocks/table-of-contents-body.html.twig' with {
+                    methods: tableOfContents.methods,
+                    classes: tableOfContents.classes,
+                    enums: tableOfContents.enums
+                } %}
                </ol>
             </div>
         </div>
@@ -62,7 +75,6 @@
 
             <h2>Перечисления</h2>
             <p class="sub-header">Перечисления в JSON-объектах передаются в виде типа string.</p>
-
 
             <h2>Общий вид ответа сервера</h2>
             <p>Результат вызова любого метода представляет собоий JSON-объект следующеий структуры:</p>
