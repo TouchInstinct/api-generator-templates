@@ -1,32 +1,46 @@
 {%- if methods is not null %}
-    <h2>
-        <a href="{{ methods.path }}">Методы</a>
-    </h2>
-    {% for methodsGroup in methods.items %}
-        <h3>
-            <a href="{{ methodsGroup.path }}">{{ methodsGroup.title }}</a>
-        </h3>
-        {% for method in methodsGroup.items -%}
-            <li><a href="{{ method.path }}">{{ method.title }}</a></li>
-        {% endfor -%}
-    {% endfor %}
+    <li>
+            <h2 class="numbered-contents__title">
+                <a href="{{ methods.path }}">Методы</a>
+            </h2>
+            <ol>
+            {% for methodsGroup in methods.items %}
+                <li>
+                    <a href="{{ methodsGroup.path }}">{{ methodsGroup.title }}</a>
+                    <ol>
+                    {% for method in methodsGroup.items -%}
+                        <li><a href="{{ method.path }}">{{ method.title }}</a></li>
+                    {% endfor -%}
+                    </ol>
+                </li>
+            {% endfor %}
+            </ol>
+    </li>
 
 {%- endif %}
 
 {%- if classes is not null %}
-    <h2>
-        <a href="{{ classes.path }}">Классы</a>
-    </h2>
-    {% for class in classes.items -%}
-        <li><a href="{{ class.path }}">{{ class.title }}</a></li>
-    {% endfor %}
+    <li>
+        <h2 class="numbered-contents__title">
+            <a href="{{ classes.path }}">Классы</a>
+        </h2>
+        <ol>
+            {% for class in classes.items -%}
+                <li><a href="{{ class.path }}">{{ class.title }}</a></li>
+            {% endfor %}
+        </ol>
+    </li>
 {% endif %}
 
 {%- if enums is not null %}
-    <h2>
-        <a href="{{ enums.path }}">Перечисления</a>
-    </h2>
-    {% for enum in enums.items -%}
-        <li><a href="{{ enum.path }}">{{ enum.title }}</a></li>
-    {% endfor %}
+    <li>
+        <h2 class="numbered-contents__title">
+            <a href="{{ enums.path }}">Перечисления</a>
+        </h2>
+        <ol>
+            {% for enum in enums.items -%}
+                <li><a href="{{ enum.path }}">{{ enum.title }}</a></li>
+            {% endfor %}
+        </ol>
+    </li>
 {%- endif %}

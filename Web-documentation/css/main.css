@@ -609,3 +609,13 @@ a.show-example-response:after {
     margin-left: 0.71em;
     top: -.28em;
 }
+
+ol {
+    list-style: none;
+    counter-reset: li;
+}
+
+.numbered-contents a::before {
+    counter-increment: li;
+    content: counters(li, ".") ". ";
+}
