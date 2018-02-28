@@ -18,48 +18,7 @@
     } %}
 
     <div class="content">
-        <div class="page-data">
-            <h2>Протокол общения между сервером и клиентом</h2>
-            <p class="sub-header">HTTPS</p>
-
-            <h2>Стиль построения API</h2>
-            <p class="sub-header">REST</p>
-
-            <h2>Используемая кодировка</h2>
-            <p class="sub-header">UTF-8</p>
-
-            <h2>Допустимые задержки</h2>
-            <p class="sub-header">Генерация ответа на сервере в среднем занимает меньше 1 секунды.</p>
-
-            <h2>Передача параметров</h2>
-            <p>Параметры передаются в виде JSON-объекта в теле запроса. Для всех запросов должен быть выставлен
-                Content-Type: application/json. Url Query String не содержит параметров.</p>
-
-            <h2>Перечисления</h2>
-            <p class="sub-header">Перечисления в JSON-объектах передаются в виде типа string.</p>
-
-
-            <h2>Общий вид ответа сервера</h2>
-            <p>Результат вызова любого метода представляет собоий JSON-объект следующеий структуры:</p>
-            <div class="table">
-                <div class="part-table">
-                    <div class="row-header">
-                        <div>Название поля</div>
-                        <div>Тип поля</div>
-                        <div class="text-centered">Название</div>
-                        <div>Обязательность</div>
-                    </div>
-                    {% for field in responseClass.fields -%}
-                    {%- include 'blocks/field-row.html.twig' with {
-                        field: field,
-                        objectsLinks: objectsLinks
-                    } %}
-                    {%- endfor %}
-                </div>
-            </div>
-
-
-        </div>
+        {%- include 'blocks/main-concepts.html.twig' with { responseClass: responseClass } %}
     </div>
 </div>
 
