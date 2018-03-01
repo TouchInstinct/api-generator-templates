@@ -1,8 +1,7 @@
+<h2 class="main-caption">{{ method.description }}</h2>
+
 <h2>Метод</h2>
 <p class="sub-header">POST {{ method.url }}</p>
-
-<h2>Описание</h2>
-<p class="sub-header">{{ method.description }}</p>
 
 {%- include 'comment.html.twig' with { comment: method.comment } %}
 

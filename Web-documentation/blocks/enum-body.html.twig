@@ -1,5 +1,7 @@
+<h2 class="main-caption">{{ structure.name }}</h2>
+
 <h2>Описание</h2>
-<p class="sub-header">{{ structure.name }} - {{ structure.description }}</p>
+<p class="sub-header">{{ structure.description }}</p>
 
 {%- include 'comment.html.twig' with { comment: structure.comment } %}
 
