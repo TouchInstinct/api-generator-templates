@@ -20,7 +20,9 @@
     <div class="content">
         <div class="page-data">
             <h1>{{ pageTitle }}</h1>
-            <h2>Touch Instinct</h2>
+            {% if author is not empty %}
+                <h2>{{ author }}</h2>
+            {% endif %}
             <p>Версия {{ version }}</p>
             <p>{{ "now"|date("d.M.Y") }}</p>
         </div>
