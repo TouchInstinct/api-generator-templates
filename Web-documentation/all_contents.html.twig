@@ -45,11 +45,25 @@
                     <li><a href="index.html">Перечисления</a></li>
                     <li><a href="index.html">бщий вид ответа сервера</a></li>
                  </ol>
-                {%- include 'blocks/table-of-contents-body.html.twig' with {
+              </li>
+
+              {% if versioningEnabled %}
+              <li>
+                <h2 class="numbered-contents__title">
+                    <a href="index.html">Версионирование API</a>
+                 </h2>
+                 <ol>
+                    <li><a href="versioning.html">Описание</a></li>
+                    <li><a href="versioning.html">Пример</a></li>
+                 </ol>
+              </li>
+              {% endif %}
+
+              {%- include 'blocks/table-of-contents-body.html.twig' with {
                     methods: tableOfContents.methods,
                     classes: tableOfContents.classes,
                     enums: tableOfContents.enums
-                } %}
+              } %}
                </ol>
             </div>
         </div>
@@ -58,6 +72,13 @@
             Общие принципы построения API
         </h1>
         {%- include 'blocks/main-concepts.html.twig' with { responseClass: responseClass } %}
+
+        {% if versioningEnabled %}
+        <h1>
+            Версионирование API
+        </h1>
+        {%- include 'blocks/versioning-info.html.twig' with { errorType: errorType, errorsPagePath: errorsPagePath } %}
+        {% endif %}
 
         {% if methods is not null %}
             <h1>
