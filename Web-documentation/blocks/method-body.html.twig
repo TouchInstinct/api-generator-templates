@@ -67,12 +67,14 @@
     <p class="sub-header">Параметры отсутствуют</p>
 {% endif %}
 
-<h2>Возможные ошибки</h2>
-{% for value in method.errorsEnumeration.values -%}
-    {%- if value.value in method.errorsEnumeration.allowedValues %}
-        <p class="sub-header">#Код {{ value.value }} — {{ value.description }}</p>
-    {%- endif -%}
-{%- endfor %}
+{% if method.errorsEnumeration is not empty %}
+    <h2>Возможные ошибки</h2>
+    {% for value in method.errorsEnumeration.values -%}
+        {%- if value.value in method.errorsEnumeration.allowedValues %}
+            <p class="sub-header">#Код {{ value.value }} — {{ value.description }}</p>
+        {%- endif -%}
+    {%- endfor %}
+{%- endif -%}
 
 <h2>Результат</h2>
 <p>Объект следующей структуры:</p>
