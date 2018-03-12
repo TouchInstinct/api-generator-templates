@@ -80,18 +80,29 @@
         {%- include 'blocks/versioning-info.html.twig' with { errorType: errorType, errorsPagePath: errorsPagePath } %}
         {% endif %}
 
-        {% if methods is not null %}
+        {% if methodGroups is not null %}
             <h1>
                 Методы
             </h1>
-            {% for method in methods %}
+            {% for methodGroup in methodGroups %}
                 <div class="page-data">
-                    {%- include 'blocks/method-body.html.twig' with {
-                    method: method,
-                    objectsLinks: objectsLinks,
-                    showSandbox: false
-                    } %}
+                    <h2>{{ methodGroup.title }}</h2>
+                    {% if methodGroup.description is not null %}
+                        <p>{{ methodGroup.description }}</p>
+                    {% endif %}
+                    {% if methodGroup.baseUrl is not empty %}
+                        <p>BaseUrl: {{ methodGroup.baseUrl }}</p>
+                    {% endif %}
                 </div>
+                {% for method in methodGroup.methods %}
+                    <div class="page-data">
+                        {%- include 'blocks/method-body.html.twig' with {
+                        method: method,
+                        objectsLinks: objectsLinks,
+                        showSandbox: false
+                        } %}
+                    </div>
+                {% endfor %}
             {% endfor %}
         {% endif %}
 
