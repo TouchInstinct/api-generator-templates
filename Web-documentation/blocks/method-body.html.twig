@@ -1,18 +1,61 @@
-<h2>Метод</h2>
-<p class="sub-header">POST {{ method.url }}</p>
+<h2 class="main-caption">{{ method.description }}</h2>
 
-<h2>Описание</h2>
-<p class="sub-header">{{ method.description }}</p>
+<h2>Метод</h2>
+<p class="sub-header">{{ method.type }} {{ method.url }}</p>
 
 {%- include 'comment.html.twig' with { comment: method.comment } %}
 
 <h2>Параметры</h2>
-{% if method.requestFields is not empty %}
+
+{% if method.requestHeaders is not empty %}
+    <p>Заголовки:</p>
+
+    <div class="table example-response-expanded">
+        <div class="part-table">
+            <div class="row-header">
+                <div>Название заголовка</div>
+                <div>Тип</div>
+                <div class="text-centered">Описание</div>
+                <div>Обязательность</div>
+            </div>
+            {% for field in method.requestHeaders -%}
+                {%- include 'field-row.html.twig' with {
+                    field: field,
+                    objectsLinks: objectsLinks
+                } %}
+            {%- endfor %}
+        </div>
+    </div>
+{% endif %}
+
+{% if method.requestQueryParams is not empty %}
+    <p>Query-параметры:</p>
+
     <div class="table example-response-expanded">
         <div class="part-table">
             <div class="row-header">
                 <div>Название параметра</div>
-                <div>Тип параметра</div>
+                <div>Тип</div>
+                <div class="text-centered">Описание</div>
+                <div>Обязательность</div>
+            </div>
+            {% for field in method.requestQueryParams -%}
+                {%- include 'field-row.html.twig' with {
+                    field: field,
+                    objectsLinks: objectsLinks
+                } %}
+            {%- endfor %}
+        </div>
+    </div>
+{% endif %}
+
+{% if method.requestFields is not empty %}
+    <p>Тело запроса, объект следующей структуры:</p>
+    <div class="table example-response-expanded">
+        <div class="part-table">
+            <div class="row-header">
+                <div>Название поля</div>
+                <div>Тип</div>
                 <div class="text-centered">Описание</div>
                 <div>Обязательность</div>
             </div>
@@ -36,7 +79,7 @@
                         <div class="styled-select">
                             <select data-name="{{ field.jsonName }}">
                                 {% for value in field.type.values %}
-                                <option>{{ value.value }}</option>
+                                    <option>{{ value.value }}</option>
                                 {% endfor %}
                             </select>
                         {%- if field.optional or field.nullable -%}
@@ -64,33 +107,61 @@
         </div>
     {% endif %}
     </div>
-{% else %}
-    <p class="sub-header">Параметры отсутствуют</p>
 {% endif %}
 
-<h2>Возможные ошибки</h2>
-{% for value in method.errorsEnumeration.values -%}
-    {%- if value.value in method.errorsEnumeration.allowedValues %}
-        <p class="sub-header">#Код {{ value.value }} — {{ value.description }}</p>
-    {%- endif -%}
-{%- endfor %}
+{% if method.errorsEnumeration is not empty %}
+    <h2>Возможные ошибки</h2>
+    {% for value in method.errorsEnumeration.values -%}
+        {%- if value.value in method.errorsEnumeration.allowedValues %}
+            <p class="sub-header">#Код {{ value.value }} — {{ value.description }}</p>
+        {%- endif -%}
+    {%- endfor %}
+{% endif %}
+
 
 <h2>Результат</h2>
-<p>Объект следующей структуры:</p>
+{% if (method.responseFields is empty) and (method.responseHeaders is empty) %}
+    <p class="sub-header">Результат отсутствует</p>
+{% else %}
+    {% if method.responseFields is not empty %}
+        <p>Объект следующей структуры:</p>
 
-<div class="table example-response-expanded">
-    <div class="part-table">
-        <div class="row-header">
-            <div>Название поля</div>
-            <div>Тип поля</div>
-            <div class="text-centered">Описание</div>
-            <div>Обязательность</div>
+        <div class="table example-response-expanded">
+            <div class="part-table">
+                <div class="row-header">
+                    <div>Название поля</div>
+                    <div>Тип</div>
+                    <div class="text-centered">Описание</div>
+                    <div>Обязательность</div>
+                </div>
+                {% for field in method.responseFields -%}
+                    {%- include 'field-row.html.twig' with {
+                        field: field,
+                        objectsLinks: objectsLinks
+                    } %}
+                {%- endfor %}
+            </div>
         </div>
-        {% for field in method.responseFields -%}
-            {%- include 'field-row.html.twig' with {
-                field: field,
-                objectsLinks: objectsLinks
-            } %}
-        {%- endfor %}
-    </div>
-</div>
+    {% endif %}
+
+    {% if method.responseHeaders is not empty %}
+        <p>Заголовки:</p>
+
+        <div class="table example-response-expanded">
+            <div class="part-table">
+                <div class="row-header">
+                    <div>Название заголовка</div>
+                    <div>Тип</div>
+                    <div class="text-centered">Описание</div>
+                    <div>Обязательность</div>
+                </div>
+                {% for field in method.responseHeaders -%}
+                    {%- include 'field-row.html.twig' with {
+                        field: field,
+                        objectsLinks: objectsLinks
+                    } %}
+                {%- endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
