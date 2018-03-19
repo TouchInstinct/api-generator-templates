@@ -776,4 +776,18 @@ ol {
     .main-page .row-body > *:first-child {
         border-left: 1px solid #c8cdd6;
     }
+
+/* правки для версии без нумирации */
+    .main-page .main-title + .page-data,
+    .main-page .main-title + .page-data .subtitle,
+    .main-page .page-data.section-helper + .page-data,
+    .main-page .page-data.section-helper + .page-data .subtitle,
+    .main-page .page-data h2 + p + .table {
+        page-break-before: avoid;
+    }
+
+    .main-page .page-data.section-helper {
+        margin-bottom: 20px;
+    }
+
 }
