@@ -18,7 +18,7 @@
     } %}
 
     <div class="content">
-        <div class="page-data">
+        <div class="page-data print-title">
             <h1>{{ pageTitle }}</h1>
             {% if author is not empty %}
                 <h2>{{ author }}</h2>
@@ -26,9 +26,9 @@
             <p>Версия {{ version }}</p>
             <p>{{ "now"|date("dd.MM.YYYY") }}</p>
         </div>
-        <h1>
+        <h2 class="main-title">
             Содержание
-        </h1>
+        </h2>
         <div class="page-data">
             <div class="numbered-contents">
               <ol>
@@ -68,25 +68,25 @@
             </div>
         </div>
 
-        <h1>
+        <h2 class="main-title">
             Общие принципы построения API
-        </h1>
+        </h2>
         {%- include 'blocks/main-concepts.html.twig' with { responseClass: responseClass } %}
 
         {% if versioningEnabled %}
-        <h1>
+        <h2 class="main-title">
             Версионирование API
-        </h1>
+        </h2>
         {%- include 'blocks/versioning-info.html.twig' with { errorType: errorType, errorsPagePath: errorsPagePath } %}
         {% endif %}
 
         {% if methodGroups is not null %}
-            <h1>
+            <h2 class="main-title">
                 Методы
-            </h1>
+            </h2>
             {% for methodGroup in methodGroups %}
                 <div class="page-data">
-                    <h2>{{ methodGroup.title }}</h2>
+                    <h2 class="subtitle">{{ methodGroup.title }}</h2>
                     {% if methodGroup.description is not null %}
                         <p>{{ methodGroup.description }}</p>
                     {% endif %}
@@ -107,9 +107,9 @@
         {% endif %}
 
         {% if classes is not null %}
-            <h1>
+            <h2 class="main-title">
                 Классы
-            </h1>
+            </h2>
             {% for class in classes %}
                 <div class="page-data">
                     {%- include 'blocks/class-body.html.twig' with {
@@ -121,9 +121,9 @@
         {% endif %}
 
         {% if enums is not null %}
-            <h1>
+            <h2 class="main-title">
                 Перечисления
-            </h1>
+            </h2>
             {% for enum in enums %}
                 <div class="page-data">
                     {%- include 'blocks/enum-body.html.twig' with {
