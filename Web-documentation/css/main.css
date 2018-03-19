@@ -24,12 +24,17 @@ body {
 .main-page {
     display: flex;
 }
+
 .gutter {
     cursor: col-resize;
     background-image: url("../images/vertical-split.png");
     background-color: transparent;
     background-repeat: no-repeat;
-    background-position: 50%;
+    background-position: 50% 200px;
+}
+
+.gutter:hover {
+    background-color: #333c47;
 }
 
 .aside {
@@ -177,15 +182,15 @@ menu li {
     white-space: nowrap;
 }
 
-.aside-left menu.main>li a:hover,
-.aside-left menu.main>li.active a {
+.aside-left menu.main > li a:hover,
+.aside-left menu.main > li.active a {
     background-color: #222933;
     padding-left: 3.14rem;
     border-left: 0.43rem solid #0ca9e6;
     color: white
 }
 
-.aside-left menu.main>li:first-child+li.active {
+.aside-left menu.main > li:first-child + li.active {
     margin-top: 0;
 }
 
@@ -210,15 +215,15 @@ menu li {
     width: 100%;
 }
 
-.aside-left menu.secondary>li:not(.active)>a:hover {
+.aside-left menu.secondary > li:not(.active) > a:hover {
     opacity: 0.8;
 }
 
-.aside-left menu.secondary>li.active>a {
+.aside-left menu.secondary > li.active > a {
     color: white
 }
 
-.aside-left menu.secondary>li.active menu.child {
+.aside-left menu.secondary > li.active menu.child {
     display: block;
 }
 
@@ -232,11 +237,11 @@ menu li {
     width: auto;
 }
 
-.aside-left menu.child>li>a {
+.aside-left menu.child > li > a {
     color: #7a7f85;
 }
 
-.aside-left menu.child>li.active>a {
+.aside-left menu.child > li.active > a {
     color: #fff;
 }
 
@@ -268,9 +273,13 @@ menu li {
 .page-data {
     width: 100%;
     background-color: white;
-    min-height: calc(100vh - 9rem);
+    min-height: 100vh;
     border: 1px solid #e9ebee;
     padding: 5.28rem;
+}
+
+.content > .page-data:first-child {
+    min-height: calc(100vh - 9rem);
 }
 
 .page-data h2 {
@@ -291,8 +300,7 @@ menu li {
     margin: 0.85rem 0 0;
 }
 
-.page-data p.sub-header {
-}
+.page-data p.sub-header {}
 
 .page-data a {
     color: #000000;
@@ -342,9 +350,10 @@ menu li {
     margin-top: 1.71rem;
 }
 
-.table>.part-table {
+.table > .part-table {
     display: table;
     width: 100%;
+    border-collapse: collapse;
 }
 
 .table p {
@@ -357,19 +366,19 @@ menu li {
     display: table-row;
 }
 
-.row-header>* {
+.row-header > * {
     display: table-cell;
     font-size: 1.15rem;
     text-transform: uppercase;
     color: #838890;
-    padding: 1rem 1.42rem 1rem;
+    padding: 1rem;
     border-bottom: 1px solid #c8cdd6;
     border-right: 1px solid #c8cdd6;
     line-height: 1.8rem;
     white-space: nowrap;
 }
 
-.row-header>*:last-child {
+.row-header > *:last-child {
     border-right: 0;
 }
 
@@ -378,7 +387,7 @@ menu li {
     background-color: white;
 }
 
-.row-body>* {
+.row-body > * {
     display: table-cell;
     font-size: 1.4rem;
     color: #838890;
@@ -388,11 +397,11 @@ menu li {
     border-right: 1px solid #c8cdd6;
 }
 
-.row-body:last-child>* {
+.row-body:last-child > * {
     border-bottom: 0;
 }
 
-.row-body>*:last-child {
+.row-body > *:last-child {
     border-right: 0;
 }
 
@@ -443,11 +452,11 @@ menu li {
     margin-top: 10px;
 }
 
-.example-response>.text-response {
+.example-response > .text-response {
     display: block;
 }
 
-.part-example-response>.inputs {
+.part-example-response > .inputs {
     display: inline-block;
     width: 14.15rem;
     vertical-align: top;
@@ -577,7 +586,7 @@ menu li {
     font-weight: 500;
 }
 
-.part-example-response>.text-response {
+.part-example-response > .text-response {
     display: inline-block;
     width: calc(100% - 16rem);
     vertical-align: top;
@@ -610,12 +619,161 @@ a.show-example-response:after {
     top: -.28em;
 }
 
+/*нумированный список*/
+
 ol {
+    margin: 0;
+    padding: 0;
     list-style: none;
     counter-reset: li;
 }
 
-.numbered-contents a::before {
+
+.numbered-contents > ol > li,
+.numbered-page-data li {
+    padding: 0;
+}
+
+.numbered-contents li {
+    padding-left: 2.5rem;
+}
+
+.numbered-page-data .page-data li h2,
+.numbered-page-data .page-data li h2:first-child {
+    margin: 4.28rem 0 1rem;
+    color: #000000;
+}
+
+.numbered-contents a::before,
+.numbered-page-data h2::before {
     counter-increment: li;
     content: counters(li, ".") ". ";
+}
+
+/*стили для печати*/
+
+.print-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.print-title * {
+    text-align: center;
+}
+
+.print-title h1 {
+    line-height: 1;
+    margin-top: 0;
+}
+
+.main-page .main-title {
+    font-size: 2.5em;
+    line-height: 1;
+    page-break-before: always;
+}
+
+.main-page .subtitle {
+    font-size: 2em;
+    line-height: 1;
+    font-weight: bold;
+
+}
+
+@media print {
+
+    @page {
+        size: A4 portrait;
+        margin: 1.5cm 1cm;
+        @top-right {
+            content: counter(page) "/" counter(pages);
+            font-style: bold;
+        }
+    }
+
+
+    .main-page {
+        min-width: 0;
+        background-color: #ffffff;
+    }
+
+    .main-page .aside-left,
+    .main-page .gutter,
+    .main-page .header {
+        display: none;
+    }
+
+    .main-page .aside-right {
+        width: 100% !important;
+        background-color: #ffffff;
+    }
+
+    .main-page .aside-right .content {
+        padding: 0;
+    }
+
+    .main-page .page-data {
+        box-sizing: border-box;
+        min-height: 0;
+        padding: 0;
+        border: none;
+    }
+
+    .main-page .main-title {
+        margin-top: 0;
+    }
+
+    .main-page .subtitle {
+        page-break-before: always;
+    }
+
+    .main-page .main-title + ol li:first-child .subtitle {
+        page-break-before: avoid;
+    }
+
+    .main-page .numbered-page-data .page-data li {
+        page-break-inside: avoid;
+    }
+
+    .main-page li a,
+    .main-page a.info {
+        color: #838890;
+    }
+
+    .main-page .table {
+        page-break-inside: avoid;
+        border: none;
+        border-radius: 0;
+        background-color: transparent;
+    }
+
+    .main-page .table > .part-table {
+        border-collapse: collapse;
+    }
+
+    .main-page .row-header > * {
+        border-top: 1px solid #c8cdd6;
+        border-bottom: 1px solid #c8cdd6;
+        border-right: 1px solid #c8cdd6;
+        background-color: #e9edf3;
+    }
+
+    .main-page .row-header > *:first-child {
+        border-left: 1px solid #c8cdd6;
+    }
+
+    .main-page .row-body {
+        display: table-row;
+        background-color: white;
+    }
+
+    .main-page .row-body > * {
+        border-bottom: 1px solid #c8cdd6;
+        border-right: 1px solid #c8cdd6;
+    }
+
+    .main-page .row-body > *:first-child {
+        border-left: 1px solid #c8cdd6;
+    }
 }
