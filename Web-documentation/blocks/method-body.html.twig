@@ -7,6 +7,9 @@
 
 <h2>Параметры</h2>
 
+{% if (method.requestHeaders is empty) and (method.requestQueryParams is empty) and (method.requestFields is empty)%}
+    <p class="sub-header">Параметры отсутствуют</p>
+{% else %}
 {% if method.requestHeaders is not empty %}
     <p>Заголовки:</p>
 
@@ -108,16 +111,18 @@
     {% endif %}
     </div>
 {% endif %}
+{% endif %}
 
-{% if method.errorsEnumeration is not empty %}
-    <h2>Возможные ошибки</h2>
+<h2>Возможные ошибки</h2>
+{% if (method.errorsEnumeration is empty) or (method.errorsEnumeration.allowedValues is empty) %}
+    <p class="sub-header">Описание ошибок отсутствует</p>
+{% else %}
     {% for value in method.errorsEnumeration.values -%}
         {%- if value.value in method.errorsEnumeration.allowedValues %}
             <p class="sub-header">#Код {{ value.value }} — {{ value.description }}</p>
         {%- endif -%}
     {%- endfor %}
 {% endif %}
-
 
 <h2>Результат</h2>
 {% if (method.responseFields is empty) and (method.responseHeaders is empty) %}
