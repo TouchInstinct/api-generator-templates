@@ -1,11 +1,11 @@
 <h2 class="subtitle">{{ method.description }}</h2>
 
-<h2>Метод</h2>
+<h3>Метод</h3>
 <p class="sub-header">{{ method.type }} {{ method.url }}</p>
 
 {%- include 'comment.html.twig' with { comment: method.comment } %}
 
-<h2>Параметры</h2>
+<h3>Параметры</h3>
 
 {% if (method.requestHeaders is empty) and (method.requestQueryParams is empty) and (method.requestFields is empty)%}
     <p class="sub-header">Параметры отсутствуют</p>
@@ -113,7 +113,7 @@
 {% endif %}
 {% endif %}
 
-<h2>Возможные ошибки</h2>
+<h3>Возможные ошибки</h3>
 {% if (method.errorsEnumeration is empty) or (method.errorsEnumeration.allowedValues is empty) %}
     <p class="sub-header">Описание ошибок отсутствует</p>
 {% else %}
@@ -124,7 +124,7 @@
     {%- endfor %}
 {% endif %}
 
-<h2>Результат</h2>
+<h3>Результат</h3>
 {% if (method.responseFields is empty) and (method.responseHeaders is empty) %}
     <p class="sub-header">Результат отсутствует</p>
 {% else %}

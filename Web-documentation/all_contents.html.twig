@@ -68,71 +68,99 @@
             </div>
         </div>
 
-        <h2 class="main-title">
-            Общие принципы построения API
-        </h2>
-        {%- include 'blocks/main-concepts.html.twig' with { responseClass: responseClass } %}
+        <div class="numbered-page-data">
+            <ol>
+                <li>
+                    <h2 class="main-title">Общие принципы построения API</h2>
+                    <ol>
+                        <li>
+                            {%- include 'blocks/main-concepts.html.twig' with { responseClass: responseClass } %}
+                        </li>
+                    </ol>
+                </li>
 
-        {% if versioningEnabled %}
-        <h2 class="main-title">
-            Версионирование API
-        </h2>
-        {%- include 'blocks/versioning-info.html.twig' with { errorType: errorType, errorsPagePath: errorsPagePath } %}
-        {% endif %}
+                {% if versioningEnabled %}
+                <li>
+                    <h2 class="main-title">Версионирование API</h2>
+                    <ol>
+                        <li>
+                            {%- include 'blocks/versioning-info.html.twig' with { errorType: errorType, errorsPagePath: errorsPagePath } %}
+                        </li>
+                    </ol>
+                </li>
+                {% endif %}
 
-        {% if methodGroups is not null %}
-            <h2 class="main-title">
-                Методы
-            </h2>
-            {% for methodGroup in methodGroups %}
-                <div class="page-data section-helper">
-                    <h2 class="subtitle">{{ methodGroup.title }}</h2>
-                    {% if methodGroup.description is not null %}
-                        <p>{{ methodGroup.description }}</p>
-                    {% endif %}
-                    {% if methodGroup.baseUrl is not empty %}
-                        <p>BaseUrl: {{ methodGroup.baseUrl }}</p>
-                    {% endif %}
-                </div>
-                {% for method in methodGroup.methods %}
-                    <div class="page-data">
-                        {%- include 'blocks/method-body.html.twig' with {
-                        method: method,
-                        objectsLinks: objectsLinks,
-                        showSandbox: false
-                        } %}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        {% endif %}
+                {% if methodGroups is not null %}
+                <li>
+                    <h2 class="main-title">Методы</h2>
+                    <ol>
+                        {% for methodGroup in methodGroups %}
+                        <li>
+                            <div class="page-data section-helper">
+                                <h2 class="subtitle">{{ methodGroup.title }}</h2>
+                                {% if methodGroup.description is not null %}
+                                    <p>{{ methodGroup.description }}</p>
+                                {% endif %}
+                                {% if methodGroup.baseUrl is not empty %}
+                                    <p>BaseUrl: {{ methodGroup.baseUrl }}</p>
+                                {% endif %}
+                            </div>
+                            <ol>
+                                {% for method in methodGroup.methods %}
+                                    <li>
+                                        <div class="page-data">
+                                        {%- include 'blocks/method-body.html.twig' with {
+                                            method: method,
+                                            objectsLinks: objectsLinks,
+                                            showSandbox: false
+                                        } %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </li>
+                {% endif %}
 
         {% if classes is not null %}
-            <h2 class="main-title">
-                Классы
-            </h2>
-            {% for class in classes %}
-                <div class="page-data">
-                    {%- include 'blocks/class-body.html.twig' with {
-                    structure: class,
-                    objectsLinks: objectsLinks
-                    } %}
-                </div>
-            {% endfor %}
+            <li>
+                <h2 class="main-title">Классы</h2>
+                <ol>
+                    {% for class in classes %}
+                        <li>
+                            <div class="page-data">
+                                {%- include 'blocks/class-body.html.twig' with {
+                                    structure: class,
+                                    objectsLinks: objectsLinks
+                                } %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </li>
         {% endif %}
 
         {% if enums is not null %}
-            <h2 class="main-title">
-                Перечисления
-            </h2>
-            {% for enum in enums %}
-                <div class="page-data">
-                    {%- include 'blocks/enum-body.html.twig' with {
-                    structure: enum,
-                    objectsLinks: objectsLinks
-                    } %}
-                </div>
-            {% endfor %}
+            <li>
+                <h2 class="main-title">Перечисления</h2>
+                <ol>
+                    {% for enum in enums %}
+                        <li>
+                            <div class="page-data">
+                                {%- include 'blocks/enum-body.html.twig' with {
+                                        structure: enum,
+                                        objectsLinks: objectsLinks
+                                } %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </li>
         {% endif %}
+        </ol>
+        </div>
     </div>
 </div>
 
