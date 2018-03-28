@@ -3,8 +3,6 @@ import LeadKit
 {% set serviceName = concat(networkServiceName, "NetworkService") -%}
 class {{ serviceName }}: NetworkService, ConfigurableNetworkService {
 
-    static let shared = {{ serviceName }}()
-
     class var baseUrl: String {
         return "{{ apiUrl }}"
     }
