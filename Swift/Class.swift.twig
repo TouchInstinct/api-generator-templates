@@ -4,6 +4,10 @@
 {%- set hasParent = parent is not null -%}
 {%- set classType = classUtils.classType(type) -%}
 {%- set parentClassType = classUtils.parentClassType(parent, type.parentTypeParameters) -%}
+{%- set hasGenerics = (type.typeParameters is not empty) %}
+{%- for field in allFieldsOrdered -%}
+    {%- set fieldsHasGenericsOrNonEqutableCollections = default(fieldsHasGenericsOrNonEqutableCollections, false) or (utils.hasGenericsOrNonEqutableCollections(field.type) != null) -%}
+{%- endfor -%}
 
 import ObjectMapper
 
@@ -18,7 +22,7 @@ import ObjectMapper
     {% if (hasParent and (fields is empty)) %} override {% endif %}init({%- include 'blocks/class/init-parameters-fields.twig' with { fields: allFieldsOrdered } -%}) {
         {%- include 'blocks/class/fields-initialization.twig' with { fields: fields } -%}
         {% if hasParent %}
-        super.init({%- include 'blocks/class/fields-super-initialization.twig' with { fields:  superclassesFields } -%})
+        super.init({%- include 'blocks/class/fields-super-initialization.twig' with { fields: superclassesFields } -%})
         {%- endif %}
     }
 
@@ -42,16 +46,36 @@ import ObjectMapper
         {%- endif %}
     }
 
+    {% if not fieldsHasGenericsOrNonEqutableCollections -%}
+    func isEqual(to other: {{ classType }}?) -> Bool {
+        guard let other = other else {
+            return false
+        }
+
+        return{%- if hasParent %} super.isEqual(to: other) &&{%- endif %} {% include 'blocks/class/fields-equal.twig' with { fields: fields } %}
+    }
+    {%- endif %}
+
 }
-{#
-{% if not hasChilds %}
+
+{% if (not hasChilds) and (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
 extension {{ type.baseTypeName }}: Equatable {
 
     static func ==(lhs: {{ classType }}, rhs: {{ classType }}) -> Bool {
-        return {%- for field in allFieldsOrdered %} lhs.{{ field.name }} == rhs.{{ field.name }} {% if not (loop.last) -%} && {%- endif %}
-        {% endfor %}
+        return lhs.isEqual(to: rhs)
     }
 
 }
-{% endif -%}
-#}
+{%- endif %}
+
+{% if not hasGenerics -%}
+extension {{ type.baseTypeName }} {
+
+    static let new{{ type.baseTypeName }} = {{ type.baseTypeName }}({%- include 'blocks/class/fields-initialization-default-values.twig' with { fields: allFieldsOrdered } -%})
+
+    func copy{%- if hasChilds -%}{{ type.baseTypeName }}{%- endif -%}With({%- include 'blocks/class/nullable-parameters-fields.twig' with { fields: allFieldsOrdered } -%}) -> {{ type.baseTypeName }} {
+        return {{ type.baseTypeName }}({%- include 'blocks/class/fields-optional-initialization.twig' with { fields: allFieldsOrdered } -%})
+    }
+
+}
+{%- endif %}
