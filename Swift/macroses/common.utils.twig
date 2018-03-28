@@ -93,8 +93,6 @@
         false
     {%- elseif baseTypeName == "Decimal" -%}
         .zero
-    {%- elseif baseTypeName == "Decimal" -%}
-        .zero
     {%- elseif (field.type.values is not null) -%}
         {%- import _self as self -%}
 
