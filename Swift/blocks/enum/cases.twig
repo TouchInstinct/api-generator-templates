@@ -2,11 +2,11 @@
 {%- for value in values -%}
     {%- if valuesTypes == "STRING" %}
 {%- if value.name != value.value %}
-   case {{ utils.escapeIfNeeded(utils.decapitalize(value.name)) }} = "{{ value.value }}"
+   case {{ utils.escapeIfNeeded(utils.enumValueName(value)) }} = "{{ value.value }}"
 {%- else %}
-    case {{ utils.escapeIfNeeded(utils.decapitalize(value.name)) -}}
+    case {{ utils.escapeIfNeeded(utils.enumValueName(value)) -}}
 {% endif -%}
 {%- else %}
-    case {{ utils.escapeIfNeeded(utils.decapitalize(value.name)) }} = {{ value.value }}
+    case {{ utils.escapeIfNeeded(utils.enumValueName(value)) }} = {{ value.value }}
 {%- endif -%}
 {%- endfor -%}

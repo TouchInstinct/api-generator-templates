@@ -63,3 +63,65 @@
 
     {{ self.decapitalize(className) }}{{ self.capitalize(fieldName) -}}Transform
 {%- endmacro %}
+
+{% macro enumValueName(value) %}
+    {%- import _self as self -%}
+
+    {{- self.decapitalize(value.name) -}}
+{%- endmacro %}
+
+{% macro defaultValueForField(field) %}
+    {%- set nullable = field.nullable -%}
+    {%- set optional = field.optional -%}
+    {%- set baseTypeName = field.type.type.baseTypeName -%}
+
+    {%- if nullable or optional -%}
+        nil
+    {%- elseif baseTypeName == "Array" -%}
+        []
+    {%- elseif baseTypeName == "Map" -%}
+        [:]
+    {%- elseif baseTypeName == "String" -%}
+        ""
+    {%- elseif baseTypeName == "DateTime" -%}
+        Date()
+    {%- elseif baseTypeName == "Double" -%}
+        0.0
+    {%- elseif baseTypeName == "Long" or baseTypeName == "Int" -%}
+        0
+    {%- elseif baseTypeName == "Bool" -%}
+        false
+    {%- elseif baseTypeName == "Decimal" -%}
+        .zero
+    {%- elseif baseTypeName == "Decimal" -%}
+        .zero
+    {%- elseif (field.type.values is not null) -%}
+        {%- import _self as self -%}
+
+        .{{ self.enumValueName(first(field.type.values)) }}
+    {%- else -%}
+        .new{{ baseTypeName }}
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro hasGenericsOrNonEqutableCollections(type) %}
+    {%- set valueType = type.type -%}
+
+    {%- if (valueType.typeParameters is not empty) -%}
+        {{ true }}
+    {%- elseif valueType.baseTypeName == "Array" -%}
+        {%- if valueType.itemsType.parent is not null -%}
+            {{ true }}
+        {%- else -%}
+            {{ self.hasGenericsOrNonEqutableCollections(valueType.itemsType) }}
+        {%- endif -%}
+    {%- elseif valueType.baseTypeName == "Map" -%}
+        {{ true }}
+    {%- elseif type.allFieldsOrdered is not null -%}
+        {%- import _self as self -%}
+
+        {%- for field in type.allFieldsOrdered -%}
+            {{ self.hasGenericsOrNonEqutableCollections(field.type) }}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endmacro %}

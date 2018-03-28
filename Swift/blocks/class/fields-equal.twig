@@ -1,0 +1,13 @@
+{%- import '../../macroses/common.utils.twig' as utils -%}
+        {%- for field in fields -%}
+        {%- if (field.type.fields is not null) -%}
+            {%- if field.nullable or field.optional -%}
+                {{- field.name -}}?.isEqual(to: other.{{- field.name -}}) ?? (({{- field.name }} == nil) && (other.{{- field.name }} == nil))
+            {%- else -%}
+                {{- field.name -}}.isEqual(to: other.{{- field.name -}})
+            {%- endif -%}
+        {%- else -%}
+            {{- field.name }} == other.{{- field.name -}}
+        {%- endif -%}
+        {%- if not (loop.last) %} && {% endif -%}
+{% endfor -%}
