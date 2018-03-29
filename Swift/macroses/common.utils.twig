@@ -18,7 +18,7 @@
     {%- elseif valueType.baseTypeName == "Map" -%}
         [{{ self.formatValueType(valueType.keysType) }}: {{ self.formatValueType(valueType.valuesType) }}]
     {%- elseif valueType.baseTypeName == "DateTime" -%}
-        Date
+        DateInRegion
     {%- elseif valueType.baseTypeName == "Long" -%}
         Int64
     {%- elseif valueType.baseTypeName == "Decimal" -%}
@@ -64,6 +64,12 @@
     {{ self.decapitalize(className) }}{{ self.capitalize(fieldName) -}}Transform
 {%- endmacro %}
 
+{% macro dateFormatName(fieldName, className) %}
+    {%- import _self as self -%}
+
+    {{ self.decapitalize(className) }}{{ self.capitalize(fieldName) -}}Format
+{%- endmacro %}
+
 {% macro enumValueName(value) %}
     {%- import _self as self -%}
 
@@ -84,7 +90,7 @@
     {%- elseif baseTypeName == "String" -%}
         ""
     {%- elseif baseTypeName == "DateTime" -%}
-        Date()
+        Date().inRegion()
     {%- elseif baseTypeName == "Double" -%}
         0.0
     {%- elseif baseTypeName == "Long" or baseTypeName == "Int" -%}
