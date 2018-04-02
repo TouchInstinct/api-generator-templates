@@ -1,10 +1,13 @@
 {%- import 'macroses/common.utils.twig' as utils -%}
 {%- import 'macroses/class.utils.twig' as classUtils -%}
 
+{%- set hasDateFormats = dateFormats is not empty -%}
+
+{%- if hasDateFormats %}
 import LeadKit
 import SwiftDate
 
-enum ApiDateFormat: String, LeadKit.DateFormat, Singleton {
+enum ApiDateFormat: String, LeadKit.DateFormat {
 
     {% for format in dateFormats -%}
     {%- set classType = classUtils.classType(format.type) -%}
@@ -16,7 +19,7 @@ enum ApiDateFormat: String, LeadKit.DateFormat, Singleton {
 
 }
 
-final class ApiDateFormattingService: DateFormattingService {
+final class ApiDateFormattingService: DateFormattingService, Singleton {
 
     typealias DateFormatType = ApiDateFormat
 
@@ -27,3 +30,4 @@ final class ApiDateFormattingService: DateFormattingService {
     private init() {}
 
 }
+{%- endif -%}
