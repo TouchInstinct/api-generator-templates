@@ -15,7 +15,7 @@
 
 {%- for field in fields -%}
 {% if field.type.type.baseTypeName == "DateTime" -%}
-private let {{ utils.dateTransformName(field.name, classType) }} = ApiDateFormattingService.shared.mappingTransform(for: "{{ field.type.dateFormat }}")
+private let {{ utils.dateTransformName(field.name, classType) }} = ApiDateFormattingService.mappingTransform(with: .{{ utils.dateFormatName(field.name, classType) }})
 {% endif -%}
 {%- endfor -%}
 {%- endif -%}
