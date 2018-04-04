@@ -619,7 +619,7 @@ a.show-example-response:after {
     top: -.28em;
 }
 
-/*нумированный список*/
+/* оглавление и нумерованный список */
 
 ol {
     margin: 0;
@@ -650,6 +650,10 @@ ol {
     content: counters(li, ".") ". ";
 }
 
+.numbered-contents a::after {
+    content: leader(".") target-counter(attr(href url), page);
+}
+
 .numbered-page-data .page-data h3 {
     font-size: 2rem;
     margin: 4.28rem 0 1rem;
@@ -661,7 +665,7 @@ ol {
     margin-top: 0;
 }
 
-/*стили для печати*/
+/* версия для печати */
 
 .print-title {
     display: flex;
@@ -697,9 +701,15 @@ ol {
     @page {
         size: A4 portrait;
         margin: 1.5cm 1cm;
-        @top-right {
+        @bottom-right {
             content: counter(page) "/" counter(pages);
-            font-style: bold;
+            font-family: 'Roboto', sans-serif;
+        }
+    }
+
+    @page:first {
+        @bottom-right {
+            content: "";
         }
     }
 
@@ -709,7 +719,11 @@ ol {
         background-color: #ffffff;
     }
 
-    .main-page .aside-left,
+    .main-page .aside {
+        display: block;
+    }
+
+    .main-page .aside.aside-left,
     .main-page .gutter,
     .main-page .header {
         display: none;
@@ -731,29 +745,51 @@ ol {
         border: none;
     }
 
+    .main-page .print-title {
+        display: block;
+        padding-top: 10.7cm;
+    }
+
     .main-page .main-title {
         margin-top: 0;
     }
 
-    .main-page .subtitle {
+    .main-page .subtitle,
+    .main-page .main-title + ol li .subtitle {
         page-break-before: always;
+        margin-top: 0;
     }
 
-    .main-page .main-title + ol li:first-child .subtitle {
+    .main-page .main-title + ol li:first-child > .subtitle,
+    .main-page .main-title + ol li:first-child > .page-data .subtitle {
         page-break-before: avoid;
+        margin-top: 3.28rem;
     }
 
-    .main-page .numbered-page-data .page-data li {
-        page-break-inside: avoid;
+    .main-page h2 + p,
+    .main-page h3 + p {
+        page-break-before: avoid !important;
     }
 
-    .main-page li a,
+    .main-page p {
+        font-size: 1.57rem;
+        color: #838890;
+        line-height: 2.2rem;
+        margin: 0.85rem 0 0;
+    }
+
+    .main-page li a {
+        color: #838890;
+    }
+
     .main-page a.info {
         color: #838890;
+        text-decoration: underline;
     }
 
     .main-page .table {
         page-break-inside: avoid;
+        page-break-before: avoid !important;
         border: none;
         border-radius: 0;
         background-color: transparent;
@@ -787,18 +823,4 @@ ol {
     .main-page .row-body > *:first-child {
         border-left: 1px solid #c8cdd6;
     }
-
-/* правки для версии без нумирации */
-    .main-page .main-title + .page-data,
-    .main-page .main-title + .page-data .subtitle,
-    .main-page .page-data.section-helper + .page-data,
-    .main-page .page-data.section-helper + .page-data .subtitle,
-    .main-page .page-data h2 + p + .table {
-        page-break-before: avoid;
-    }
-
-    .main-page .page-data.section-helper {
-        margin-bottom: 20px;
-    }
-
 }
