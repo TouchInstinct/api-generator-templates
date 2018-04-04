@@ -40,7 +40,7 @@
     {%- import _self as self -%}
 
     {%- if field.type.type.baseTypeName == "DateTime" -%}
-        map.value("{{ field.jsonName }}", using: {{ self.dateTransformName(field.name, className) -}})
+        map.value("{{ field.jsonName }}", using: {{ self.mappingTransformForField(field) -}})
     {%- elseif field.type.type.baseTypeName == "Decimal" -%}
         map.value("{{ field.jsonName }}", using: NSDecimalNumberTransform())
     {%- else -%}
@@ -52,23 +52,15 @@
     {%- import _self as self -%}
 
     {%- if field.type.type.baseTypeName == "DateTime" -%}
-        (map["{{ field.jsonName }}"], {{ self.dateTransformName(field.name, className) -}})
+        (map["{{ field.jsonName }}"], {{ self.mappingTransformForField(field) -}})
     {%- else -%}
         map["{{ field.jsonName }}"]
     {%- endif -%}
 {% endmacro %}
 
-{% macro dateTransformName(fieldName, className) %}
-    {%- import _self as self -%}
-
-    {{ self.decapitalize(className) }}{{ self.capitalize(fieldName) -}}Transform
-{%- endmacro %}
-
-{% macro dateFormatName(fieldName, className) %}
-    {%- import _self as self -%}
-
-    {{ self.decapitalize(className) }}{{ self.capitalize(fieldName) -}}Format
-{%- endmacro %}
+{% macro mappingTransformForField(field) %}
+    ApiDateFormattingService.mappingTransform(with: .{{ dateFormatToName(field.type.dateFormat) }})
+{% endmacro %}
 
 {% macro enumValueName(value) %}
     {%- import _self as self -%}
@@ -108,10 +100,22 @@
     {%- endif -%}
 {%- endmacro %}
 
+{% macro valueTypeHasGenerics(valueType) %}
+    {%- if valueType.typeParameters is not empty -%}
+        {{ true }}
+    {%- elseif (valueType.parent is not null) -%}
+        {%- import _self as self -%}
+
+        self.valueTypeHasGenerics(valueType.parent)
+    {%- endif -%}
+{% endmacro %}
+
 {% macro hasGenericsOrNonEqutableCollections(type) %}
     {%- set valueType = type.type -%}
 
-    {%- if (valueType.typeParameters is not empty) -%}
+    {%- import _self as self -%}
+
+    {%- if self.valueTypeHasGenerics(valueType) != null -%}
         {{ true }}
     {%- elseif valueType.baseTypeName == "Array" -%}
         {%- if valueType.itemsType.parent is not null -%}
@@ -122,8 +126,6 @@
     {%- elseif valueType.baseTypeName == "Map" -%}
         {{ true }}
     {%- elseif type.allFieldsOrdered is not null -%}
-        {%- import _self as self -%}
-
         {%- for field in type.allFieldsOrdered -%}
             {{ self.hasGenericsOrNonEqutableCollections(field.type) }}
         {%- endfor -%}
