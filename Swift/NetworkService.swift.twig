@@ -1,4 +1,5 @@
 import LeadKit
+import RxSwift
 
 {% set serviceName = concat(networkServiceName, "NetworkService") -%}
 class {{ serviceName }}: NetworkService, ConfigurableNetworkService {
@@ -9,6 +10,10 @@ class {{ serviceName }}: NetworkService, ConfigurableNetworkService {
 
     convenience init() {
         self.init(sessionManager: {{ serviceName }}.sessionManager)
+    }
+
+    func apiRequest<T: ImmutableMappable>(with parameters: ApiRequestParameters) -> Single<T> {
+        return rxRequest(with: parameters).map { $0.model }.asSingle()
     }
 
 }
