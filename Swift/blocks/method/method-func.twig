@@ -1,16 +1,23 @@
 {%- import '../../macroses/common.utils.twig' as utils -%}
 
-{%- set bodyParamName = utils.decapitalize(method.bodyType.type.typeName) -%}
+{%- if (method.bodyType is not null) -%}
+  {%- set bodyParamName = utils.decapitalize(method.bodyType.type.typeName) -%}
+  {%- set bodyTypeName = method.bodyType.type.typeName -%}
+
+  {%- set hasBody = true -%}
+{%- endif -%}
+
+{%- set methodType = default(method.type, "POST") | lower -%}
 {%- set funcName = utils.decapitalize(method.name) -%}
 
     /// {{ method.description }}
-    func {{ funcName }}({{ bodyParamName }}: {{ method.bodyType.type.typeName }},
+    func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
                    encoding: ParameterEncoding = URLEncoding.default,
                    headers: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}> {
 
         let parameters = ApiRequestParameters(url: "{{ method.url }}",
-                                              method: .post,
-                                              parameters: {{ bodyParamName }}.toJSON(),
+                                              method: .{{ methodType }},
+                                              parameters: {% if hasBody -%}{{ bodyParamName }}.toJSON(){%- else -%}nil{%- endif -%},
                                               encoding: encoding,
                                               headers: headers)
 

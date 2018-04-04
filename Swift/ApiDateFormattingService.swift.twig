@@ -10,8 +10,7 @@ import SwiftDate
 enum ApiDateFormat: String, LeadKit.DateFormat {
 
     {% for format in dateFormats -%}
-    {%- set classType = classUtils.classType(format.type) -%}
-    case {{ utils.dateFormatName(format.fieldName, classType) }} = "{{ format.dateFormat }}"
+    case {{ format.name }} = "{{ format.format }}"
     {% endfor %}
     var swiftDateFormat: SwiftDate.DateFormat {
         return SwiftDate.DateFormat.custom(rawValue)
@@ -30,4 +29,5 @@ final class ApiDateFormattingService: DateFormattingService, Singleton {
     private init() {}
 
 }
+{{ "\n" }}
 {%- endif -%}
