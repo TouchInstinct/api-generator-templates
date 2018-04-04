@@ -11,15 +11,21 @@
 {%- set funcName = utils.decapitalize(method.name) -%}
 
     /// {{ method.description }}
-    func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
+    {{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
                    encoding: ParameterEncoding = URLEncoding.default,
                    headers: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}> {
 
-        let parameters = ApiRequestParameters(url: "{{ method.url }}",
+        {% if isStatic -%}
+          return shared.{{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyParamName }},{{ "\n                   " }}{%- endif -%}
+                   encoding: encoding,
+                   headers: headers)
+        {%- else %}
+          let parameters = ApiRequestParameters(url: "{{ method.url }}",
                                               method: .{{ methodType }},
                                               parameters: {% if hasBody -%}{{ bodyParamName }}.toJSON(){%- else -%}nil{%- endif -%},
                                               encoding: encoding,
                                               headers: headers)
 
-        return rxRequest(with: parameters).map { $0.model }.asSingle()
+          return apiRequest(with: parameters)
+        {%- endif %}
     }

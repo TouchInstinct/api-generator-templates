@@ -2,10 +2,20 @@ import LeadKit
 import RxSwift
 import Alamofire
 
-extension NetworkService {
+{% set serviceName = concat(networkServiceName, "NetworkService") -%}
+
+extension {{ serviceName }} {
 
     {% for method in methods %}
-    {%- include 'blocks/method/method-func.twig' with { method: method } %}
+    {%- include 'blocks/method/method-func.twig' with { method: method, isStatic: false } %}
+
+    {% endfor %}
+}
+
+extension Singleton where Self: {{ serviceName }} {
+
+    {% for method in methods %}
+    {%- include 'blocks/method/method-func.twig' with { method: method, isStatic: true } %}
 
     {% endfor %}
 }
