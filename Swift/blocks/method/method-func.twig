@@ -12,16 +12,18 @@
 
     /// {{ method.description }}
     {{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
+                   encoding: ParameterEncoding? = nil,
                    requestHeaders: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}> {
 
         {% if isStatic -%}
           return shared.{{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyParamName }},{{ "\n                   " }}{%- endif -%}
+                   encoding: encoding,
                    requestHeaders: requestHeaders)
         {%- else %}
           let parameters = ApiRequestParameters(url: configuration.baseUrl + "{{ method.url }}",
                                               method: .{{ methodType }},
                                               parameters: {% if hasBody -%}{{ bodyParamName }}.toJSON(){%- else -%}nil{%- endif -%},
-                                              encoding: configuration.encoding,
+                                              encoding: encoding ?? configuration.encoding,
                                               headers: requestHeaders)
 
           return apiRequest(with: parameters)
