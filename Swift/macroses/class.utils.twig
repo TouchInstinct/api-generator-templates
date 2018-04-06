@@ -1,10 +1,10 @@
-{% macro typeParameters(parameters) %}
+{% macro typeParameters(parameters, withConstraint) %}
     {%- import '../macroses/common.utils.twig' as utils -%}
 
     {%- if parameters is not empty -%}
     <
     {%- for typeParameter in parameters %}
-        {{- utils.formatValueType(typeParameter) -}}{%- if not (loop.last) %}, {% endif %}
+        {{- utils.formatValueType(typeParameter) -}}{{- withConstraint ? ": ImmutableMappable" : ""-}}{%- if not (loop.last) %}, {% endif %}
     {%- endfor -%}
     >
     {%- endif -%}
@@ -13,7 +13,7 @@
 {% macro classType(type) %}
     {%- import _self as self -%}
 
-    {{- type.baseTypeName -}}{{- self.typeParameters(type.typeParameters) -}}
+    {{- type.baseTypeName -}}{{- self.typeParameters(type.typeParameters, true) -}}
 {% endmacro %}
 
 {% macro parentClassType(parent, parentTypeParameters) %}
@@ -25,5 +25,5 @@
         ImmutableMappable
     {%- endif -%}
 
-    {{- self.typeParameters(parentTypeParameters) -}}
+    {{- self.typeParameters(parentTypeParameters, false) -}}
 {% endmacro %}
