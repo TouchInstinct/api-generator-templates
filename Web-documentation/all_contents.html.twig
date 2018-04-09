@@ -62,7 +62,8 @@
               {%- include 'blocks/table-of-contents-body.html.twig' with {
                     methods: tableOfContents.methods,
                     classes: tableOfContents.classes,
-                    enums: tableOfContents.enums
+                    enums: tableOfContents.enums,
+                    useAnchors: true
               } %}
                </ol>
             </div>
@@ -92,12 +93,12 @@
 
                 {% if methodGroups is not null %}
                 <li>
-                    <h2 class="main-title">Методы</h2>
+                    <h2 class="main-title" id="methods">Методы</h2>
                     <ol>
                         {% for methodGroup in methodGroups %}
                         <li>
                             <div class="page-data section-helper">
-                                <h2 class="subtitle">{{ methodGroup.title }}</h2>
+                                <h2 class="subtitle" id="{{ methodGroup.sectionTitle }}">{{ methodGroup.title }}</h2>
                                 {% if methodGroup.description is not null %}
                                     <p>{{ methodGroup.description }}</p>
                                 {% endif %}
@@ -112,7 +113,8 @@
                                         {%- include 'blocks/method-body.html.twig' with {
                                             method: method,
                                             objectsLinks: objectsLinks,
-                                            showSandbox: false
+                                            showSandbox: false,
+                                            useAnchors: true
                                         } %}
                                         </div>
                                     </li>
@@ -126,14 +128,15 @@
 
         {% if classes is not null %}
             <li>
-                <h2 class="main-title">Классы</h2>
+                <h2 class="main-title" id="classes">Классы</h2>
                 <ol>
                     {% for class in classes %}
                         <li>
                             <div class="page-data">
                                 {%- include 'blocks/class-body.html.twig' with {
                                     structure: class,
-                                    objectsLinks: objectsLinks
+                                    objectsLinks: objectsLinks,
+                                    useAnchors: true
                                 } %}
                             </div>
                         </li>
@@ -144,14 +147,15 @@
 
         {% if enums is not null %}
             <li>
-                <h2 class="main-title">Перечисления</h2>
+                <h2 class="main-title" id="enums">Перечисления</h2>
                 <ol>
                     {% for enum in enums %}
                         <li>
                             <div class="page-data">
                                 {%- include 'blocks/enum-body.html.twig' with {
                                         structure: enum,
-                                        objectsLinks: objectsLinks
+                                        objectsLinks: objectsLinks,
+                                        useAnchors: true
                                 } %}
                             </div>
                         </li>
