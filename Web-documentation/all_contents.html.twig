@@ -34,23 +34,23 @@
               <ol>
               <li>
                  <h2 class="numbered-contents__title">
-                    <a href="index.html">Общие принципы построения API</a>
+                    <a href="#main-concepts">Общие принципы построения API</a>
                  </h2>
                  <ol>
-                    <li><a href="index.html">Протокол общения между сервером и клиентом</a></li>
-                    <li><a href="index.html">Стиль построения API</a></li>
-                    <li><a href="index.html">Используемая кодировка</a></li>
-                    <li><a href="index.html">Допустимые задержки</a></li>
-                    <li><a href="index.html">Передача параметров</a></li>
-                    <li><a href="index.html">Перечисления</a></li>
-                    <li><a href="index.html">Общий вид ответа сервера</a></li>
+                    <li><a href="#main-concepts-protocol">Протокол общения между сервером и клиентом</a></li>
+                    <li><a href="#main-concepts-style">Стиль построения API</a></li>
+                    <li><a href="#main-concepts-encoding">Используемая кодировка</a></li>
+                    <li><a href="#main-concepts-delay">Допустимые задержки</a></li>
+                    <li><a href="#main-concepts-params">Передача параметров</a></li>
+                    <li><a href="#main-concepts-enums">Перечисления</a></li>
+                    <li><a href="#main-concepts-general-response">Общий вид ответа сервера</a></li>
                  </ol>
               </li>
 
               {% if versioningEnabled %}
               <li>
                 <h2 class="numbered-contents__title">
-                    <a href="index.html">Версионирование API</a>
+                    <a href="#versioining">Версионирование API</a>
                  </h2>
                  <ol>
                     <li><a href="versioning.html">Описание</a></li>
@@ -71,7 +71,7 @@
         <div class="numbered-page-data">
             <ol>
                 <li>
-                    <h2 class="main-title">Общие принципы построения API</h2>
+                    <h2 class="main-title" id="main-concepts">Общие принципы построения API</h2>
                     <ol>
                         <li>
                             {%- include 'blocks/main-concepts.html.twig' with { responseClass: responseClass } %}
@@ -81,7 +81,7 @@
 
                 {% if versioningEnabled %}
                 <li>
-                    <h2 class="main-title">Версионирование API</h2>
+                    <h2 class="main-title" id="versioning">Версионирование API</h2>
                     <ol>
                         <li>
                             {%- include 'blocks/versioning-info.html.twig' with { errorType: errorType, errorsPagePath: errorsPagePath } %}

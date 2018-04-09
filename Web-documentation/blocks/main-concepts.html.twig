@@ -1,23 +1,23 @@
 <div class="page-data">
-   <h2>Протокол общения между сервером и клиентом</h2>
+   <h2 id="main-concepts-protocol">Протокол общения между сервером и клиентом</h2>
    <p class="sub-header">HTTPS</p>
 
-   <h2>Стиль построения API</h2>
+   <h2 id="main-concepts-style">Стиль построения API</h2>
    <p class="sub-header">REST</p>
 
-   <h2>Используемая кодировка</h2>
+   <h2 id="main-concepts-encoding">Используемая кодировка</h2>
    <p class="sub-header">UTF-8</p>
 
-   <h2>Допустимые задержки</h2>
+   <h2 id="main-concepts-delay">Допустимые задержки</h2>
    <p class="sub-header">Генерация ответа на сервере в среднем занимает меньше 1 секунды.</p>
 
-   <h2>Передача параметров</h2>
+   <h2 id="main-concepts-params">Передача параметров</h2>
    <p>Параметры передаются в виде JSON-объекта в теле запроса. Для всех запросов должен быть выставлен Content-Type: application/json.</p>
 
-   <h2>Перечисления</h2>
+   <h2 id="main-concepts-enums">Перечисления</h2>
    <p class="sub-header">Перечисления в JSON-объектах передаются в виде типа string.</p>
 
-   <h2>Общий вид ответа сервера</h2>
+   <h2 id="main-concepts-general-response">Общий вид ответа сервера</h2>
    <p>Результат вызова любого метода представляет собоий JSON-объект следующеий структуры:</p>
    <div class="table">
       <div class="part-table">
@@ -28,11 +28,11 @@
             <div>Обязательность</div>
          </div>
          {% for field in responseClass.fields -%}
-         {%- include 'field-row.html.twig' with {
-         field: field,
-         objectsLinks: objectsLinks
-         } %}
-         {%- endfor %}
+            {%- include 'field-row.html.twig' with {
+                field: field,
+                objectsLinks: objectsLinks
+            } %}
+         {% endfor %}
       </div>
    </div>
 </div>
