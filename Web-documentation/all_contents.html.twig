@@ -75,7 +75,10 @@
                     <h2 class="main-title" id="main-concepts">Общие принципы построения API</h2>
                     <ol>
                         <li>
-                            {%- include 'blocks/main-concepts.html.twig' with { responseClass: responseClass } %}
+                            {%- include 'blocks/main-concepts.html.twig' with {
+                                responseClass: responseClass,
+                                useAnchors: true
+                            } %}
                         </li>
                     </ol>
                 </li>

@@ -30,7 +30,8 @@
          {% for field in responseClass.fields -%}
             {%- include 'field-row.html.twig' with {
                 field: field,
-                objectsLinks: objectsLinks
+                objectsLinks: objectsLinks,
+                useAnchors: useAnchors
             } %}
          {% endfor %}
       </div>

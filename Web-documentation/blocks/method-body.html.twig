@@ -24,7 +24,8 @@
             {% for field in method.requestHeaders -%}
                 {%- include 'field-row.html.twig' with {
                     field: field,
-                    objectsLinks: objectsLinks
+                    objectsLinks: objectsLinks,
+                    useAnchors: useAnchors
                 } %}
             {%- endfor %}
         </div>
@@ -45,7 +46,8 @@
             {% for field in method.requestQueryParams -%}
                 {%- include 'field-row.html.twig' with {
                     field: field,
-                    objectsLinks: objectsLinks
+                    objectsLinks: objectsLinks,
+                    useAnchors: useAnchors
                 } %}
             {%- endfor %}
         </div>
@@ -65,7 +67,8 @@
             {% for field in method.requestFields -%}
                 {%- include 'field-row.html.twig' with {
                     field: field,
-                    objectsLinks: objectsLinks
+                    objectsLinks: objectsLinks,
+                    useAnchors: useAnchors
                 } %}
             {%- endfor %}
         </div>
@@ -142,7 +145,8 @@
                 {% for field in method.responseFields -%}
                     {%- include 'field-row.html.twig' with {
                         field: field,
-                        objectsLinks: objectsLinks
+                        objectsLinks: objectsLinks,
+                        useAnchors: useAnchors
                     } %}
                 {%- endfor %}
             </div>
@@ -163,7 +167,8 @@
                 {% for field in method.responseHeaders -%}
                     {%- include 'field-row.html.twig' with {
                         field: field,
-                        objectsLinks: objectsLinks
+                        objectsLinks: objectsLinks,
+                        useAnchors: useAnchors
                     } %}
                 {%- endfor %}
             </div>

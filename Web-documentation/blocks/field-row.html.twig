@@ -1,15 +1,15 @@
-{%- macro formatValueType(valueType, nullable, objectsLinks) -%}
+{%- macro formatValueType(valueType, nullable, objectsLinks, useAnchors) -%}
     {%- import _self as self -%}
     {%- import '../utils.twig' as utils -%}
 
     {%- if valueType.baseTypeName == "Map" -%}
-        {%- set keysType = self.formatValueType(valueType.keysType, false, objectsLinks) -%}
-        {%- set valuesType = self.formatValueType(valueType.valuesType, false, objectsLinks) -%}
+        {%- set keysType = self.formatValueType(valueType.keysType, false, objectsLinks, useAnchors) -%}
+        {%- set valuesType = self.formatValueType(valueType.valuesType, false, objectsLinks, useAnchors) -%}
         {%- set mapType = concat("Map&lt;", keysType, ", ", valuesType, "&gt;") -%}
 
         {{- utils.formatNullable(mapType, nullable) -}}
     {%- elseif valueType.baseTypeName == "Array" -%}
-        {%- set itemsType = self.formatValueType(valueType.itemsType, false, objectsLinks) -%}
+        {%- set itemsType = self.formatValueType(valueType.itemsType, false, objectsLinks, useAnchors) -%}
         {%- set arrayType = concat(itemsType, "[]") -%}
 
         {{- utils.formatNullable(arrayType, nullable) -}}
@@ -18,9 +18,14 @@
 
         {%- for name, path in objectsLinks -%}
             {%- if name == valueType.baseTypeName -%}
-                {%- set link = path -%}
+                {% if useAnchors %}
+                    {% set link = concat("#", valueType.baseTypeName) %}
+                {% else %}
+                    {%- set link = path -%}
+                {% endif %}
             {%- endif -%}
         {%- endfor -%}
+
 
         {%- if link is not null -%}
             <a class="info" href="{{ link }}">{{- utils.formatNullable(valueType.typeName, nullable) -}}</a>
@@ -36,7 +41,7 @@
 <div class="row-body">
     <div>{{ field.jsonName }}</div>
     <div>
-    {{ self.formatValueType(field.type.type, field.nullable, objectsLinks) }}
+    {{ self.formatValueType(field.type.type, field.nullable, objectsLinks, useAnchors) }}
     </div>
     <div>{{ field.description }}</div>
     <div>{{ utils.optionalDescription(field.optional) }}</div>
