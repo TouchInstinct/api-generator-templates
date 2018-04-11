@@ -58,9 +58,9 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro mappingTransformForField(field) %}
+{%- macro mappingTransformForField(field) -%}
     ApiDateFormattingService.mappingTransform(with: .{{ dateFormatToName(field.type.dateFormat) }})
-{% endmacro %}
+{%- endmacro -%}
 
 {% macro enumValueName(value) %}
     {%- import _self as self -%}
@@ -106,7 +106,7 @@
     {%- elseif (valueType.parent is not null) -%}
         {%- import _self as self -%}
 
-        self.valueTypeHasGenerics(valueType.parent)
+        {{ self.valueTypeHasGenerics(valueType.parent) }}
     {%- endif -%}
 {% endmacro %}
 
@@ -118,7 +118,7 @@
     {%- if self.valueTypeHasGenerics(valueType) != null -%}
         {{ true }}
     {%- elseif valueType.baseTypeName == "Array" -%}
-        {%- if valueType.itemsType.parent is not null -%}
+        {%- if (valueType.itemsType.typeParameters is not null) -%}
             {{ true }}
         {%- else -%}
             {{ self.hasGenericsOrNonEqutableCollections(valueType.itemsType) }}
