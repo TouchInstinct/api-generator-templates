@@ -21,10 +21,10 @@
                    requestHeaders: requestHeaders)
         {%- else -%}
           let parameters = apiRequestParameters(relativeUrl: "{{ method.url }}",
-                                                method: .{{ methodType }},
-                                                parameters: {% if hasBody -%}{{ bodyParamName }}.toJSON(){%- else -%}nil{%- endif -%},
-                                                requestEncoding: requestEncoding,
-                                                requestHeaders: requestHeaders)
+                                              method: .{{ methodType }},
+                                              parameters: {% if hasBody -%}{{ bodyParamName }}.toJSON(){%- else -%}nil{%- endif -%},
+                                              requestEncoding: requestEncoding,
+                                              requestHeaders: requestHeaders)
 
           return apiRequest(with: parameters)
         {%- endif %}
