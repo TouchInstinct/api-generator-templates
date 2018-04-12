@@ -14,7 +14,7 @@
             <div class="text-centered">Описание</div>
             <div>Обязательность</div>
         </div>
-        {% for field in structure.allFieldsOrdered -%}
+        {% for field in structure.allFieldsUnordered -%}
             {%- include 'field-row.html.twig' with {
                 field: field,
                 objectsLinks: objectsLinks,
