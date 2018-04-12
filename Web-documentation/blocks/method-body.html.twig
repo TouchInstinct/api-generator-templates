@@ -1,12 +1,15 @@
-<h2 class="main-caption">{{ method.description }}</h2>
+<h2 class="subtitle" id="{{ method.anchorPath }}">{{ method.description }}</h2>
 
-<h2>Метод</h2>
+<h3>Метод</h3>
 <p class="sub-header">{{ method.type }} {{ method.url }}</p>
 
 {%- include 'comment.html.twig' with { comment: method.comment } %}
 
-<h2>Параметры</h2>
+<h3>Параметры</h3>
 
+{% if (method.requestHeaders is empty) and (method.requestQueryParams is empty) and (method.requestFields is empty)%}
+    <p class="sub-header">Параметры отсутствуют</p>
+{% else %}
 {% if method.requestHeaders is not empty %}
     <p>Заголовки:</p>
 
@@ -21,7 +24,8 @@
             {% for field in method.requestHeaders -%}
                 {%- include 'field-row.html.twig' with {
                     field: field,
-                    objectsLinks: objectsLinks
+                    objectsLinks: objectsLinks,
+                    useAnchors: useAnchors
                 } %}
             {%- endfor %}
         </div>
@@ -42,7 +46,8 @@
             {% for field in method.requestQueryParams -%}
                 {%- include 'field-row.html.twig' with {
                     field: field,
-                    objectsLinks: objectsLinks
+                    objectsLinks: objectsLinks,
+                    useAnchors: useAnchors
                 } %}
             {%- endfor %}
         </div>
@@ -62,7 +67,8 @@
             {% for field in method.requestFields -%}
                 {%- include 'field-row.html.twig' with {
                     field: field,
-                    objectsLinks: objectsLinks
+                    objectsLinks: objectsLinks,
+                    useAnchors: useAnchors
                 } %}
             {%- endfor %}
         </div>
@@ -108,9 +114,12 @@
     {% endif %}
     </div>
 {% endif %}
+{% endif %}
 
-{% if method.errorsEnumeration is not empty %}
-    <h2>Возможные ошибки</h2>
+<h3>Возможные ошибки</h3>
+{% if (method.errorsEnumeration is empty) or (method.errorsEnumeration.allowedValues is empty) %}
+    <p class="sub-header">Описание ошибок отсутствует</p>
+{% else %}
     {% for value in method.errorsEnumeration.values -%}
         {%- if value.value in method.errorsEnumeration.allowedValues %}
             <p class="sub-header">#Код {{ value.value }} — {{ value.description }}</p>
@@ -118,8 +127,7 @@
     {%- endfor %}
 {% endif %}
 
-
-<h2>Результат</h2>
+<h3>Результат</h3>
 {% if (method.responseFields is empty) and (method.responseHeaders is empty) %}
     <p class="sub-header">Результат отсутствует</p>
 {% else %}
@@ -137,7 +145,8 @@
                 {% for field in method.responseFields -%}
                     {%- include 'field-row.html.twig' with {
                         field: field,
-                        objectsLinks: objectsLinks
+                        objectsLinks: objectsLinks,
+                        useAnchors: useAnchors
                     } %}
                 {%- endfor %}
             </div>
@@ -158,7 +167,8 @@
                 {% for field in method.responseHeaders -%}
                     {%- include 'field-row.html.twig' with {
                         field: field,
-                        objectsLinks: objectsLinks
+                        objectsLinks: objectsLinks,
+                        useAnchors: useAnchors
                     } %}
                 {%- endfor %}
             </div>

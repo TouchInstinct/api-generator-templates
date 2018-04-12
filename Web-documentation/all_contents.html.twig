@@ -18,7 +18,7 @@
     } %}
 
     <div class="content">
-        <div class="page-data">
+        <div class="page-data print-title">
             <h1>{{ pageTitle }}</h1>
             {% if author is not empty %}
                 <h2>{{ author }}</h2>
@@ -26,35 +26,35 @@
             <p>Версия {{ version }}</p>
             <p>{{ "now"|date("dd.MM.YYYY") }}</p>
         </div>
-        <h1>
+        <h2 class="main-title">
             Содержание
-        </h1>
+        </h2>
         <div class="page-data">
             <div class="numbered-contents">
               <ol>
               <li>
                  <h2 class="numbered-contents__title">
-                    <a href="index.html">Общие принципы построения API</a>
+                    <a href="#main-concepts">Общие принципы построения API</a>
                  </h2>
                  <ol>
-                    <li><a href="index.html">Протокол общения между сервером и клиентом</a></li>
-                    <li><a href="index.html">Стиль построения API</a></li>
-                    <li><a href="index.html">Используемая кодировка</a></li>
-                    <li><a href="index.html">Допустимые задержки</a></li>
-                    <li><a href="index.html">Передача параметров</a></li>
-                    <li><a href="index.html">Перечисления</a></li>
-                    <li><a href="index.html">Общий вид ответа сервера</a></li>
+                    <li><a href="#main-concepts-protocol">Протокол общения между сервером и клиентом</a></li>
+                    <li><a href="#main-concepts-style">Стиль построения API</a></li>
+                    <li><a href="#main-concepts-encoding">Используемая кодировка</a></li>
+                    <li><a href="#main-concepts-delay">Допустимые задержки</a></li>
+                    <li><a href="#main-concepts-params">Передача параметров</a></li>
+                    <li><a href="#main-concepts-enums">Перечисления</a></li>
+                    <li><a href="#main-concepts-general-response">Общий вид ответа сервера</a></li>
                  </ol>
               </li>
 
               {% if versioningEnabled %}
               <li>
                 <h2 class="numbered-contents__title">
-                    <a href="index.html">Версионирование API</a>
+                    <a href="#versioining">Версионирование API</a>
                  </h2>
                  <ol>
-                    <li><a href="versioning.html">Описание</a></li>
-                    <li><a href="versioning.html">Пример</a></li>
+                    <li><a href="#versioning-description">Описание</a></li>
+                    <li><a href="#versioning-example">Пример</a></li>
                  </ol>
               </li>
               {% endif %}
@@ -62,77 +62,112 @@
               {%- include 'blocks/table-of-contents-body.html.twig' with {
                     methods: tableOfContents.methods,
                     classes: tableOfContents.classes,
-                    enums: tableOfContents.enums
+                    enums: tableOfContents.enums,
+                    useAnchors: true
               } %}
                </ol>
             </div>
         </div>
 
-        <h1>
-            Общие принципы построения API
-        </h1>
-        {%- include 'blocks/main-concepts.html.twig' with { responseClass: responseClass } %}
+        <div class="numbered-page-data">
+            <ol>
+                <li>
+                    <h2 class="main-title" id="main-concepts">Общие принципы построения API</h2>
+                    <ol>
+                        <li>
+                            {%- include 'blocks/main-concepts.html.twig' with {
+                                responseClass: responseClass,
+                                useAnchors: true
+                            } %}
+                        </li>
+                    </ol>
+                </li>
 
-        {% if versioningEnabled %}
-        <h1>
-            Версионирование API
-        </h1>
-        {%- include 'blocks/versioning-info.html.twig' with { errorType: errorType, errorsPagePath: errorsPagePath } %}
-        {% endif %}
+                {% if versioningEnabled %}
+                <li>
+                    <h2 class="main-title" id="versioning">Версионирование API</h2>
+                    <ol>
+                        <li>
+                            {%- include 'blocks/versioning-info.html.twig' with { errorType: errorType, errorsPagePath: errorsPagePath } %}
+                        </li>
+                    </ol>
+                </li>
+                {% endif %}
 
-        {% if methodGroups is not null %}
-            <h1>
-                Методы
-            </h1>
-            {% for methodGroup in methodGroups %}
-                <div class="page-data">
-                    <h2>{{ methodGroup.title }}</h2>
-                    {% if methodGroup.description is not null %}
-                        <p>{{ methodGroup.description }}</p>
-                    {% endif %}
-                    {% if methodGroup.baseUrl is not empty %}
-                        <p>BaseUrl: {{ methodGroup.baseUrl }}</p>
-                    {% endif %}
-                </div>
-                {% for method in methodGroup.methods %}
-                    <div class="page-data">
-                        {%- include 'blocks/method-body.html.twig' with {
-                        method: method,
-                        objectsLinks: objectsLinks,
-                        showSandbox: false
-                        } %}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        {% endif %}
+                {% if methodGroups is not null %}
+                <li>
+                    <h2 class="main-title" id="methods">Методы</h2>
+                    <ol>
+                        {% for methodGroup in methodGroups %}
+                        <li>
+                            <div class="page-data section-helper">
+                                <h2 class="subtitle" id="{{ methodGroup.sectionTitle }}">{{ methodGroup.title }}</h2>
+                                {% if methodGroup.description is not null %}
+                                    <p>{{ methodGroup.description }}</p>
+                                {% endif %}
+                                {% if methodGroup.baseUrl is not empty %}
+                                    <p>BaseUrl: {{ methodGroup.baseUrl }}</p>
+                                {% endif %}
+                            </div>
+                            <ol>
+                                {% for method in methodGroup.methods %}
+                                    <li>
+                                        <div class="page-data">
+                                        {%- include 'blocks/method-body.html.twig' with {
+                                            method: method,
+                                            objectsLinks: objectsLinks,
+                                            showSandbox: false,
+                                            useAnchors: true
+                                        } %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </li>
+                {% endif %}
 
         {% if classes is not null %}
-            <h1>
-                Классы
-            </h1>
-            {% for class in classes %}
-                <div class="page-data">
-                    {%- include 'blocks/class-body.html.twig' with {
-                    structure: class,
-                    objectsLinks: objectsLinks
-                    } %}
-                </div>
-            {% endfor %}
+            <li>
+                <h2 class="main-title" id="classes">Классы</h2>
+                <ol>
+                    {% for class in classes %}
+                        <li>
+                            <div class="page-data">
+                                {%- include 'blocks/class-body.html.twig' with {
+                                    structure: class,
+                                    objectsLinks: objectsLinks,
+                                    useAnchors: true
+                                } %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </li>
         {% endif %}
 
         {% if enums is not null %}
-            <h1>
-                Перечисления
-            </h1>
-            {% for enum in enums %}
-                <div class="page-data">
-                    {%- include 'blocks/enum-body.html.twig' with {
-                    structure: enum,
-                    objectsLinks: objectsLinks
-                    } %}
-                </div>
-            {% endfor %}
+            <li>
+                <h2 class="main-title" id="enums">Перечисления</h2>
+                <ol>
+                    {% for enum in enums %}
+                        <li>
+                            <div class="page-data">
+                                {%- include 'blocks/enum-body.html.twig' with {
+                                        structure: enum,
+                                        objectsLinks: objectsLinks,
+                                        useAnchors: true
+                                } %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </li>
         {% endif %}
+        </ol>
+        </div>
     </div>
 </div>
 

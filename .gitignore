@@ -1,0 +1,11 @@
+/api-generator-templates.iml
+/gradlew
+/gradlew.bat
+
+# Intellij
+*.iml
+.idea
+
+# Gradle files
+.gradle/
+gradle/

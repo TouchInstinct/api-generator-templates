@@ -1,15 +1,15 @@
 {%- if methods is not null %}
     <li>
             <h2 class="numbered-contents__title">
-                <a href="{{ methods.path }}">Методы</a>
+                <a href="{% if useAnchors %}#{{ methods.anchorPath }}{% else %}{{ methods.path }}{% endif %}">Методы</a>
             </h2>
             <ol>
             {% for methodsGroup in methods.items %}
                 <li>
-                    <a href="{{ methodsGroup.path }}">{{ methodsGroup.title }}</a>
+                    <a href="{% if useAnchors %}#{{ methodsGroup.anchorPath }}{% else %}{{ methodsGroup.path }}{% endif %}">{{ methodsGroup.title }}</a>
                     <ol>
                     {% for method in methodsGroup.items -%}
-                        <li><a href="{{ method.path }}">{{ method.title }}</a></li>
+                        <li><a href="{% if useAnchors %}#{{ method.anchorPath }}{% else %}{{ method.path }}{% endif %}">{{ method.title }}</a></li>
                     {% endfor -%}
                     </ol>
                 </li>
@@ -22,11 +22,11 @@
 {%- if classes is not null %}
     <li>
         <h2 class="numbered-contents__title">
-            <a href="{{ classes.path }}">Классы</a>
+            <a href="{% if useAnchors %}#{{ classes.anchorPath }}{% else %}{{ classes.path }}{% endif %}">Классы</a>
         </h2>
         <ol>
             {% for class in classes.items -%}
-                <li><a href="{{ class.path }}">{{ class.title }}</a></li>
+                <li><a href="{% if useAnchors %}#{{ class.anchorPath }}{% else %}{{ class.path }}{% endif %}">{{ class.title }}</a></li>
             {% endfor %}
         </ol>
     </li>
@@ -35,11 +35,11 @@
 {%- if enums is not null %}
     <li>
         <h2 class="numbered-contents__title">
-            <a href="{{ enums.path }}">Перечисления</a>
+            <a href="{% if useAnchors %}#{{ enums.anchorPath }}{% else %}{{ enums.path }}{% endif %}">Перечисления</a>
         </h2>
         <ol>
             {% for enum in enums.items -%}
-                <li><a href="{{ enum.path }}">{{ enum.title }}</a></li>
+                <li><a href="{% if useAnchors %}#{{ enum.anchorPath }}{% else %}{{ enum.path }}{% endif %}">{{ enum.title }}</a></li>
             {% endfor %}
         </ol>
     </li>
