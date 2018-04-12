@@ -1,23 +1,32 @@
-import LeadKit
-import ObjectMapper
+{%- import 'macroses/common.utils.twig' as utils -%}
 
-final class ApiDateFormattingService: DateFormattingService {
+{%- set hasDateFormats = dateFormats is not empty -%}
+
+{%- if hasDateFormats %}
+import LeadKit
+import SwiftDate
+
+enum ApiDateFormat: String, LeadKit.DateFormat {
+
+    {% for format in dateFormats -%}
+    case {{ format.name }} = "{{ format.format }}"
+    {% endfor %}
+    var swiftDateFormat: SwiftDate.DateFormat {
+        return SwiftDate.DateFormat.custom(rawValue)
+    }
+
+}
+
+final class ApiDateFormattingService: DateFormattingService, Singleton {
+
+    typealias DateFormatType = ApiDateFormat
+
+    var currentRegion: Region = .Local()
 
     static let shared = ApiDateFormattingService()
 
-    private init() {
-        super.init(formattingArguments: [
-            {% for dateFormat in dateFormats -%}
-                DateFormattingArguments(dateFormat: "{{ dateFormat }}"){% if not (loop.last) %},{%- endif %}
-            {% endfor %}
-        ])
-    }
-}
-
-extension ApiDateFormattingService {
-
-    func mappingTransform(for dateFormat: String) -> TransformOf<Date, String> {
-        return mappingTransform(for: DateFormattingArguments(dateFormat: dateFormat))
-    }
+    private init() {}
 
 }
+{{ "\n" }}
+{%- endif -%}

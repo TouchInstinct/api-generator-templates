@@ -1,18 +1,31 @@
 {%- import '../../macroses/common.utils.twig' as utils -%}
 
-{%- set bodyParamName = utils.decapitalize(method.bodyType.type.typeName) -%}
+{%- if (method.bodyType is not null) -%}
+  {%- set bodyParamName = utils.decapitalize(method.bodyType.type.typeName) -%}
+  {%- set bodyTypeName = method.bodyType.type.typeName -%}
+
+  {%- set hasBody = true -%}
+{%- endif -%}
+
+{%- set methodType = default(method.type, "POST") | lower -%}
 {%- set funcName = utils.decapitalize(method.name) -%}
 
     /// {{ method.description }}
-    func {{ funcName }}({{ bodyParamName }}: {{ method.bodyType.type.typeName }},
-                   encoding: ParameterEncoding = URLEncoding.default,
-                   headers: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}> {
+    {{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
+                   requestEncoding: ParameterEncoding? = nil,
+                   requestHeaders: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}> {
 
-        let parameters = ApiRequestParameters(url: "{{ method.url }}",
-                                              method: .post,
-                                              parameters: {{ bodyParamName }}.toJSON(),
-                                              encoding: encoding,
-                                              headers: headers)
+        {% if isStatic -%}
+          return shared.{{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyParamName }},{{ "\n                   " }}{%- endif -%}
+                   requestEncoding: requestEncoding,
+                   requestHeaders: requestHeaders)
+        {%- else -%}
+          let parameters = apiRequestParameters(relativeUrl: "{{ method.url }}",
+                                              method: .{{ methodType }},
+                                              parameters: {% if hasBody -%}{{ bodyParamName }}.toJSON(){%- else -%}nil{%- endif -%},
+                                              requestEncoding: requestEncoding,
+                                              requestHeaders: requestHeaders)
 
-        return rxRequest(with: parameters).map { $0.model }.asSingle()
+          return apiRequest(with: parameters)
+        {%- endif %}
     }
