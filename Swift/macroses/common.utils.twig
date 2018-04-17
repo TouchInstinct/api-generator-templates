@@ -36,25 +36,29 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro mappingFromMapForField(field, className) %}
+{% macro mappingFromMapForField(field, className, typeParameters) %}
     {%- import _self as self -%}
 
     {%- if field.type.type.baseTypeName == "DateTime" -%}
         map.value("{{ field.jsonName }}", using: {{ self.mappingTransformForField(field) -}})
     {%- elseif field.type.type.baseTypeName == "Decimal" -%}
         map.value("{{ field.jsonName }}", using: NSDecimalNumberTransform())
+    {%- elseif (self.fieldIsGeneric(field, typeParameters) != null) -%}
+        {{ field.type.type.baseTypeName }}.decode(from: map, key: "{{ field.jsonName }}")
     {%- else -%}
         map.value("{{ field.jsonName }}")
     {%- endif -%}
 {% endmacro %}
 
-{% macro mappingToMapForField(field, className) %}
+{% macro mappingToMapForField(field, className, typeParameters) %}
     {%- import _self as self -%}
 
     {%- if field.type.type.baseTypeName == "DateTime" -%}
-        (map["{{ field.jsonName }}"], {{ self.mappingTransformForField(field) -}})
+        {{ field.name }} >>> (map["{{ field.jsonName }}"], {{ self.mappingTransformForField(field) -}})
+    {%- elseif (self.fieldIsGeneric(field, typeParameters) != null) -%}
+        {{ field.name }}.encode(to: map, key: "{{ field.jsonName }}")
     {%- else -%}
-        map["{{ field.jsonName }}"]
+        {{ field.name }} >>> map["{{ field.jsonName }}"]
     {%- endif -%}
 {% endmacro %}
 
@@ -131,3 +135,11 @@
         {%- endfor -%}
     {%- endif -%}
 {%- endmacro %}
+
+{% macro fieldIsGeneric(field, typeParameters) %}
+    {%- for typeParameter in typeParameters -%}
+        {%- if typeParameter.baseTypeName == field.type.type.baseTypeName -%}
+            {{ true }}
+        {%- endif -%}
+    {%- endfor -%}
+{% endmacro %}
