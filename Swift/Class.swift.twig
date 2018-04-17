@@ -60,7 +60,20 @@ import LeadKit
 
 }
 
-{% if (not hasChilds) and (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
+{% if not hasChilds %}
+
+extension {{ type.baseTypeName }}: UniversalMappable {
+
+    static func decode(from map: Map, key: String) throws -> {{ type.baseTypeName }} {
+        return try map.value(key)
+    }
+
+}
+
+{{ "\n" }}
+{%- endif -%}
+
+{%- if (not hasChilds) and (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
 extension {{ type.baseTypeName }}: Equatable {
 
     static func ==(lhs: {{ classType }}, rhs: {{ classType }}) -> Bool {
