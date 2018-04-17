@@ -106,7 +106,7 @@
     {%- elseif (valueType.parent is not null) -%}
         {%- import _self as self -%}
 
-        {{ self.valueTypeHasGenerics(valueType.parent) }}
+        {{- self.valueTypeHasGenerics(valueType.parent) -}}
     {%- endif -%}
 {% endmacro %}
 
@@ -121,13 +121,13 @@
         {%- if (valueType.itemsType.typeParameters is not null) -%}
             {{ true }}
         {%- else -%}
-            {{ self.hasGenericsOrNonEqutableCollections(valueType.itemsType) }}
+            {{- self.hasGenericsOrNonEqutableCollections(valueType.itemsType) -}}
         {%- endif -%}
     {%- elseif valueType.baseTypeName == "Map" -%}
         {{ true }}
     {%- elseif type.allFieldsOrdered is not null -%}
         {%- for field in type.allFieldsOrdered -%}
-            {{ self.hasGenericsOrNonEqutableCollections(field.type) }}
+            {{- self.hasGenericsOrNonEqutableCollections(field.type) -}}
         {%- endfor -%}
     {%- endif -%}
 {%- endmacro %}

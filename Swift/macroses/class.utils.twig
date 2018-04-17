@@ -4,7 +4,7 @@
     {%- if parameters is not empty -%}
     <
     {%- for typeParameter in parameters %}
-        {{- utils.formatValueType(typeParameter) -}}{{- withConstraint ? ": ImmutableMappable" : ""-}}{%- if not (loop.last) %}, {% endif %}
+        {{- utils.formatValueType(typeParameter) -}}{{- withConstraint ? ": UniversalMappable" : ""-}}{%- if not (loop.last) %}, {% endif %}
     {%- endfor -%}
     >
     {%- endif -%}
