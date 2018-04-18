@@ -55,12 +55,11 @@ import LeadKit
         }
 
         return{%- if hasParent %} super.isEqual(to: other){%- endif %}{%- if (fields is not empty) and hasParent %} &&{% endif %} {% include 'blocks/class/fields-equal.twig' with { fields: fields } %}
-    }
+    }{{ "\n" }}
     {%- endif %}
-
 }
-
-{% if not hasChilds %}
+{{ "\n" }}
+{%- if not hasChilds -%}
 extension {{ type.baseTypeName }}: UniversalMappable {
 
     static func decode(from map: Map, key: String) throws -> {{ type.baseTypeName }} {

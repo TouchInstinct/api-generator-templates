@@ -56,7 +56,7 @@
     {%- if field.type.type.baseTypeName == "DateTime" -%}
         {{ field.name }} >>> (map["{{ field.jsonName }}"], {{ self.mappingTransformForField(field) -}})
     {%- elseif (self.fieldIsGeneric(field, typeParameters) != null) -%}
-        {{ field.name }}.encode(to: map, key: "{{ field.jsonName }}")
+        {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) }}.encode(to: map, key: "{{ field.jsonName }}")
     {%- else -%}
         {{ field.name }} >>> map["{{ field.jsonName }}"]
     {%- endif -%}
