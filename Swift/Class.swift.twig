@@ -29,7 +29,8 @@ import LeadKit
     required init(map: Map) throws {
         {%- include 'blocks/class/fields-mapping-from-map.twig' with {
             fields: fields,
-            classType: classType
+            classType: classType,
+            typeParameters: type.typeParameters
         } -%}
         {% if hasParent %}
         try super.init(map: map)
@@ -39,7 +40,8 @@ import LeadKit
     {% if hasParent %} override {% endif %}func mapping(map: Map) {
         {%- include 'blocks/class/fields-mapping-to-map.twig' with {
             fields: fields,
-            classType: classType
+            classType: classType,
+            typeParameters: type.typeParameters
         } -%}
         {% if hasParent %}
         super.mapping(map: map)
@@ -53,12 +55,22 @@ import LeadKit
         }
 
         return{%- if hasParent %} super.isEqual(to: other){%- endif %}{%- if (fields is not empty) and hasParent %} &&{% endif %} {% include 'blocks/class/fields-equal.twig' with { fields: fields } %}
-    }
+    }{{ "\n" }}
     {%- endif %}
+}
+{{ "\n" }}
+{%- if not hasChilds -%}
+extension {{ type.baseTypeName }}: UniversalMappable {
+
+    static func decode(from map: Map, key: String) throws -> {{ type.baseTypeName }} {
+        return try map.value(key)
+    }
 
 }
+{{ "\n" }}
+{%- endif -%}
 
-{% if (not hasChilds) and (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
+{%- if (not hasChilds) and (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
 extension {{ type.baseTypeName }}: Equatable {
 
     static func ==(lhs: {{ classType }}, rhs: {{ classType }}) -> Bool {

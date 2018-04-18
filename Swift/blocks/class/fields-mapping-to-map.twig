@@ -2,9 +2,9 @@
         {%- for field in fields %}
         {%- if field.optional %}
         if {{ field.name }} != nil {
-            {{ field.name }} >>> {{ utils.mappingToMapForField(field, classType) }}
+            {{ utils.mappingToMapForField(field, classType, typeParameters) }}
         }
         {%- else %}
-        {{ field.name }} >>> {{ utils.mappingToMapForField(field, classType) }}
+        {{ utils.mappingToMapForField(field, classType, typeParameters) }}
         {%- endif -%}
 {%- endfor -%}
