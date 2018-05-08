@@ -131,7 +131,9 @@
 {% if (method.responseFields is empty) and (method.responseHeaders is empty) %}
     <p class="sub-header">Результат отсутствует</p>
 {% else %}
-    {% if method.responseFields is not empty %}
+    {% if method.booleanResponseDescription is not empty %}
+        <p>{{ method.booleanResponseDescription }}. Тип Boolean.</p>
+    {% elseif method.responseFields is not empty %}
         <p>Объект следующей структуры:</p>
 
         <div class="table example-response-expanded">
