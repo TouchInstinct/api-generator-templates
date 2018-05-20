@@ -11,7 +11,7 @@ class {{ serviceName }}: NetworkService {
         self.init(configuration: NetworkServiceConfiguration(baseUrl: {{ serviceName }}.apiBaseUrl))
     }
 
-    func apiRequest<T: Decodable>(with parameters: ApiRequestParameters, decoder: JSONDecoder = JSONDecoder()) -> Single<T> {
+    func apiRequest<T: Decodable>(with parameters: ApiRequestParameters, decoder: JSONDecoder) -> Single<T> {
         return rxRequest(with: parameters, decoder: decoder).map { $0.model }.asSingle()
     }
 

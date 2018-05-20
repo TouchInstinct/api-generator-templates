@@ -13,12 +13,14 @@
     /// {{ method.description }}
     {{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
                    requestEncoding: ParameterEncoding? = nil,
-                   requestHeaders: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}> {
+                   requestHeaders: HTTPHeaders? = nil,
+                   decoder: JSONDecoder = JSONDecoder()) -> Single<{{ method.responseType.type.typeName }}> {
 
         {% if isStatic -%}
           return shared.{{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyParamName }},{{ "\n                   " }}{%- endif -%}
                    requestEncoding: requestEncoding,
-                   requestHeaders: requestHeaders)
+                   requestHeaders: requestHeaders,
+                   decoder: decoder)
         {%- else -%}
           let parameters = apiRequestParameters(relativeUrl: "{{ method.url }}",
                                               method: .{{ methodType }},
@@ -26,6 +28,6 @@
                                               requestEncoding: requestEncoding,
                                               requestHeaders: requestHeaders)
 
-          return apiRequest(with: parameters)
+          return apiRequest(with: parameters, decoder)
         {%- endif %}
     }
