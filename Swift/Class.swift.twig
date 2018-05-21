@@ -27,6 +27,15 @@ import LeadKit
         {%- endif %}
     }
 
+    {% if hasParent %}
+    required init(from decoder: Decoder) throws {
+        {%- if fields is not empty %}
+        {% include 'blocks/class/fields-initialization-from-decoder.twig' with { fields: fields} %}
+        {% endif %}
+        try super.init(from: decoder)
+    }
+    {% endif %}
+
     {% if (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
     func isEqual(to other: {{ classType }}?) -> Bool {
         guard let other = other else {
