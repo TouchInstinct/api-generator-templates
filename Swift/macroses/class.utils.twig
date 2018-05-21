@@ -29,5 +29,5 @@
 {% endmacro %}
 
 {% macro codingKey(field) %}
-    case {{ field.name }}{% if field.name != field.jsonName %} = {{ "#{field.jsonName}" }}{% endif %}
+    case {{ field.name }}{% if field.name != field.jsonName %} = "{{- field.jsonName -}}"{% endif %}
 {% endmacro %}
