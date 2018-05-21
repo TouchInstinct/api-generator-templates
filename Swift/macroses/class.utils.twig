@@ -27,7 +27,3 @@
 
     {{- self.typeParameters(parentTypeParameters, false) -}}
 {% endmacro %}
-
-{% macro codingKey(field) %}
-    case {{ field.name }}{% if field.name != field.jsonName %} = "{{- field.jsonName -}}"{% endif %}
-{% endmacro %}
