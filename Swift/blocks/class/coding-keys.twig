@@ -1,8 +1,8 @@
 {%- import '../../macroses/class.utils.twig' as classUtils -%}
     {% if fields is not empty %}
     enum CodingKeys: String, CodingKey {
-        {% for field in fields %}
-        {{ classUtils.codingKey(field) -}}
+        {% for field in fields -%}
+        {{ classUtils.codingKey(field) }}
         {% endfor %}
     }
     {% endif %}

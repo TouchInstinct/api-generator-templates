@@ -15,7 +15,7 @@ import LeadKit
 /// {{ description }}
 {% if (not hasChilds) -%}final {% endif %}class {{ classType }}: {{ parentClassType }} {
 
-    {% include 'blocks/class/coding-keys.twig' %}
+    {% include 'blocks/class/coding-keys.twig' with { fields: fields } %}
 
     {% include 'blocks/class/fields.twig' with { fields: fields } %}
     // MARK: - Initializers
