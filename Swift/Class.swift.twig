@@ -9,7 +9,6 @@
     {%- set fieldsHasGenericsOrNonEqutableCollections = default(fieldsHasGenericsOrNonEqutableCollections, false) or (utils.hasGenericsOrNonEqutableCollections(field.type) != null) -%}
 {%- endfor -%}
 
-import ObjectMapper
 import SwiftDate
 import LeadKit
 
@@ -26,28 +25,6 @@ import LeadKit
         {%- endif %}
     }
 
-    required init(map: Map) throws {
-        {%- include 'blocks/class/fields-mapping-from-map.twig' with {
-            fields: fields,
-            classType: classType,
-            typeParameters: type.typeParameters
-        } -%}
-        {% if hasParent %}
-        try super.init(map: map)
-        {%- endif %}
-    }
-
-    {% if hasParent %} override {% endif %}func mapping(map: Map) {
-        {%- include 'blocks/class/fields-mapping-to-map.twig' with {
-            fields: fields,
-            classType: classType,
-            typeParameters: type.typeParameters
-        } -%}
-        {% if hasParent %}
-        super.mapping(map: map)
-        {%- endif %}
-    }
-
     {% if (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
     func isEqual(to other: {{ classType }}?) -> Bool {
         guard let other = other else {
@@ -59,16 +36,6 @@ import LeadKit
     {%- endif %}
 }
 {{ "\n" }}
-{%- if not hasChilds -%}
-extension {{ type.baseTypeName }}: UniversalMappable {
-
-    static func decode(from map: Map, key: String) throws -> {{ type.baseTypeName }} {
-        return try map.value(key)
-    }
-
-}
-{{ "\n" }}
-{%- endif -%}
 
 {%- if (not hasChilds) and (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
 extension {{ type.baseTypeName }}: Equatable {
