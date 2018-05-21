@@ -1,0 +1,6 @@
+{%- import '../../macroses/class.utils.twig' as classUtils -%}
+    enum CodingKeys: String, CodingKey {
+        {% for field in fields %}
+        {{ classUtils.codingKey(field) }}
+        {% endfor %}
+    }
