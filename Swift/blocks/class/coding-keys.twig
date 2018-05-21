@@ -1,8 +1,7 @@
-{%- import '../../macroses/class.utils.twig' as classUtils -%}
     {% if fields is not empty %}
-    enum CodingKeys: String, CodingKey {
-        {% for field in fields -%}
-        {{ classUtils.codingKey(field) }}
-        {% endfor %}
+    private enum CodingKeys: String, CodingKey {
+        {% for field in fields %}
+        case {{ field.name }}{% if field.name != field.jsonName %} = "{{- field.jsonName -}}"{% endif %}
+        {%- endfor %}
     }
     {% endif %}
