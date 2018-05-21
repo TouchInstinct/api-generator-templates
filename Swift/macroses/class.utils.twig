@@ -4,7 +4,7 @@
     {%- if parameters is not empty -%}
     <
     {%- for typeParameter in parameters %}
-        {{- utils.formatValueType(typeParameter) -}}{{- withConstraint ? ": UniversalMappable" : ""-}}{%- if not (loop.last) %}, {% endif %}
+        {{- utils.formatValueType(typeParameter) -}}{{- withConstraint ? ": Codable" : ""-}}{%- if not (loop.last) %}, {% endif %}
     {%- endfor -%}
     >
     {%- endif -%}
@@ -22,7 +22,7 @@
     {%- if parent is not null %}
         {{- parent.type.baseTypeName -}}
     {%- else -%}
-        ImmutableMappable
+        Codable
     {%- endif -%}
 
     {{- self.typeParameters(parentTypeParameters, false) -}}
