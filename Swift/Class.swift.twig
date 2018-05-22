@@ -27,12 +27,14 @@ import LeadKit
         {%- endif %}
     }
 
-    {% if hasParent %}
+    {% if hasParent or fields is not empty %}
     required init(from decoder: Decoder) throws {
         {%- if fields is not empty %}
         {% include 'blocks/class/fields-initialization-from-decoder.twig' with { fields: fields} %}
-        {% endif %}
+        {%- endif -%}
+        {% if hasParent %}
         try super.init(from: decoder)
+        {%- endif %}
     }
     {% endif %}
 
