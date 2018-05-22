@@ -36,35 +36,44 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro mappingFromMapForField(field, className, typeParameters) %}
+{% macro decodeFromContainer(field) %}
     {%- import _self as self -%}
 
-    {%- if field.type.type.baseTypeName == "DateTime" -%}
-        map.value("{{ field.jsonName }}", using: {{ self.mappingTransformForField(field) -}})
-    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
-        map.value("{{ field.jsonName }}", using: NSDecimalNumberTransform())
-    {%- elseif (self.fieldIsGeneric(field, typeParameters) != null) -%}
-        {{ field.type.type.baseTypeName }}.decode(from: map, key: "{{ field.jsonName }}")
+    {% if field.type.type.baseTypeName == "DateTime" %}
+        {{ self.decodeComplexField(field, "String") }}
+    {% elseif field.type.type.baseTypeName == "Decimal" %}
+        {{ self.decodeComplexField(field, "Decimal") }}
     {%- else -%}
-        map.value("{{ field.jsonName }}")
+        self.{{ field.name }} = {{ self.formatNullableOrOptional("try", field.nullable, field.optional) }} container.decode({{ self.formatValueType(field.type.type) }}.self, forKey: .{{ field.name }})
     {%- endif -%}
 {% endmacro %}
 
-{% macro mappingToMapForField(field, className, typeParameters) %}
+{% macro decodeComplexField(field, decodingType) %}
     {%- import _self as self -%}
 
-    {%- if field.type.type.baseTypeName == "DateTime" -%}
-        {{ field.name }} >>> (map["{{ field.jsonName }}"], {{ self.mappingTransformForField(field) -}})
-    {%- elseif (self.fieldIsGeneric(field, typeParameters) != null) -%}
-        {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) }}.encode(to: map, key: "{{ field.jsonName }}")
+    {%- if field.optional or field.nullable -%}
+        if let {{ field.name }} = try? container.decode({{ decodingType }}.self, forKey: .{{ field.name }}) {
+            {{ self.initExpr(field) }}
+        } else {
+            self.{{ field.name }} = nil
+        }
     {%- else -%}
-        {{ field.name }} >>> map["{{ field.jsonName }}"]
+        let {{ field.name }} = try container.decode({{ decodingType }}.self, forKey: .{{ field.name }})
+        {{ self.initExpr(field) }}
     {%- endif -%}
 {% endmacro %}
 
-{%- macro mappingTransformForField(field) -%}
-    ApiDateFormattingService.mappingTransform(with: .{{ dateFormatToName(field.type.dateFormat) }})
-{%- endmacro -%}
+{% macro initExpr(field) %}
+    {%- if field.type.type.baseTypeName == "DateTime" -%}
+        if let date = DateInRegion(string: {{ field.name }}, format: ApiDateFormat.{{ dateFormatToName(field.type.dateFormat) }}.swiftDateFormat, fromRegion: ApiDateFormattingService.shared.currentRegion) {
+            self.{{ field.name }} = date
+        } else {
+            throw LeadKitError.failedToDecode(reason: "init?(string:format:fromRegion:) returned nil")
+        }
+    {%- elseif  field.type.type.baseTypeName == "Decimal" -%}
+        self.{{ field.name }} = NSDecimalNumber(decimal: {{ field.name }})
+    {%- endif -%}
+{% endmacro %}
 
 {% macro enumValueName(value) %}
     {%- import _self as self -%}
