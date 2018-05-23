@@ -38,6 +38,15 @@ import LeadKit
     }
     {% endif %}
 
+    {% if hasParent -%}override {% endif %}func encode(to encoder: Encoder) throws {
+        {%- if fields is not empty %}
+        {% include 'blocks/class/fields-encode-to-encoder.twig' with { fields: fields} %}
+        {%- endif -%}
+        {% if hasParent %}
+        try super.encode(to: encoder)
+        {%- endif %}
+    }
+
     {% if (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
     func isEqual(to other: {{ classType }}?) -> Bool {
         guard let other = other else {

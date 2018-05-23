@@ -28,11 +28,41 @@
     {%- endif -%}
 {% endmacro %}
 
+{% macro formatEncodingValue(field) %}
+    {%- import _self as self -%}
+
+    {%- if field.type.type.baseTypeName == "DateTime" -%}
+        {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}
+        .string(format: ApiDateFormat.{{ dateFormatToName(field.type.dateFormat) }}.swiftDateFormat)
+    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
+        {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}
+        .decimalValue
+    {%- else -%}
+        {{ field.name }}
+    {%- endif -%}
+{% endmacro %}
+
 {% macro escapeIfNeeded(expr) %}
     {%- if expr == "default" -%}
         `{{ expr }}`
     {%- else -%}
         {{ expr }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro encodeToContainer(field) %}
+    {%- import _self as self -%}
+
+    {%- if field.optional -%}
+        try container.encodeIfPresent({{ self.formatEncodingValue(field) }}, forKey: .{{ field.name }})
+    {%- elseif field.nullable -%}
+        if let value = {{ self.formatEncodingValue(field) }} {
+            try container.encode({{ self.formatEncodingValue(field) }}, forKey: .{{ field.name }})
+        } else {
+            try container.encodeNil(forKey: .{{ field.name }})
+        }
+    {%- else -%}
+        try container.encode({{ self.formatEncodingValue(field) }}, forKey: .{{ field.name }})
     {%- endif -%}
 {% endmacro %}
 

@@ -1,0 +1,5 @@
+{%- import '../../macroses/common.utils.twig' as utils -%}
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    {% for field in fields %}
+        {{ utils.encodeToContainer(field) -}}
+    {%- endfor -%}
