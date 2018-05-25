@@ -9,6 +9,8 @@ import Foundation
 /// - {{ utils.decapitalize(value.name) }}: {{ value.description }}
 {% endfor -%}
 enum {{ name }}: {{ enumutils.enumType(valuesTypes) }}, Codable, RawRepresentable {
+  
+    {% include 'blocks/enum/all-items.twig' %}
     {% include 'blocks/enum/cases.twig' with { values: values } %}
 
 }
