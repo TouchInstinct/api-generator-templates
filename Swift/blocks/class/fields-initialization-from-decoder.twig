@@ -1,0 +1,5 @@
+{%- import '../../macroses/common.utils.twig' as utils -%}
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    {% for field in fields %}
+        {{ utils.decodeFromContainer(field) }}
+    {%- endfor -%}

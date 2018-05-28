@@ -9,12 +9,13 @@
     {%- set fieldsHasGenericsOrNonEqutableCollections = default(fieldsHasGenericsOrNonEqutableCollections, false) or (utils.hasGenericsOrNonEqutableCollections(field.type) != null) -%}
 {%- endfor -%}
 
-import ObjectMapper
 import SwiftDate
 import LeadKit
 
 /// {{ description }}
 {% if (not hasChilds) -%}final {% endif %}class {{ classType }}: {{ parentClassType }} {
+
+    {% include 'blocks/class/coding-keys.twig' with { fields: fields } %}
 
     {% include 'blocks/class/fields.twig' with { fields: fields } %}
     // MARK: - Initializers
@@ -26,25 +27,23 @@ import LeadKit
         {%- endif %}
     }
 
-    required init(map: Map) throws {
-        {%- include 'blocks/class/fields-mapping-from-map.twig' with {
-            fields: fields,
-            classType: classType,
-            typeParameters: type.typeParameters
-        } -%}
+    {% if hasParent or fields is not empty %}
+    required init(from decoder: Decoder) throws {
+        {%- if fields is not empty %}
+        {% include 'blocks/class/fields-initialization-from-decoder.twig' with { fields: fields} %}
+        {%- endif -%}
         {% if hasParent %}
-        try super.init(map: map)
+        try super.init(from: decoder)
         {%- endif %}
     }
+    {% endif %}
 
-    {% if hasParent %} override {% endif %}func mapping(map: Map) {
-        {%- include 'blocks/class/fields-mapping-to-map.twig' with {
-            fields: fields,
-            classType: classType,
-            typeParameters: type.typeParameters
-        } -%}
+    {% if hasParent -%}override {% endif %}func encode(to encoder: Encoder) throws {
+        {%- if fields is not empty %}
+        {% include 'blocks/class/fields-encode-to-encoder.twig' with { fields: fields} %}
+        {%- endif -%}
         {% if hasParent %}
-        super.mapping(map: map)
+        try super.encode(to: encoder)
         {%- endif %}
     }
 
@@ -59,16 +58,6 @@ import LeadKit
     {%- endif %}
 }
 {{ "\n" }}
-{%- if not hasChilds -%}
-extension {{ type.baseTypeName }}: UniversalMappable {
-
-    static func decode(from map: Map, key: String) throws -> {{ type.baseTypeName }} {
-        return try map.value(key)
-    }
-
-}
-{{ "\n" }}
-{%- endif -%}
 
 {%- if (not hasChilds) and (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
 extension {{ type.baseTypeName }}: Equatable {

@@ -1,0 +1,8 @@
+{% import '../../macroses/common.utils.twig' as utils -%}
+static var allItems: [{{ name }}] {
+    {{ "    " }}return [
+    {%- for value in values -%}
+        .{{ utils.decapitalize(value.name) }}{%- if not (loop.last) -%}, {% endif -%}
+    {%- endfor -%}
+    ]
+{{ "    " }}}
