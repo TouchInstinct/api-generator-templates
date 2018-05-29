@@ -51,7 +51,7 @@ import LeadKit
     func isEqual(to other: {{ classType }}?) -> Bool {
         {% if (fields is empty) and (not hasParent) %}
         return false
-        {% elseif %}
+        {% else %}
         guard let other = other else {
             return false
         }
