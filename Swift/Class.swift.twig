@@ -49,11 +49,15 @@ import LeadKit
 
     {% if (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
     func isEqual(to other: {{ classType }}?) -> Bool {
+        {% if (fields is empty) and (not hasParent) %}
+        return false
+        {% elseif %}
         guard let other = other else {
             return false
         }
 
-        return{%- if hasParent %} super.isEqual(to: other){%- endif %}{%- if (fields is not empty) and hasParent %} &&{% endif %} {% include 'blocks/class/fields-equal.twig' with { fields: fields } %}{% if (fields is empty) and (not hasParent) %} false{% endif %}
+        return{%- if hasParent %} super.isEqual(to: other){%- endif %}{%- if (fields is not empty) and hasParent %} &&{% endif %} {% include 'blocks/class/fields-equal.twig' with { fields: fields } %}
+        {% endif %}
     }{{ "\n" }}
     {%- endif %}
 }
