@@ -53,7 +53,7 @@ import LeadKit
             return false
         }
 
-        return{%- if hasParent %} super.isEqual(to: other){%- endif %}{%- if (fields is not empty) and hasParent %} &&{% endif %} {% include 'blocks/class/fields-equal.twig' with { fields: fields } %}
+        return{%- if hasParent %} super.isEqual(to: other){%- endif %}{%- if (fields is not empty) and hasParent %} &&{% endif %} {% include 'blocks/class/fields-equal.twig' with { fields: fields } %}{% if (fields is empty) and (not hasParent) %} false{% endif %}
     }{{ "\n" }}
     {%- endif %}
 }
