@@ -74,7 +74,7 @@
     {% elseif field.type.type.baseTypeName == "Decimal" %}
         {{ self.decodeComplexField(field, "Decimal") }}
     {%- else -%}
-        self.{{ field.name }} = {{ self.formatNullableOrOptional("try", field.nullable, field.optional) }} container.decode({{ self.formatValueType(field.type.type) }}.self, forKey: .{{ field.name }})
+        self.{{ field.name }} = try container.{{- self.formatOptionalDecode(field) -}}({{ self.formatValueType(field.type.type) }}.self, forKey: .{{ field.name }})
     {%- endif -%}
 {% endmacro %}
 
@@ -82,7 +82,7 @@
     {%- import _self as self -%}
 
     {%- if field.optional or field.nullable -%}
-        if let {{ field.name }} = try? container.decode({{ decodingType }}.self, forKey: .{{ field.name }}) {
+        if let {{ field.name }} = try container.decodeIfPresent({{ decodingType }}.self, forKey: .{{ field.name }}) {
             {{ self.initExpr(field) }}
         } else {
             self.{{ field.name }} = nil
@@ -90,6 +90,14 @@
     {%- else -%}
         let {{ field.name }} = try container.decode({{ decodingType }}.self, forKey: .{{ field.name }})
         {{ self.initExpr(field) }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro formatOptionalDecode(field) %}
+    {%- if field.optional or field.nullable -%}
+        decodeIfPresent
+    {%- else -%}
+        decode
     {%- endif -%}
 {% endmacro %}
 
