@@ -3,8 +3,6 @@
 <h3>Описание</h3>
 <p class="sub-header">{{ structure.description }}</p>
 
-{%- include 'comment.html.twig' with { comment: structure.comment } %}
-
 <h3>Структура данных</h3>
 <div class="table">
     <div class="part-table">
@@ -23,3 +21,5 @@
         {%- endfor %}
     </div>
 </div>
+
+{%- include 'comment.html.twig' with { comment: structure.comment } %}

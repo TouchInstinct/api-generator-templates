@@ -3,8 +3,6 @@
 <h3>Метод</h3>
 <p class="sub-header">{{ method.type }} {{ method.url }}</p>
 
-{%- include 'comment.html.twig' with { comment: method.comment } %}
-
 <h3>Параметры</h3>
 
 {% if (method.requestHeaders is empty) and (method.requestQueryParams is empty) and (method.requestFields is empty)%}
@@ -177,3 +175,5 @@
         </div>
     {% endif %}
 {% endif %}
+
+{%- include 'comment.html.twig' with { comment: method.comment } %}
