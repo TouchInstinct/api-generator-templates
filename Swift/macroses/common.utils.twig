@@ -33,7 +33,7 @@
 
     {%- if field.type.type.baseTypeName == "DateTime" -%}
         {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}
-        .string(format: ApiDateFormat.{{ dateFormatToName(field.type.dateFormat) }}.swiftDateFormat)
+        .toString(ApiDateFormat.{{ dateFormatToName(field.type.dateFormat) }}.swiftDateFormat)
     {%- elseif field.type.type.baseTypeName == "Decimal" -%}
         {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}
         .decimalValue
@@ -103,12 +103,12 @@
 
 {% macro initExpr(field) %}
     {%- if field.type.type.baseTypeName == "DateTime" -%}
-        if let date = DateInRegion(string: {{ field.name }}, format: ApiDateFormat.{{ dateFormatToName(field.type.dateFormat) }}.swiftDateFormat, fromRegion: ApiDateFormattingService.shared.currentRegion) {
+        if let date = ApiDateFormattingService.date(from: {{ field.name }}, format: "{{ field.type.dateFormat }}") {
             self.{{ field.name }} = date
         } else {
             throw LeadKitError.failedToDecode(reason: "init?(string:format:fromRegion:) returned nil")
         }
-    {%- elseif  field.type.type.baseTypeName == "Decimal" -%}
+    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
         self.{{ field.name }} = NSDecimalNumber(decimal: {{ field.name }})
     {%- endif -%}
 {% endmacro %}
@@ -133,7 +133,7 @@
     {%- elseif baseTypeName == "String" -%}
         ""
     {%- elseif baseTypeName == "DateTime" -%}
-        Date().inRegion()
+        Date().inDefaultRegion()
     {%- elseif baseTypeName == "Double" -%}
         0.0
     {%- elseif baseTypeName == "Long" or baseTypeName == "Int" -%}
