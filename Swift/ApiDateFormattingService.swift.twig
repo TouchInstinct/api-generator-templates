@@ -11,8 +11,8 @@ enum ApiDateFormat: String, LeadKit.DateFormat {
     {% for format in dateFormats -%}
     case {{ format.name }} = "{{ format.format }}"
     {% endfor %}
-    var swiftDateFormat: SwiftDate.DateFormat {
-        return SwiftDate.DateFormat.custom(rawValue)
+    var swiftDateFormat: DateToStringStyles {
+        return .custom(rawValue)
     }
 
 }
@@ -21,7 +21,7 @@ final class ApiDateFormattingService: DateFormattingService, Singleton {
 
     typealias DateFormatType = ApiDateFormat
 
-    var currentRegion: Region = .Local()
+    var currentRegion: Region = .local
 
     static let shared = ApiDateFormattingService()
 
