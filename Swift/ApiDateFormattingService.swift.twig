@@ -6,12 +6,16 @@
 import LeadKit
 import SwiftDate
 
-enum ApiDateFormat: String, LeadKit.DateFormat {
+enum ApiDateFormat: String, DateFormat {
 
     {% for format in dateFormats -%}
     case {{ format.name }} = "{{ format.format }}"
     {% endfor %}
-    var swiftDateFormat: DateToStringStyles {
+    var dateToStringFormat: DateToStringStyles {
+        return .custom(rawValue)
+    }
+
+    var stringToDateFormat: StringToDateStyles {
         return .custom(rawValue)
     }
 
