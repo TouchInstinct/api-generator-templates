@@ -32,8 +32,7 @@
     {%- import _self as self -%}
 
     {%- if field.type.type.baseTypeName == "DateTime" -%}
-        {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}
-        .toString(ApiDateFormat.{{ dateFormatToName(field.type.dateFormat) }}.swiftDateFormat)
+        ApiDateFormattingService.string(from: {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}, format: .{{ dateFormatToName(field.type.dateFormat) }})
     {%- elseif field.type.type.baseTypeName == "Decimal" -%}
         {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}
         .decimalValue
@@ -103,7 +102,7 @@
 
 {% macro initExpr(field) %}
     {%- if field.type.type.baseTypeName == "DateTime" -%}
-        if let date = ApiDateFormattingService.date(from: {{ field.name }}, format: "{{ field.type.dateFormat }}") {
+        if let date = ApiDateFormattingService.date(from: {{ field.name }}, format: .{{ dateFormatToName(field.type.dateFormat) }}, parsedIn: nil) {
             self.{{ field.name }} = date
         } else {
             throw LeadKitError.failedToDecode(reason: "init?(string:format:fromRegion:) returned nil")
