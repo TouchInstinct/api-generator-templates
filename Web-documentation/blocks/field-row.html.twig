@@ -45,4 +45,8 @@
     </div>
     <div>{{ field.description }}</div>
     <div>{{ utils.optionalDescription(field.optional) }}</div>
+    {% if useServiceField %}
+        <div>{{ field.service }}</div>
+        <div>{{ field.serviceField }}</div>
+    {% endif %}
 </div>
