@@ -11,12 +11,15 @@
             <div>Тип поля</div>
             <div class="text-centered">Описание</div>
             <div>Обязательность</div>
+            <div>Сервис</div>
+            <div>Название поля сервиса</div>
         </div>
         {% for field in structure.allFieldsUnordered -%}
             {%- include 'field-row.html.twig' with {
                 field: field,
                 objectsLinks: objectsLinks,
-                useAnchors: useAnchors
+                useAnchors: useAnchors,
+                useServiceField: true
             } %}
         {%- endfor %}
     </div>
