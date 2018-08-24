@@ -32,7 +32,7 @@
     {%- import _self as self -%}
 
     {%- if field.type.type.baseTypeName == "DateTime" -%}
-        ApiDateFormattingService.string(from: {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}, format: .{{ dateFormatToName(field.type.dateFormat) }})
+        ApiDateFormattingService.string(from: {{ field.name -}}, format: .{{ dateFormatToName(field.type.dateFormat) }})
     {%- elseif field.type.type.baseTypeName == "Decimal" -%}
         {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}
         .decimalValue
@@ -55,8 +55,8 @@
     {%- if field.optional -%}
         try container.encodeIfPresent({{ self.formatEncodingValue(field) }}, forKey: .{{ field.name }})
     {%- elseif field.nullable -%}
-        if let value = {{ self.formatEncodingValue(field) }} {
-            try container.encode(value, forKey: .{{ field.name }})
+        if let {{ field.name }} = {{ field.name }} {
+            try container.encode({{ self.formatEncodingValue(field) }}, forKey: .{{ field.name }})
         } else {
             try container.encodeNil(forKey: .{{ field.name }})
         }
