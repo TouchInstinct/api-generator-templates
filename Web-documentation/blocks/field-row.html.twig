@@ -41,7 +41,10 @@
 <div class="row-body">
     <div>{{ field.jsonName }}</div>
     <div>
-    {{ self.formatValueType(field.type.type, field.nullable, objectsLinks, useAnchors) }}
+        {{ self.formatValueType(field.type.type, field.nullable, objectsLinks, useAnchors) }}
+        {%- if field.type.type.typeName == "DateTime" -%}
+            &nbsp;({{ field.type.dateFormat }})
+        {%- endif -%}
     </div>
     <div>{{ field.description }}</div>
     <div>{{ utils.optionalDescription(field.optional) }}</div>
