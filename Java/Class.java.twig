@@ -30,11 +30,30 @@ import ru.touchin.templates.ApiModel;
 import ru.touchin.roboswag.core.utils.ObjectUtils;
 import ru.touchin.templates.logansquare.LoganSquareJsonModel;
 
-{% if (description is not empty) %}
+{%- if (storageAttributes is not null) %}
+
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+{%- endif %}
+
+{%- if (description is not empty) %}
+
 /**
  * {{ description }}
  */
-{% endif -%}
+{%- endif %}
+{%- if (storageAttributes is not null) %}
+@Entity(
+        {%- if (storageAttributes.tableName is not null) %}
+        tableName = "{{ storageAttributes.tableName }}"
+        {%- endif %}
+        {%- if (storageAttributes.primaryKeys is not empty) %},
+        primaryKeys = { {%- for key in storageAttributes.primaryKeys -%} "
+        {{- key.name -}}
+        " {%- endfor -%} }
+        {%- endif %}
+)
+{%- endif %}
 @JsonObject(serializeNullObjects = true)
 public class {% include 'blocks/class/classtype.twig' with { type: type } %} extends {% include 'blocks/class/supertype.twig' with { type: type, parent: parent } %} {
 {% include 'blocks/class/fields.twig' with { fields: fields } %}
