@@ -257,7 +257,7 @@ inputStream.readBoolean()
                 and valueType.baseTypeName != "DateTime"
                 and (valueTopType.values is empty) %}
         {%- if valueTopType.allFieldsOrdered is empty %}
-        if (((ApiModel) {{ object }}{%- if optional -%} .get() {%- endif -%}) instanceof ApiModel) {
+        if ({{ object }}{%- if optional -%} .get() {%- endif -%} instanceof ApiModel) {
             ((ApiModel) {{ object }}{%- if optional -%} .get() {%- endif -%}).validate();
         } else if ({{ object }} instanceof List) {
             validateCollection(((List) {{ object }}), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
