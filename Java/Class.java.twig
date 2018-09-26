@@ -43,15 +43,17 @@ import android.arch.persistence.room.PrimaryKey;
  */
 {%- endif %}
 {%- if (storageAttributes is not null) %}
+{%- set attributeWas = false %}
 @Entity(
-        {%- if (storageAttributes.tableName is not null) %}
-        tableName = "{{ storageAttributes.tableName }}"
-        {%- endif %}
-        {%- if (storageAttributes.primaryKeys is not empty) %},
-        primaryKeys = { {%- for key in storageAttributes.primaryKeys -%} "
-        {{- key.name -}}
-        " {%- endfor -%} }
-        {%- endif %}
+        {%- if (storageAttributes.tableName is not null) -%}
+            {%- set attributeWas = true -%}
+            tableName = "{{ storageAttributes.tableName }}"
+        {%- endif -%}
+        {%- if attributeWas -%}, {% endif %}
+        {%- if (storageAttributes.primaryKeys is not empty) -%}
+            {%- set attributeWas = true -%}
+            primaryKeys = { {%- for key in storageAttributes.primaryKeys -%} {%- if loop.index0 != 0 %}, {% endif -%} "{{- key.name -}}" {%- endfor -%} }
+        {%- endif -%}
 )
 {%- endif %}
 @JsonObject(serializeNullObjects = true)
@@ -90,6 +92,8 @@ public class {% include 'blocks/class/classtype.twig' with { type: type } %} ext
 		return result;
 	}
 
+{%- if (fields is not empty) %}
+
 	public int hashCode() {
 		return ObjectUtils.hashCode({%- if parent is not null -%}super.hashCode(), {% endif -%}{%- include 'blocks/class/fields-super-initialization.twig' with { fields: fields } -%});
 	}
@@ -116,5 +120,7 @@ public class {% include 'blocks/class/classtype.twig' with { type: type } %} ext
 	private void readObject(@NonNull final ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
 		{%- include 'blocks/class/fields-read-object.twig' with { fields: fields } %}
 	}
+
+{%- endif %}
 
 }
