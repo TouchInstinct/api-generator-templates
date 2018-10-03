@@ -1,0 +1,11 @@
+
+
+    @TypeConverter
+    public static String serialize(@NonNull final {{ name }} value) {
+        return value.name();
+    }
+
+    @TypeConverter
+    public static {{ name }} deserialize(@NonNull final String value) {
+        return {{ name }}.valueOf(value);
+    }
