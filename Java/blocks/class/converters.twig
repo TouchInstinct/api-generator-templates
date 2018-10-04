@@ -1,0 +1,27 @@
+{%- import '../../utils.twig' as utils -%}
+
+{%- for field in fields -%}
+{%- if field.type.type.baseTypeName == "Array" %}
+
+    @TypeConverter
+    public static String serialize{{ utils.capitalize(field.name) }}(@NonNull final List<{{ utils.formatNonOptionalValueType(field.type.type.itemsType, false) }}> value) throws IOException {
+        return LoganSquare.serialize(value);
+    }
+
+    @TypeConverter
+    public static List<{{ utils.formatNonOptionalValueType(field.type.type.itemsType, false) }}> deserialize{{ utils.capitalize(field.name) }}(@NonNull final String value) throws IOException {
+        return LoganSquare.parseList(value, {{ utils.formatNonOptionalValueType(field.type.type.itemsType, false) }}.class);
+    }
+{%- elseif field.type.type.baseTypeName == "Map" %}
+
+    @TypeConverter
+    public static String serialize{{ utils.capitalize(field.name) }}(@NonNull final Map<String, {{ utils.formatNonOptionalValueType(field.type.type.valuesType, false) }}> value) throws IOException {
+        return LoganSquare.serialize(value);
+    }
+
+    @TypeConverter
+    public static Map<String, {{ utils.formatNonOptionalValueType(field.type.type.valuesType, false) }}> deserialize{{ utils.capitalize(field.name) }}(@NonNull final String value) throws IOException {
+        return LoganSquare.parseMap(value, {{ utils.formatNonOptionalValueType(field.type.type.valuesType, false) }}.class);
+    }
+{%- endif -%}
+{%- endfor -%}

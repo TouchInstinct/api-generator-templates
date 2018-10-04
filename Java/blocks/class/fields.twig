@@ -7,7 +7,7 @@
 	 * {{ field.description }}
 	 */
     {% endif -%}
-    {% if (field.type.storable) %}
+    {% if (storageAttributes is not null) and field.type.storable %}
     @TypeConverters({{ field.type.type.baseTypeName }}.class)
     {% endif -%}
     @JsonField(name = "{{ field.jsonName }}")
