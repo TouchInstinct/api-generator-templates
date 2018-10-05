@@ -4,24 +4,88 @@
 {%- if field.type.type.baseTypeName == "Array" %}
 
     @TypeConverter
-    public static String serialize{{ utils.capitalize(field.name) }}(@NonNull final List<{{ utils.formatNonOptionalValueType(field.type.type.itemsType, false) }}> value) throws IOException {
-        return LoganSquare.serialize(value);
+    @Nullable
+    public static String serialize{{ utils.capitalize(field.name) }}(@Nullable final List<{{ utils.formatNonOptionalValueType(field.type.type.itemsType, false) }}> value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.serialize(value);
+        } catch (final IOException exception) {
+            return null;
+        }
     }
 
     @TypeConverter
-    public static List<{{ utils.formatNonOptionalValueType(field.type.type.itemsType, false) }}> deserialize{{ utils.capitalize(field.name) }}(@NonNull final String value) throws IOException {
-        return LoganSquare.parseList(value, {{ utils.formatNonOptionalValueType(field.type.type.itemsType, false) }}.class);
+    @Nullable
+    public static List<{{ utils.formatNonOptionalValueType(field.type.type.itemsType, false) }}> deserialize{{ utils.capitalize(field.name) }}(@Nullable final String value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.parseList(value, {{ utils.formatNonOptionalValueType(field.type.type.itemsType, false) }}.class);
+        } catch (final IOException exception) {
+            return null;
+        }
     }
 {%- elseif field.type.type.baseTypeName == "Map" %}
 
     @TypeConverter
-    public static String serialize{{ utils.capitalize(field.name) }}(@NonNull final Map<String, {{ utils.formatNonOptionalValueType(field.type.type.valuesType, false) }}> value) throws IOException {
-        return LoganSquare.serialize(value);
+    @Nullable
+    public static String serialize{{ utils.capitalize(field.name) }}(@Nullable final Map<String, {{ utils.formatNonOptionalValueType(field.type.type.valuesType, false) }}> value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.serialize(value);
+        } catch (final IOException exception) {
+            return null;
+        }
     }
 
     @TypeConverter
-    public static Map<String, {{ utils.formatNonOptionalValueType(field.type.type.valuesType, false) }}> deserialize{{ utils.capitalize(field.name) }}(@NonNull final String value) throws IOException {
-        return LoganSquare.parseMap(value, {{ utils.formatNonOptionalValueType(field.type.type.valuesType, false) }}.class);
+    @Nullable
+    public static Map<String, {{ utils.formatNonOptionalValueType(field.type.type.valuesType, false) }}> deserialize{{ utils.capitalize(field.name) }}(@Nullable final String value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.parseMap(value, {{ utils.formatNonOptionalValueType(field.type.type.valuesType, false) }}.class);
+        } catch (final IOException exception) {
+            return null;
+        }
+    }
+{%- elseif field.type.type.baseTypeName != "Bool"
+    and field.type.type.baseTypeName != "Int"
+    and field.type.type.baseTypeName != "Long"
+    and field.type.type.baseTypeName != "Double"
+    and field.type.type.baseTypeName != "String"
+    and field.type.storable != true %}
+
+    @TypeConverter
+    @Nullable
+    public static String serialize{{ utils.capitalize(field.name) }}(@Nullable final {{ utils.formatNonOptionalValueType(field.type.type, false) }} value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.serialize(value);
+        } catch (final IOException exception) {
+            return null;
+        }
+    }
+
+    @TypeConverter
+    @Nullable
+    public static {{ utils.formatNonOptionalValueType(field.type.type, false) }} deserialize{{ utils.capitalize(field.name) }}(@Nullable final String value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.parse(value, {{ utils.formatNonOptionalValueType(field.type.type, false) }}.class);
+        } catch (final IOException exception) {
+            return null;
+        }
     }
 {%- endif -%}
 {%- endfor -%}
