@@ -31,12 +31,14 @@
                 and field.type.type.baseTypeName != "Decimal"
                 and field.type.type.baseTypeName != "DateTime"
                 and (field.type.values is empty) %}
-        {%- if field.nullable %}
-        if (this.{{ field.name }} != null) {
-            this.{{ field.name }}.validate();
+        if (this.{{ field.name }} instanceof ApiModel) {
+            {%- if field.nullable %}
+            if (this.{{ field.name }} != null) {
+                ((ApiModel) this.{{ field.name }}).validate();
+            }
+            {%- else %}
+            ((ApiModel) this.{{ field.name }}).validate();
+            {%- endif %}
         }
-        {%- else %}
-        this.{{ field.name }}.validate();
-        {%- endif -%}
     {%- endif -%}
 {%- endfor -%}

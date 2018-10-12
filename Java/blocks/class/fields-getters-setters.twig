@@ -9,7 +9,7 @@
     {{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable) }}
     public {{ utils.formatValueType(field.type.type, field.nullable) }} {% if (field.type.type.baseTypeName == "Bool") and (field.name matches "^is[A-Z,0-9].*") -%}{{ field.name }}{%- else -%}get{{ capitalize(field.name) }}{%- endif -%}() {
         {%- if field.nullable %}
-        if ({{ fieldName }} == null) {
+        if (this.{{ field.name }} == null) {
             return null;
         }
         {%- endif %}

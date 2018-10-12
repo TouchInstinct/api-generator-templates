@@ -8,8 +8,13 @@
      */
     {%- endif %}
     {{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable) }}
-    {%- if (storageAttributes is not null) and field.type.storable %}
+    {%- if (storageAttributes is not null) %}
+    {%- if (field.type.storable) %}
     @TypeConverters({{ field.type.type.baseTypeName }}.class)
+    {%- endif %}
+    {%- if (field.autoGenerate) %}
+    @PrimaryKey(autoGenerate = true)
+    {%- endif %}
     {%- endif %}
     @JsonField(name = "{{ field.jsonName }}")
     private {{ utils.formatValueType(field.type.type, field.nullable) }} {{ field.name }};

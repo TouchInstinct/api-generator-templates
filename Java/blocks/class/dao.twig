@@ -1,0 +1,38 @@
+{%- import '../../utils.twig' as utils -%}
+
+{%- if (storageAttributes is not null) %}
+
+    @android.arch.persistence.room.Dao
+    public interface Dao {
+
+        @NonNull
+        @Query("SELECT * FROM {{ default(storageAttributes.tableName, type.baseTypeName) }}")
+        List<{{ type.baseTypeName }}> get();
+
+        @NonNull
+        @Insert(onConflict = OnConflictStrategy.REPLACE)
+        void insert(@NonNull final Iterable<{{ type.baseTypeName }}> list);
+
+        @NonNull
+        @Delete
+        void delete(@NonNull final Iterable<{{ type.baseTypeName }}> list);
+
+        @Query("DELETE FROM {{ default(storageAttributes.tableName, type.baseTypeName) }}")
+        void clear();
+
+    }
+
+    @android.arch.persistence.room.Dao
+    public interface ReactiveDao {
+
+        @NonNull
+        @Query("SELECT * FROM {{ default(storageAttributes.tableName, type.baseTypeName) }}")
+        Flowable<List<{{ type.baseTypeName }}>> observe();
+
+        @NonNull
+        @Query("SELECT * FROM {{ default(storageAttributes.tableName, type.baseTypeName) }}")
+        Single<List<{{ type.baseTypeName }}>> get();
+
+    }
+
+{%- endif -%}

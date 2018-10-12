@@ -3,6 +3,20 @@
  */
 package {{ packageName }}.api;
 
+{%- if (storageAttributes is not null) %}
+
+import android.arch.persistence.room.Delete;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
+import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Transaction;
+import android.arch.persistence.room.TypeConverter;
+import android.arch.persistence.room.TypeConverters;
+
+import io.reactivex.Flowable;
+import io.reactivex.Single;
+{%- endif %}
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ObjectsCompat;
@@ -29,14 +43,6 @@ import ru.touchin.templates.ApiModel;
 import ru.touchin.roboswag.core.utils.ObjectUtils;
 import ru.touchin.templates.logansquare.LoganSquareJsonModel;
 
-{%- if (storageAttributes is not null) %}
-
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
-import android.arch.persistence.room.TypeConverter;
-{%- endif %}
-
 {%- if (description is not empty) %}
 
 /**
@@ -50,20 +56,18 @@ import android.arch.persistence.room.TypeConverter;
             {%- set attributeWas = true -%}
             tableName = "{{ storageAttributes.tableName }}"
         {%- endif -%}
-        {%- if attributeWas -%}, {% endif %}
+        {%- if attributeWas and storageAttributes.primaryKeys is not empty -%}, {% endif %}
         {%- if (storageAttributes.primaryKeys is not empty) -%}
             {%- set attributeWas = true -%}
-            primaryKeys = { {%- for key in storageAttributes.primaryKeys -%} {%- if not (loop.last) %}, {% endif -%} "{{- key.name -}}" {%- endfor -%} }
+            primaryKeys = { {%- for key in storageAttributes.primaryKeys -%} {%- if not (loop.last) %}, {% endif -%} "{{- key -}}" {%- endfor -%} }
         {%- endif -%}
 )
 @TypeConverters({{ type.baseTypeName }}.class)
 {%- endif %}
-@JsonObject(serializeNullObjects = true)
+@JsonObject(serializeNullObjects = {{ serializeNulls }})
 public class {% include 'blocks/class/classtype.twig' with { type: type } %} extends {% include 'blocks/class/supertype.twig' with { type: type, parent: parent } %} {
 
-{%- if (storageAttributes is not null) -%}
-{%- include 'blocks/class/converters.twig' -%}
-{%- endif -%}
+{%- include 'blocks/class/fields-converters.twig' -%}
 
 {% include 'blocks/class/fields.twig' with { fields: fields } %}
 
@@ -132,5 +136,7 @@ public class {% include 'blocks/class/classtype.twig' with { type: type } %} ext
     }
 
 {%- endif %}
+
+{%- include 'blocks/class/dao.twig' %}
 
 }

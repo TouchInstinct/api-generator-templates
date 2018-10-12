@@ -1,11 +1,17 @@
 {%- import '../../utils.twig' as utils -%}
 
+{%- if (storageAttributes is not null) -%}
+{% set converters = [] %}
+
 {%- for field in fields -%}
+
+{%- if not (field.type.type.baseTypeName in converters) -%}
+
 {%- if field.type.type.baseTypeName == "Array" %}
 
     @TypeConverter
     @Nullable
-    public static String serialize{{ capitalize(field.name) }}(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
+    public static String serialize{{ field.type.type.itemsType.baseTypeName }}List(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
         if (value == null) {
             return null;
         }
@@ -18,7 +24,7 @@
 
     @TypeConverter
     @Nullable
-    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ capitalize(field.name) }}(@Nullable final String value) {
+    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ field.type.type.itemsType.baseTypeName }}List(@Nullable final String value) {
         if (value == null) {
             return null;
         }
@@ -28,11 +34,13 @@
             return null;
         }
     }
+
+    {%- set converters = merge(converters, field.type.type.itemsType.baseTypeName) -%}
 {%- elseif field.type.type.baseTypeName == "Map" %}
 
     @TypeConverter
     @Nullable
-    public static String serialize{{ capitalize(field.name) }}(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
+    public static String serialize{{ field.type.type.valuesType.baseTypeName }}Map(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
         if (value == null) {
             return null;
         }
@@ -45,7 +53,7 @@
 
     @TypeConverter
     @Nullable
-    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ capitalize(field.name) }}(@Nullable final String value) {
+    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ field.type.type.valuesType.baseTypeName }}Map(@Nullable final String value) {
         if (value == null) {
             return null;
         }
@@ -55,6 +63,8 @@
             return null;
         }
     }
+
+    {%- set converters = merge(converters, field.type.type.valuesType.baseTypeName) -%}
 {%- elseif field.type.type.baseTypeName != "Bool"
     and field.type.type.baseTypeName != "Int"
     and field.type.type.baseTypeName != "Long"
@@ -64,7 +74,7 @@
 
     @TypeConverter
     @Nullable
-    public static String serialize{{ capitalize(field.name) }}(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
+    public static String serialize{{ field.type.type.baseTypeName }}(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
         if (value == null) {
             return null;
         }
@@ -77,7 +87,7 @@
 
     @TypeConverter
     @Nullable
-    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ capitalize(field.name) }}(@Nullable final String value) {
+    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ field.type.type.baseTypeName }}(@Nullable final String value) {
         if (value == null) {
             return null;
         }
@@ -87,5 +97,12 @@
             return null;
         }
     }
+
+    {%- set converters = merge(converters, field.type.type.baseTypeName) -%}
 {%- endif -%}
+
+{%- endif -%}
+
 {%- endfor -%}
+
+{%- endif -%}
