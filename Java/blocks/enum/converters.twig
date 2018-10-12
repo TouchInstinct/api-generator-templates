@@ -1,4 +1,5 @@
 
+{%- if storable %}
 
     @TypeConverter
     @Nullable
@@ -17,3 +18,5 @@
         }
         return {{ name }}.valueOf(value);
     }
+
+{%- endif %}

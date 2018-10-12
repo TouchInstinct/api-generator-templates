@@ -1,4 +1,42 @@
 {%- import '../../utils.twig' as utils -%}
-{% for field in fields -%}
-    {{ utils.formatValidateObject(concat("this.", field.name), field.type, field.type.type, field.nullable, field.optional) }}
+{%- for field in fields %}
+    {%- if not (field.nullable)
+        and field.type.type.baseTypeName != "Int"
+        and field.type.type.baseTypeName != "Long"
+        and field.type.type.baseTypeName != "Double"
+        and field.type.type.baseTypeName != "Bool" %}
+        validateNotNull(this.{{ field.name }});
+    {%- endif %}
+    {%- if field.type.type.baseTypeName == "Map" %}
+        {%- if field.nullable %}
+        if (this.{{ field.name }} != null) {
+            validateCollection(this.{{ field.name }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        }
+        {%- else %}
+        validateCollection(this.{{ field.name }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        {%- endif %}
+    {%- elseif field.type.type.baseTypeName == "Array" %}
+        {%- if field.nullable %}
+        if (this.{{ field.name }} != null) {
+            validateCollection(this.{{ field.name }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        }
+        {%- else %}
+        validateCollection(this.{{ field.name }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        {%- endif %}
+    {%- elseif field.type.type.baseTypeName != "Int"
+                and field.type.type.baseTypeName != "Long"
+                and field.type.type.baseTypeName != "Double"
+                and field.type.type.baseTypeName != "Bool"
+                and field.type.type.baseTypeName != "String"
+                and field.type.type.baseTypeName != "Decimal"
+                and field.type.type.baseTypeName != "DateTime"
+                and (field.type.values is empty) %}
+        {%- if field.nullable %}
+        if (this.{{ field.name }} != null) {
+            this.{{ field.name }}.validate();
+        }
+        {%- else %}
+        this.{{ field.name }}.validate();
+        {%- endif -%}
+    {%- endif -%}
 {%- endfor -%}

@@ -1,17 +1,16 @@
 {%- import '../../utils.twig' as utils -%}
 
-{%- if fields is not empty -%}
-{% for field in fields %}
-    {% if (field.description is not empty) %}
-	/**
-	 * {{ field.description }}
-	 */
-    {% endif -%}
-    {% if (storageAttributes is not null) and field.type.storable %}
+{%- for field in fields %}
+    {%- if (field.description is not empty) %}
+
+    /**
+     * {{ field.description }}
+     */
+    {%- endif %}
+    {{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable) }}
+    {%- if (storageAttributes is not null) and field.type.storable %}
     @TypeConverters({{ field.type.type.baseTypeName }}.class)
-    {% endif -%}
+    {%- endif %}
     @JsonField(name = "{{ field.jsonName }}")
-	{{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable, field.optional) }}
-	private {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }} {{ field.name }} {%- if field.optional %} = {{ utils.formatOptionalValueType(field.type.type, field.nullable) }}.empty(){% endif %};
-{% endfor -%}
-{% endif %}
+    private {{ utils.formatValueType(field.type.type, field.nullable) }} {{ field.name }};
+{%- endfor -%}
