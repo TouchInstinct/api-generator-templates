@@ -64,7 +64,7 @@ import ru.touchin.templates.logansquare.LoganSquareJsonModel;
 )
 @TypeConverters({{ type.baseTypeName }}.class)
 {%- endif %}
-@JsonObject(serializeNullObjects = {{ serializeNulls }})
+@JsonObject(serializeNullObjects = {{ default(serializeNulls, false) }})
 public class {% include 'blocks/class/classtype.twig' with { type: type } %} extends {% include 'blocks/class/supertype.twig' with { type: type, parent: parent } %} {
 
 {%- include 'blocks/class/fields-converters.twig' -%}
