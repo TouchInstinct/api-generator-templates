@@ -32,13 +32,17 @@
     {%- import _self as self -%}
 
     {%- if field.type.type.baseTypeName == "DateTime" -%}
-        ApiDateFormattingService.string(from: {{ field.name -}}, format: .{{ dateFormatToName(field.type.dateFormat) }})
+        {{ self.formatEncodingDate(field) -}}
     {%- elseif field.type.type.baseTypeName == "Decimal" -%}
         {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}
         .decimalValue
     {%- else -%}
         {{ field.name }}
     {%- endif -%}
+{% endmacro %}
+
+{% macro formatEncodingDate(field) %}
+    ApiDateFormattingService.string(from: {{ field.name -}}, format: .{{ dateFormatToName(field.type.dateFormat) }})
 {% endmacro %}
 
 {% macro escapeIfNeeded(expr) %}
@@ -49,11 +53,23 @@
     {%- endif -%}
 {% endmacro %}
 
+{% macro encodeIfPresent(field) %}
+    {%- import _self as self -%}
+
+    {% if field.type.type.baseTypeName == "DateTime" %}
+        if let {{ field.name }} = {{ field.name }} {
+            try container.encode({{ self.formatEncodingDate(field) }}, forKey: .{{ field.name }})
+        }
+    {%- else -%}
+        try container.encodeIfPresent({{ self.formatEncodingValue(field) }}, forKey: .{{ field.name }})
+    {%- endif -%}
+{% endmacro %}
+
 {% macro encodeToContainer(field) %}
     {%- import _self as self -%}
 
     {%- if field.optional -%}
-        try container.encodeIfPresent({{ self.formatEncodingValue(field) }}, forKey: .{{ field.name }})
+        {{ self.encodeIfPresent(field) -}}
     {%- elseif field.nullable -%}
         if let {{ field.name }} = {{ field.name }} {
             try container.encode({{ self.formatEncodingValue(field) }}, forKey: .{{ field.name }})
