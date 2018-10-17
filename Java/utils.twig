@@ -6,30 +6,30 @@ LoganSquareJsonModel
 {%- endif -%}
 {% endmacro %}
 
-{% macro writeNullCheckAnnotation(baseTypeName, nullable) %}
-{%- if nullable -%}
+{% macro writeNullCheckAnnotation(baseTypeName, nullable, optional) %}
+{%- if nullable or optional -%}
 @Nullable
 {%- elseif not (baseTypeName == "Int" or baseTypeName == "Long" or baseTypeName == "Double" or baseTypeName == "Bool") -%}
 @NonNull
 {%- endif -%}
 {% endmacro %}
 
-{% macro formatValueType(valueType, nullable) %}
+{% macro formatValueType(valueType, nullable, optional) %}
 {% import _self as self %}
 {%- if valueType.baseTypeName == "Int" -%}
-{%- if not nullable -%}int{%- else -%}Integer{%- endif -%}
+{%- if nullable or optional -%}Integer{%- else -%}int{%- endif -%}
 {%- elseif valueType.baseTypeName == "Long" -%}
-{%- if not nullable -%}long{%- else -%}Long{%- endif -%}
+{%- if nullable or optional -%}Long{%- else -%}long{%- endif -%}
 {%- elseif valueType.baseTypeName == "Double" -%}
-{%- if not nullable -%}double{%- else -%}Double{%- endif -%}
+{%- if nullable or optional -%}Double{%- else -%}double{%- endif -%}
 {%- elseif valueType.baseTypeName == "Bool" -%}
-{%- if not nullable -%}boolean{%- else -%}Boolean{%- endif -%}
+{%- if nullable or optional -%}Boolean{%- else -%}boolean{%- endif -%}
 {%- elseif valueType.baseTypeName == "Decimal" -%}
 BigDecimal
 {%- elseif valueType.baseTypeName == "Map" -%}
-Map<{{ self.formatValueType(valueType.keysType, true) }}, {{ self.formatValueType(valueType.valuesType, true) }}>
+Map<{{ self.formatValueType(valueType.keysType, true, true) }}, {{ self.formatValueType(valueType.valuesType, true, true) }}>
 {%- elseif valueType.baseTypeName == "Array" -%}
-List<{{ self.formatValueType(valueType.itemsType, true) }}>
+List<{{ self.formatValueType(valueType.itemsType, true, true) }}>
 {%- else -%}
 {{ valueType.baseTypeName }}
 {%- endif -%}
