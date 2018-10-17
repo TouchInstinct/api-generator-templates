@@ -2,7 +2,7 @@
 {%- if typeParameters is not empty -%}
 <
 {%- for typeParameter in typeParameters %}
-{{- utils.formatValueType(typeParameter, true) -}}{%- if not (loop.last) %}, {% endif %}
+{{- utils.formatValueType(typeParameter, true, true) -}}{%- if not (loop.last) %}, {% endif %}
 {%- endfor -%}
 >
 {%- endif -%}
