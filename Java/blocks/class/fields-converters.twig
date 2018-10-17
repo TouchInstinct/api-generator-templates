@@ -1,0 +1,108 @@
+{%- import '../../utils.twig' as utils -%}
+
+{%- if (storageAttributes is not null) -%}
+{% set converters = [] %}
+
+{%- for field in fields -%}
+
+{%- if not (field.type.type.baseTypeName in converters) -%}
+
+{%- if field.type.type.baseTypeName == "Array" %}
+
+    @TypeConverter
+    @Nullable
+    public static String serialize{{ field.type.type.itemsType.baseTypeName }}List(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.serialize(value);
+        } catch (final IOException exception) {
+            return null;
+        }
+    }
+
+    @TypeConverter
+    @Nullable
+    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ field.type.type.itemsType.baseTypeName }}List(@Nullable final String value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.parseList(value, {{ utils.formatValueType(field.type.type.itemsType, true) }}.class);
+        } catch (final IOException exception) {
+            return null;
+        }
+    }
+
+    {%- set converters = merge(converters, field.type.type.itemsType.baseTypeName) -%}
+{%- elseif field.type.type.baseTypeName == "Map" %}
+
+    @TypeConverter
+    @Nullable
+    public static String serialize{{ field.type.type.valuesType.baseTypeName }}Map(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.serialize(value);
+        } catch (final IOException exception) {
+            return null;
+        }
+    }
+
+    @TypeConverter
+    @Nullable
+    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ field.type.type.valuesType.baseTypeName }}Map(@Nullable final String value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.parseMap(value, {{ utils.formatValueType(field.type.type.valuesType, true) }}.class);
+        } catch (final IOException exception) {
+            return null;
+        }
+    }
+
+    {%- set converters = merge(converters, field.type.type.valuesType.baseTypeName) -%}
+{%- elseif field.type.type.baseTypeName != "Bool"
+    and field.type.type.baseTypeName != "Int"
+    and field.type.type.baseTypeName != "Long"
+    and field.type.type.baseTypeName != "Double"
+    and field.type.type.baseTypeName != "String"
+    and field.type.storable != true %}
+
+    @TypeConverter
+    @Nullable
+    public static String serialize{{ field.type.type.baseTypeName }}(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.serialize(value);
+        } catch (final IOException exception) {
+            return null;
+        }
+    }
+
+    @TypeConverter
+    @Nullable
+    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ field.type.type.baseTypeName }}(@Nullable final String value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return LoganSquare.parse(value, {{ utils.formatValueType(field.type.type, true) }}.class);
+        } catch (final IOException exception) {
+            return null;
+        }
+    }
+
+    {%- set converters = merge(converters, field.type.type.baseTypeName) -%}
+{%- endif -%}
+
+{%- endif -%}
+
+{%- endfor -%}
+
+{%- endif -%}

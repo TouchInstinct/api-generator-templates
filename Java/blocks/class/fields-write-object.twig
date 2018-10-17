@@ -1,4 +1,17 @@
-{%- import '../../utils.twig' as utils -%}
 {% for field in fields %}
-		outputStream.{{ utils.formatWriteObject(field.name, field.type.type, field.nullable, field.optional) }};
+        {%- if field.nullable %}
+        outputStream.writeObject(this.{{ field.name }});
+        {%- elseif field.type.type.baseTypeName == "Int" %}
+        outputStream.writeInt(this.{{ field.name }});
+        {%- elseif field.type.type.baseTypeName == "Long" %}
+        outputStream.writeLong(this.{{ field.name }});
+        {%- elseif field.type.type.baseTypeName == "Double" %}
+        outputStream.writeDouble(this.{{ field.name }});
+        {%- elseif field.type.type.baseTypeName == "String" %}
+        outputStream.writeUTF(this.{{ field.name }});
+        {%- elseif field.type.type.baseTypeName == "Bool" %}
+        outputStream.writeBoolean(this.{{ field.name }});
+        {%- else %}
+        outputStream.writeObject(this.{{ field.name }});
+        {%- endif -%}
 {%- endfor -%}

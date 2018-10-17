@@ -1,5 +1,4 @@
-{%- import '../../utils.twig' as utils -%}
 {%- for field in fields -%}
-	{{ utils.formatEquals(field.name, field.type.type.baseTypeName, field.optional) }} {%- if not (loop.last) %}
-				&& {% endif %}
+    ObjectsCompat.equals(this.{{ field.name }}, that.{{ field.name }}) {%- if not (loop.last) %}
+                && {% endif %}
 {%- endfor -%}
