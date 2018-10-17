@@ -1,5 +1,5 @@
 {% for field in fields %}
-        {%- if field.nullable %}
+        {%- if field.nullable or field.optional %}
         outputStream.writeObject(this.{{ field.name }});
         {%- elseif field.type.type.baseTypeName == "Int" %}
         outputStream.writeInt(this.{{ field.name }});

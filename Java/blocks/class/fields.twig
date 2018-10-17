@@ -7,7 +7,7 @@
      * {{ field.description }}
      */
     {%- endif %}
-    {{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable) }}
+    {{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable, field.optional) }}
     {%- if (storageAttributes is not null) %}
     {%- if (field.type.storable) %}
     @TypeConverters({{ field.type.type.baseTypeName }}.class)
@@ -17,5 +17,5 @@
     {%- endif %}
     {%- endif %}
     @JsonField(name = "{{ field.jsonName }}")
-    private {{ utils.formatValueType(field.type.type, field.nullable) }} {{ field.name }};
+    private {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }} {{ field.name }};
 {%- endfor -%}

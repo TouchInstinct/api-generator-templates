@@ -11,7 +11,7 @@
 
     @TypeConverter
     @Nullable
-    public static String serialize{{ field.type.type.itemsType.baseTypeName }}List(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
+    public static String serialize{{ field.type.type.itemsType.baseTypeName }}List(@Nullable final {{ utils.formatValueType(field.type.type, true, true) }} value) {
         if (value == null) {
             return null;
         }
@@ -24,12 +24,12 @@
 
     @TypeConverter
     @Nullable
-    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ field.type.type.itemsType.baseTypeName }}List(@Nullable final String value) {
+    public static {{ utils.formatValueType(field.type.type, true, true) }} deserialize{{ field.type.type.itemsType.baseTypeName }}List(@Nullable final String value) {
         if (value == null) {
             return null;
         }
         try {
-            return LoganSquare.parseList(value, {{ utils.formatValueType(field.type.type.itemsType, true) }}.class);
+            return LoganSquare.parseList(value, {{ utils.formatValueType(field.type.type.itemsType, true, true) }}.class);
         } catch (final IOException exception) {
             return null;
         }
@@ -40,7 +40,7 @@
 
     @TypeConverter
     @Nullable
-    public static String serialize{{ field.type.type.valuesType.baseTypeName }}Map(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
+    public static String serialize{{ field.type.type.valuesType.baseTypeName }}Map(@Nullable final {{ utils.formatValueType(field.type.type, true, true) }} value) {
         if (value == null) {
             return null;
         }
@@ -53,12 +53,12 @@
 
     @TypeConverter
     @Nullable
-    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ field.type.type.valuesType.baseTypeName }}Map(@Nullable final String value) {
+    public static {{ utils.formatValueType(field.type.type, true, true) }} deserialize{{ field.type.type.valuesType.baseTypeName }}Map(@Nullable final String value) {
         if (value == null) {
             return null;
         }
         try {
-            return LoganSquare.parseMap(value, {{ utils.formatValueType(field.type.type.valuesType, true) }}.class);
+            return LoganSquare.parseMap(value, {{ utils.formatValueType(field.type.type.valuesType, true, true) }}.class);
         } catch (final IOException exception) {
             return null;
         }
@@ -74,7 +74,7 @@
 
     @TypeConverter
     @Nullable
-    public static String serialize{{ field.type.type.baseTypeName }}(@Nullable final {{ utils.formatValueType(field.type.type, true) }} value) {
+    public static String serialize{{ field.type.type.baseTypeName }}(@Nullable final {{ utils.formatValueType(field.type.type, true, true) }} value) {
         if (value == null) {
             return null;
         }
@@ -87,12 +87,12 @@
 
     @TypeConverter
     @Nullable
-    public static {{ utils.formatValueType(field.type.type, true) }} deserialize{{ field.type.type.baseTypeName }}(@Nullable final String value) {
+    public static {{ utils.formatValueType(field.type.type, true, true) }} deserialize{{ field.type.type.baseTypeName }}(@Nullable final String value) {
         if (value == null) {
             return null;
         }
         try {
-            return LoganSquare.parse(value, {{ utils.formatValueType(field.type.type, true) }}.class);
+            return LoganSquare.parse(value, {{ utils.formatValueType(field.type.type, true, true) }}.class);
         } catch (final IOException exception) {
             return null;
         }
