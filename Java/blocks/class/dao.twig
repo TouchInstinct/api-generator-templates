@@ -2,7 +2,7 @@
 
 {%- if (storageAttributes is not null) %}
 
-    @android.arch.persistence.room.Dao
+    @androidx.room.Dao
     public interface Dao {
 
         @NonNull
@@ -22,7 +22,7 @@
 
     }
 
-    @android.arch.persistence.room.Dao
+    @androidx.room.Dao
     public interface ReactiveDao {
 
         @NonNull
