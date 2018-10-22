@@ -3,23 +3,22 @@
  */
 package {{ packageName }}.api;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.util.ObjectsCompat;
 {%- if (storageAttributes is not null) %}
-
-import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.OnConflictStrategy;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Transaction;
-import android.arch.persistence.room.TypeConverter;
-import android.arch.persistence.room.TypeConverters;
+import androidx.room.Delete;
+import androidx.room.Entity;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
+import androidx.room.Transaction;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 {%- endif %}
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.util.ObjectsCompat;
 
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.bluelinelabs.logansquare.annotation.JsonField;
@@ -40,7 +39,6 @@ import java.util.HashMap;
 import org.joda.time.DateTime;
 
 import ru.touchin.templates.ApiModel;
-import ru.touchin.roboswag.core.utils.ObjectUtils;
 import ru.touchin.templates.logansquare.LoganSquareJsonModel;
 
 {%- if (description is not empty) %}
@@ -111,7 +109,7 @@ public class {% include 'blocks/class/classtype.twig' with { type: type } %} ext
 {%- if (fields is not empty) %}
 
     public int hashCode() {
-        return ObjectUtils.hashCode({%- if parent is not null -%}super.hashCode(), {% endif -%}{%- include 'blocks/class/fields-super-initialization.twig' with { fields: fields } -%});
+        return ObjectsCompat.hash({%- if parent is not null -%}super.hashCode(), {% endif -%}{%- include 'blocks/class/fields-super-initialization.twig' with { fields: fields } -%});
     }
 
     public boolean equals(@Nullable final Object object) {
