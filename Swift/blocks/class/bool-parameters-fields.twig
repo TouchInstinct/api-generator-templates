@@ -1,0 +1,7 @@
+{%- import '../../macroses/common.utils.twig' as utils -%}
+
+{%- if fields is not empty -%}
+{%- for field in fields -%}
+    {{ field.name }}: Bool = false{%- if not (loop.last) %}, {% endif %}
+{%- endfor -%}
+{%- endif -%}
