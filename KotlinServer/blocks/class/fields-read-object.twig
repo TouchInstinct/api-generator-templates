@@ -1,0 +1,18 @@
+{%- import '../../utils.twig' as utils -%}
+{% for field in fields %}
+        {%- if field.nullable or field.optional %}
+        this.{{ field.name }} = ({{ utils.formatValueType(field.type.type, field.nullable, field.optional) }}) inputStream.readObject();
+        {%- elseif field.type.type.baseTypeName == "Int" %}
+        this.{{ field.name }} = inputStream.readInt();
+        {%- elseif field.type.type.baseTypeName == "Long" %}
+        this.{{ field.name }} = inputStream.readLong();
+        {%- elseif field.type.type.baseTypeName == "Double" %}
+        this.{{ field.name }} = inputStream.readDouble();
+        {%- elseif field.type.type.baseTypeName == "String" %}
+        this.{{ field.name }} = inputStream.readUTF();
+        {%- elseif field.type.type.baseTypeName == "Bool" %}
+        this.{{ field.name }} = inputStream.readBoolean();
+        {%- else %}
+        this.{{ field.name }} = ({{ utils.formatValueType(field.type.type, field.nullable, field.optional) }}) inputStream.readObject();
+        {%- endif -%}
+{%- endfor -%}

@@ -1,0 +1,8 @@
+{%- import '../../utils.twig' as utils -%}
+
+{%- for field in superclassesFields %}
+	    {{ field.name }}{{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable, field.optional) }} {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }} {%- if (not (loop.last)) or (fields is not empty)%}, {% endif %}
+{%- endfor -%}
+{%- for field in fields %}
+	    {{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable, field.optional) }} val {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }} {{ field.name }} {%- if not (loop.last) %}, {% endif %}
+{%- endfor -%}

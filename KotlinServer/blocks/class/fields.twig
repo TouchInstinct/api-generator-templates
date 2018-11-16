@@ -1,0 +1,21 @@
+{%- import '../../utils.twig' as utils -%}
+
+{%- for field in fields %}
+    {%- if (field.description is not empty) %}
+
+    /**
+     * {{ field.description }}
+     */
+    {%- endif %}
+    {{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable, field.optional) }}
+    {%- if (storageAttributes is not null) %}
+    {%- if (field.type.storable) %}
+    @TypeConverters({{ field.type.type.baseTypeName }}.class)
+    {%- endif %}
+    {%- if (field.autoGenerate) %}
+    @PrimaryKey(autoGenerate = true)
+    {%- endif %}
+    {%- endif %}
+    @JsonField(name = "{{ field.jsonName }}")
+    private {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }} {{ field.name }};
+{%- endfor -%}

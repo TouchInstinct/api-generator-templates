@@ -1,0 +1,22 @@
+
+{%- if storable %}
+
+    @TypeConverter
+    @Nullable
+    public static String serialize(@Nullable final {{ name }} value) {
+        if (value == null) {
+            return null;
+        }
+        return value.name();
+    }
+
+    @TypeConverter
+    @Nullable
+    public static {{ name }} deserialize(@Nullable final String value) {
+        if (value == null) {
+            return null;
+        }
+        return {{ name }}.valueOf(value);
+    }
+
+{%- endif -%}

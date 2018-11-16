@@ -1,0 +1,3 @@
+{%- import '../../utils.twig' as utils -%}
+
+{%- if includeVal %} val {% endif %} {{ field.name }}: {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }} {{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable, field.optional) }}

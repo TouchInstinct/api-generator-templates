@@ -1,0 +1,44 @@
+{%- import '../../utils.twig' as utils -%}
+{%- for field in fields %}
+    {%- if not (field.nullable or field.optional)
+        and field.type.type.baseTypeName != "Int"
+        and field.type.type.baseTypeName != "Long"
+        and field.type.type.baseTypeName != "Double"
+        and field.type.type.baseTypeName != "Bool" %}
+        validateNotNull(this.{{ field.name }});
+    {%- endif %}
+    {%- if field.type.type.baseTypeName == "Map" %}
+        {%- if field.nullable or field.optional %}
+        if (this.{{ field.name }} != null) {
+            validateCollection(this.{{ field.name }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        }
+        {%- else %}
+        validateCollection(this.{{ field.name }}.values(), CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        {%- endif %}
+    {%- elseif field.type.type.baseTypeName == "Array" %}
+        {%- if field.nullable or field.optional %}
+        if (this.{{ field.name }} != null) {
+            validateCollection(this.{{ field.name }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        }
+        {%- else %}
+        validateCollection(this.{{ field.name }}, CollectionValidationRule.EXCEPTION_IF_ANY_INVALID);
+        {%- endif %}
+    {%- elseif field.type.type.baseTypeName != "Int"
+                and field.type.type.baseTypeName != "Long"
+                and field.type.type.baseTypeName != "Double"
+                and field.type.type.baseTypeName != "Bool"
+                and field.type.type.baseTypeName != "String"
+                and field.type.type.baseTypeName != "Decimal"
+                and field.type.type.baseTypeName != "DateTime"
+                and (field.type.values is empty) %}
+        if (this.{{ field.name }} instanceof ApiModel) {
+            {%- if field.nullable or field.optional %}
+            if (this.{{ field.name }} != null) {
+                ((ApiModel) this.{{ field.name }}).validate();
+            }
+            {%- else %}
+            ((ApiModel) this.{{ field.name }}).validate();
+            {%- endif %}
+        }
+    {%- endif -%}
+{%- endfor -%}
