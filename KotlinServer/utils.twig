@@ -2,9 +2,17 @@
 {%- if parent is not null %} : {{ parent.type.baseTypeName }}{%- endif -%}
 {% endmacro %}
 
-{% macro writeNullCheckAnnotation(baseTypeName, nullable, optional) %}
+{% macro writeNullCheckMark(nullable, optional) %}
 {%- if nullable or optional -%}
 ?
+{%- endif -%}
+{% endmacro %}
+
+{% macro writeInclusionAnnotation(nullable, optional) %}
+{%- if nullable -%}
+ @JsonInclude(JsonInclude.Include.ALWAYS){{ " " }}
+{%- elseif optional -%}
+ @JsonInclude(JsonInclude.Include.NON_NULL){{ " " }}
 {%- endif -%}
 {% endmacro %}
 

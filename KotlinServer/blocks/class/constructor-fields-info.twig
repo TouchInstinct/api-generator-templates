@@ -1,8 +1,5 @@
 {%- import '../../utils.twig' as utils -%}
 
 {%- for field in fields %}
-    {%- if includeVal %}
-     val
-    {%- else %}
-    {% endif %} {{ field.name }}: {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }}{{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable, field.optional) }} {%- if (not (loop.last)) or (addCommaAtTheEnd)%}, {% endif %}
+    {{ utils.writeInclusionAnnotation(field.nullable, field.optional) }}{%- if includeVal %}val {% endif %}{{ field.name }}: {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }}{{ utils.writeNullCheckMark(field.nullable, field.optional) }} {%- if (not (loop.last)) or (addCommaAtTheEnd)%}, {% endif %}
 {%- endfor -%}
