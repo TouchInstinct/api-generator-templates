@@ -10,14 +10,8 @@
 
 {% macro formatValueType(valueType, nullable, optional) %}
 {% import _self as self %}
-{%- if valueType.baseTypeName == "Int" -%}
-{%- if nullable or optional -%}Integer{%- else -%}int{%- endif -%}
-{%- elseif valueType.baseTypeName == "Long" -%}
-{%- if nullable or optional -%}Long{%- else -%}long{%- endif -%}
-{%- elseif valueType.baseTypeName == "Double" -%}
-{%- if nullable or optional -%}Double{%- else -%}double{%- endif -%}
-{%- elseif valueType.baseTypeName == "Bool" -%}
-{%- if nullable or optional -%}Boolean{%- else -%}boolean{%- endif -%}
+{%- if valueType.baseTypeName == "Bool" -%}
+Boolean
 {%- elseif valueType.baseTypeName == "Decimal" -%}
 BigDecimal
 {%- elseif valueType.baseTypeName == "Map" -%}
