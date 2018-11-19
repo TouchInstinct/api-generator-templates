@@ -34,3 +34,7 @@ List<{{ self.formatValueType(valueType.itemsType, true, true) }}>
 {% macro formatEnumValueType(valuesTypes) %}
 {%- if valuesTypes == "STRING" -%}String{%- elseif valuesTypes == "INT" -%}Int{%- endif -%}
 {% endmacro %}
+
+{% macro formatEnumValue(valuesTypes, value) %}
+{%- if valuesTypes == "STRING" -%}"{{ value.value }}"{%- elseif valuesTypes == "INT" -%}{{ value.value }}{%- endif -%}
+{% endmacro %}

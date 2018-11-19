@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonValue
  */
 enum class {{ name }}(val code: {{ utils.formatEnumValueType(valuesTypes) }}) {
 
-    {%- include 'blocks/enum/cases.twig' with { values: values } %}
+    {%- include 'blocks/enum/cases.twig' with { valuesTypes: valuesTypes, values: values } %}
 
     @JsonValue
     fun toValue() = code
