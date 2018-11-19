@@ -4,5 +4,5 @@
     {%- if includeVal %}
      val
     {%- else %}
-    {% endif %} {{ field.name }}: {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }} {{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable, field.optional) }} {%- if (not (loop.last)) or (addCommaAtTheEnd)%}, {% endif %}
+    {% endif %} {{ field.name }}: {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }}{{ utils.writeNullCheckAnnotation(field.type.type.baseTypeName, field.nullable, field.optional) }} {%- if (not (loop.last)) or (addCommaAtTheEnd)%}, {% endif %}
 {%- endfor -%}

@@ -8,9 +8,7 @@ LoganSquareJsonModel
 
 {% macro writeNullCheckAnnotation(baseTypeName, nullable, optional) %}
 {%- if nullable or optional -%}
-@Nullable
-{%- elseif not (baseTypeName == "Int" or baseTypeName == "Long" or baseTypeName == "Double" or baseTypeName == "Bool") -%}
-@NonNull
+?
 {%- endif -%}
 {% endmacro %}
 
