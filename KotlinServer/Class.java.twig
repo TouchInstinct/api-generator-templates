@@ -15,4 +15,4 @@ import org.joda.time.DateTime //TODO update
 open class {% include 'blocks/class/classtype.twig' with { type: type } %} (
             {%- include 'blocks/class/constructor-fields-info.twig' with { fields: superclassesFields, includeVal: false, addCommaAtTheEnd: (fields is not empty) } %}
             {%- include 'blocks/class/constructor-fields-info.twig' with { fields: fields, includeVal: true, addComma: false } %}
-) : {% include 'blocks/class/supertype.twig' with { type: type, parent: parent } %} ({%- include 'blocks/class/fields-super-initialization.twig' with { fields: superclassesFields } -%})
+){% include 'blocks/class/supertype.twig' with { type: type, parent: parent } %} {%- include 'blocks/class/fields-super-initialization.twig' with { fields: superclassesFields } -%}

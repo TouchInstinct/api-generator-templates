@@ -1,9 +1,5 @@
 {% macro parentClassType(parent) %}
-{%- if parent is not null %}
-{{- parent.type.baseTypeName -}}
-{%- else -%}
-LoganSquareJsonModel
-{%- endif -%}
+{%- if parent is not null %} : {{ parent.type.baseTypeName }}{%- endif -%}
 {% endmacro %}
 
 {% macro writeNullCheckAnnotation(baseTypeName, nullable, optional) %}
