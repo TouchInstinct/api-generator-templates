@@ -1,5 +1,13 @@
 {%- import '../../utils.twig' as utils -%}
 
 {%- for field in fields %}
-    {{ utils.writeInclusionAnnotation(field.nullable, field.optional) }}{%- if includeVal %}val {% endif %}{{ field.name }}: {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }}{{ utils.writeNullCheckMark(field.nullable, field.optional) }} {%- if (not (loop.last)) or (addCommaAtTheEnd)%}, {% endif %}
+    {%- if field.type.type.baseTypeName == "DateTime" %}
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssX", timezone = "UTC") //TODO use field format
+    {%- endif %}
+    {%- if field.nullable %}
+    @JsonInclude(JsonInclude.Include.ALWAYS)
+    {%- elseif field.optional %}
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    {%- endif %}
+    {% if includeVal %}val {% endif %}{{ field.name }}: {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }}{{ utils.writeNullCheckMark(field.nullable, field.optional) }} {%- if (not (loop.last)) or (addCommaAtTheEnd)%}, {% endif %}
 {%- endfor -%}

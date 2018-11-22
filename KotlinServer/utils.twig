@@ -16,10 +16,18 @@
 {%- endif -%}
 {% endmacro %}
 
+{% macro includeDateFormat(valueType) %}
+{%- if valueType.baseTypeName == "DateTime" -%}
+@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssX", timezone = "UTC")
+{%- endif -%}
+{% endmacro %}
+
 {% macro formatValueType(valueType, nullable, optional) %}
 {% import _self as self %}
 {%- if valueType.baseTypeName == "Bool" -%}
 Boolean
+{%- elseif valueType.baseTypeName == "DateTime" -%}
+ZonedDateTime
 {%- elseif valueType.baseTypeName == "Decimal" -%}
 BigDecimal
 {%- elseif valueType.baseTypeName == "Map" -%}

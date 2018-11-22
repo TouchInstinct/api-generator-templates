@@ -4,9 +4,10 @@
 package {{ packageName }}.api
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonFormat
 
 import java.math.BigDecimal
-import org.joda.time.DateTime //TODO update
+import java.time.ZonedDateTime
 
 {%- if (description is not empty) %}
 
