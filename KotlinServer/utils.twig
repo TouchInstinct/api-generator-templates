@@ -1,0 +1,40 @@
+{% macro parentClassType(parent) %}
+{%- if parent is not null %} : {{ parent.type.baseTypeName }}{%- endif -%}
+{% endmacro %}
+
+{% macro writeNullCheckMark(nullable, optional) %}
+{%- if nullable or optional -%}
+?
+{%- endif -%}
+{% endmacro %}
+
+{% macro formatValueType(valueType, nullable, optional) %}
+{% import _self as self %}
+{%- if valueType.baseTypeName == "Bool" -%}
+Boolean
+{%- elseif valueType.baseTypeName == "DateTime" -%}
+ZonedDateTime
+{%- elseif valueType.baseTypeName == "Decimal" -%}
+BigDecimal
+{%- elseif valueType.baseTypeName == "Map" -%}
+Map<{{ self.formatValueType(valueType.keysType, true, true) }}, {{ self.formatValueType(valueType.valuesType, true, true) }}>
+{%- elseif valueType.baseTypeName == "Array" -%}
+List<{{ self.formatValueType(valueType.itemsType, true, true) }}>
+{%- else -%}
+{{ valueType.baseTypeName }}
+{%- endif -%}
+{% endmacro %}
+
+{% macro formatEnumValueType(valuesTypes) %}
+{%- if valuesTypes == "STRING" -%}String{%- elseif valuesTypes == "INT" -%}Int{%- endif -%}
+{% endmacro %}
+
+{% macro formatEnumValue(valuesTypes, value) %}
+{%- if valuesTypes == "STRING" -%}"{{ value.value }}"{%- elseif valuesTypes == "INT" -%}{{ value.value }}{%- endif -%}
+{% endmacro %}
+
+{% macro addDescription(field) %}
+{%- if (field.description is not empty) -%}
+// {{ field.description }}
+{%- endif -%}
+{% endmacro %}

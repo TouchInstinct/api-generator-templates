@@ -1,0 +1,13 @@
+{%- import '../../utils.twig' as utils -%}
+
+{%- for field in fields %}
+    {%- if field.type.type.baseTypeName == "DateTime" %}
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssX", timezone = "UTC") //TODO find a way to use 'ZZZ' from date format instead of 'X'
+    {%- endif %}
+    {%- if field.nullable %}
+    @JsonInclude(JsonInclude.Include.ALWAYS)
+    {%- elseif field.optional %}
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    {%- endif %}
+    {% if includeVal %}val {% endif %}{{ field.name }}: {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }}{{ utils.writeNullCheckMark(field.nullable, field.optional) }} {%- if (not (loop.last)) or (addCommaAtTheEnd)%}, {% endif %} {{ utils.addDescription(field) }}
+{%- endfor -%}
