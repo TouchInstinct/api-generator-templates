@@ -9,5 +9,5 @@
     {%- elseif field.optional %}
     @JsonInclude(JsonInclude.Include.NON_NULL)
     {%- endif %}
-    {% if includeVal %}val {% endif %}{{ field.name }}: {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }}{{ utils.writeNullCheckMark(field.nullable, field.optional) }} {%- if (not (loop.last)) or (addCommaAtTheEnd)%}, {% endif %} {{ utils.addDescription(field) }}
+    {% if not (field in superclassesFields) %}val {% endif %}{{ field.name }}: {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }}{{ utils.writeNullCheckMark(field.nullable, field.optional) }} {%- if not (loop.last) %}, {% endif %} {{ utils.addDescription(field) }}
 {%- endfor -%}
