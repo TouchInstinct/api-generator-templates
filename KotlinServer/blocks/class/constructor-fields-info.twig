@@ -2,7 +2,7 @@
 
 {%- for field in fields %}
     {%- if field.type.type.baseTypeName == "DateTime" %}
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssX", timezone = "UTC") //TODO find a way to use 'ZZZ' from date format instead of 'X'
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "{{ field.type.dateFormat }}")
     {%- endif %}
     {%- if field.nullable %}
     @JsonInclude(JsonInclude.Include.ALWAYS)
