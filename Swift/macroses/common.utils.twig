@@ -50,7 +50,7 @@
 {%- endmacro -%}
 
 {% macro escapeIfNeeded(expr) %}
-    {%- if expr == "default" -%}
+    {%- if expr == "default" or expr == "operator" -%}
         `{{ expr }}`
     {%- else -%}
         {{ expr }}
