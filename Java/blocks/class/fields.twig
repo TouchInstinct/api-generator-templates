@@ -16,6 +16,8 @@
     @PrimaryKey(autoGenerate = true)
     {%- endif %}
     {%- endif %}
+    {%- if (storageAttributes is null) or (field.autoGenerate != true) %}
     @JsonField(name = "{{ field.jsonName }}")
+    {%- endif %}
     private {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }} {{ field.name }};
 {%- endfor -%}
