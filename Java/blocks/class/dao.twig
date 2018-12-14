@@ -23,7 +23,7 @@
     }
 
     @androidx.room.Dao
-    public interface ReactiveDao {
+    public interface ReactiveDao extends Dao {
 
         @NonNull
         @Query("SELECT * FROM {{ default(storageAttributes.tableName, type.baseTypeName) }}")
@@ -31,7 +31,7 @@
 
         @NonNull
         @Query("SELECT * FROM {{ default(storageAttributes.tableName, type.baseTypeName) }}")
-        Single<List<{{ type.baseTypeName }}>> get();
+        Single<List<{{ type.baseTypeName }}>> getSingle();
 
     }
 
