@@ -62,6 +62,26 @@ import ru.touchin.templates.logansquare.LoganSquareJsonModel;
             primaryKeys = { {%- for key in storageAttributes.primaryKeys -%} {%- if not (loop.last) %}, {% endif -%} "{{- key -}}" {%- endfor -%} }
         {%- endif -%}
 )
+{%- set haveConverters = false -%}
+{%- for field in fields -%}
+
+    {%- if (field.type.type.baseTypeName == "Array")
+        or (field.type.type.baseTypeName == "Map")
+        or (field.type.type.baseTypeName != "Bool"
+            and field.type.type.baseTypeName != "Int"
+            and field.type.type.baseTypeName != "Long"
+            and field.type.type.baseTypeName != "Double"
+            and field.type.type.baseTypeName != "String"
+            and field.type.storable != true) %}
+
+        {%- set haveConverters = true -%}
+
+    {%- endif -%}
+
+{%- endfor -%}
+{%- if haveConverters %}
+@TypeConverters({{ type.baseTypeName }}.class)
+{%- endif -%}
 {%- endif %}
 @JsonObject(serializeNullObjects = {{ default(serializeNulls, false) }})
 public class {% include 'blocks/class/classtype.twig' with { type: type } %} extends {% include 'blocks/class/supertype.twig' with { type: type, parent: parent } %} {
