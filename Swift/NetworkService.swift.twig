@@ -1,9 +1,29 @@
+{%- import "blocks/method/method-func.twig" as methodUtils -%}
+
 import LeadKit
 import RxSwift
 import Alamofire
 
 {% set serviceName = concat(networkServiceName, "NetworkService") -%}
-class {{ serviceName }}: NetworkService {
+{% set protocolName = concat(networkServiceName, "NetworkProtocol") -%}
+
+protocol {{ protocolName }} {
+
+    func apiRequest<T: Decodable>(with parameters: ApiRequestParameters, decoder: JSONDecoder) -> Single<T>
+    func apiRequestParameters(relativeUrl: String,
+                              method: HTTPMethod = .get,
+                              parameters: Parameters? = nil,
+                              requestEncoding: ParameterEncoding? = nil,
+                              requestHeaders: HTTPHeaders? = nil) -> ApiRequestParameters
+
+    {% for method in methods %}
+    {{ isStatic ? "static " : "" }}func {{ methodUtils.funcName }}({%- if methodUtils.hasBody -%}{{ methodUtils.bodyParamName }}: {{ methodUtils.bodyTypeName }},{{ "\n                   " }}{%- endif -%}
+                   requestEncoding: ParameterEncoding? = nil,
+                   requestHeaders: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}>
+    {% endfor %}
+}
+
+class {{ serviceName }}: NetworkService, {{ protocolName }} {
 
     static let apiBaseUrl = "{{ apiUrl }}"
 
