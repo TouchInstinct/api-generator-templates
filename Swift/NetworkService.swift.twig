@@ -2,8 +2,6 @@ import LeadKit
 import RxSwift
 import Alamofire
 
-{% import "Methods.swift.twig" as Methods %}
-
 {% set serviceName = concat(networkServiceName, "NetworkService") -%}
 {% set protocolName = concat(networkServiceName, "NetworkProtocol") -%}
 
@@ -16,7 +14,7 @@ protocol {{ protocolName }} {
                               requestEncoding: ParameterEncoding?,
                               requestHeaders: HTTPHeaders?) -> ApiRequestParameters
 
-    {% for method in Methods.methods %}
+    {% for method in methods %}
     {%- include 'blocks/method/method-declaration.twig' with { method: method, isStatic: false } %}
     {% endfor %}
 }
