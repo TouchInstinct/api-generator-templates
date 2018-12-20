@@ -1,5 +1,3 @@
-{%- import "blocks/method/method-func.twig" as methodUtils -%}
-
 import LeadKit
 import RxSwift
 import Alamofire
@@ -16,10 +14,8 @@ protocol {{ protocolName }} {
                               requestEncoding: ParameterEncoding?,
                               requestHeaders: HTTPHeaders?) -> ApiRequestParameters
 
-    {% for method in methodUtils.methods %}
-    {{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
-                   requestEncoding: ParameterEncoding? = nil,
-                   requestHeaders: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}>
+    {% for method in methods %}
+    {%- include 'blocks/method/method-declaration.twig' with { method: method, isStatic: false } %}
     {% endfor %}
 }
 

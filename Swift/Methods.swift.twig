@@ -16,7 +16,7 @@ extension Singleton where Self: {{ protocolName }} {
 
     {% for method in methods %}
     {%- include 'blocks/method/method-func.twig' with { method: method, isStatic: true } %}
-
+    
     {% endfor %}
 }
 {{ "\n" }}

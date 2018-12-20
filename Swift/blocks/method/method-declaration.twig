@@ -1,0 +1,12 @@
+{%- import '../../macroses/common.utils.twig' as utils -%}
+
+{%- if (method.bodyType is not null) -%}
+  {%- set bodyParamName = utils.decapitalize(method.bodyType.type.typeName) -%}
+  {%- set bodyTypeName = method.bodyType.type.typeName -%}
+
+  {%- set hasBody = true -%}
+{%- endif -%}
+
+{%- set funcName = utils.decapitalize(method.name) -%}
+
+{{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ " " }}{%- endif -%}requestEncoding: ParameterEncoding?, requestHeaders: HTTPHeaders?) -> Single<{{ method.responseType.type.typeName }}>
