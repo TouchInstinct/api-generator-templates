@@ -15,7 +15,7 @@ protocol {{ protocolName }} {
                               requestHeaders: HTTPHeaders?) -> ApiRequestParameters
 
     {% for method in methods %}
-    {%- include 'blocks/method/method-declaration.twig' with { method: method, isStatic: false } %}
+    {%- include 'blocks/method/method-declaration.twig' with { method: method, isStatic: false } -%}
     {% endfor %}
 }
 
