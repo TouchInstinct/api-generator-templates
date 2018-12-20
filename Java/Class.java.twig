@@ -59,7 +59,7 @@ import ru.touchin.templates.logansquare.LoganSquareJsonModel;
         {%- if attributeWas and storageAttributes.primaryKeys is not empty -%}, {% endif %}
         {%- if (storageAttributes.primaryKeys is not empty) -%}
             {%- set attributeWas = true -%}
-            primaryKeys = { {%- for key in storageAttributes.primaryKeys -%} {%- if not (loop.last) %}, {% endif -%} "{{- key -}}" {%- endfor -%} }
+            primaryKeys = { {%- for key in storageAttributes.primaryKeys -%} "{{- key -}}" {%- if not (loop.last) %}, {% endif -%} {%- endfor -%} }
         {%- endif -%}
 )
 {%- set haveConverters = false -%}
