@@ -12,12 +12,12 @@ protocol {{ protocolName }} {
     func apiRequest<T: Decodable>(with parameters: ApiRequestParameters, decoder: JSONDecoder) -> Single<T>
     func apiRequestParameters(relativeUrl: String,
                               method: HTTPMethod,
-                              parameters: Parameters?
+                              parameters: Parameters?,
                               requestEncoding: ParameterEncoding?,
                               requestHeaders: HTTPHeaders?) -> ApiRequestParameters
 
-    {% for method in methods %}
-    {{ isStatic ? "static " : "" }}func {{ methodUtils.funcName }}({%- if methodUtils.hasBody -%}{{ methodUtils.bodyParamName }}: {{ methodUtils.bodyTypeName }},{{ "\n                   " }}{%- endif -%}
+    {% for method in methodUtils.methods %}
+    {{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
                    requestEncoding: ParameterEncoding? = nil,
                    requestHeaders: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}>
     {% endfor %}
