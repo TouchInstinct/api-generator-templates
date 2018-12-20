@@ -3,7 +3,23 @@ import RxSwift
 import Alamofire
 
 {% set serviceName = concat(networkServiceName, "NetworkService") -%}
-class {{ serviceName }}: NetworkService {
+{% set protocolName = concat(networkServiceName, "NetworkProtocol") -%}
+
+protocol {{ protocolName }} {
+
+    func apiRequest<T: Decodable>(with parameters: ApiRequestParameters, decoder: JSONDecoder) -> Single<T>
+    func apiRequestParameters(relativeUrl: String,
+                              method: HTTPMethod,
+                              parameters: Parameters?,
+                              requestEncoding: ParameterEncoding?,
+                              requestHeaders: HTTPHeaders?) -> ApiRequestParameters
+
+    {% for method in methods %}
+    {%- include 'blocks/method/method-declaration.twig' with { method: method, isStatic: false } -%}
+    {% endfor %}
+}
+
+class {{ serviceName }}: NetworkService, {{ protocolName }} {
 
     static let apiBaseUrl = "{{ apiUrl }}"
 

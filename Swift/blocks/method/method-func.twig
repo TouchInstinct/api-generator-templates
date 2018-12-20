@@ -26,6 +26,6 @@
                                               requestEncoding: requestEncoding,
                                               requestHeaders: requestHeaders)
 
-          return apiRequest(with: parameters)
+          return apiRequest(with: parameters, decoder: JSONDecoder())
         {%- endif %}
     }
