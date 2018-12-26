@@ -20,12 +20,15 @@
                    requestEncoding: requestEncoding,
                    requestHeaders: requestHeaders)
         {%- else -%}
-          let parameters = apiRequestParameters(relativeUrl: "{{ method.url }}",
+          return .deferred {
+            let parameters = self.apiRequestParameters(relativeUrl: "{{ method.url }}",
                                               method: .{{ methodType }},
                                               parameters: {% if hasBody -%}{{ bodyParamName }}.toJSON(){%- else -%}nil{%- endif -%},
                                               requestEncoding: requestEncoding,
                                               requestHeaders: requestHeaders)
 
-          return apiRequest(with: parameters, decoder: JSONDecoder())
+            return self.apiRequest(with: parameters, decoder: JSONDecoder())
+          }
+          
         {%- endif %}
     }
