@@ -23,7 +23,12 @@
             {% if author is not empty %}
                 <h2>{{ author }}</h2>
             {% endif %}
-            <p>Версия {{ version }}</p>
+            <p>Версия: {{ version }}</p>
+
+            {% if buildVersion|length %}
+                <p>Build: {{ buildVersion }}</p>
+            {% endif %}
+
             <p>{{ "now"|date("dd.MM.YYYY") }}</p>
         </div>
         <h2 class="main-title">
