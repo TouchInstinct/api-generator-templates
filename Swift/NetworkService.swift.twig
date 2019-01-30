@@ -7,12 +7,12 @@ import Alamofire
 
 protocol {{ protocolName }} {
 
-    func apiRequest<T: Decodable>(with parameters: ApiRequestParameters, decoder: JSONDecoder) -> Single<T>
-    func apiRequestParameters(relativeUrl: String,
+    func apiRequest<T: Decodable>(with parametersSingle: Single<ApiRequestParameters>, decoder: JSONDecoder) -> Single<T>
+    func deferredApiRequestParameters(relativeUrl: String,
                               method: HTTPMethod,
                               parameters: Parameters?,
                               requestEncoding: ParameterEncoding?,
-                              requestHeaders: HTTPHeaders?) -> ApiRequestParameters
+                              requestHeaders: HTTPHeaders?) -> Single<ApiRequestParameters>
 
     {% for method in methods %}
     {%- include 'blocks/method/method-declaration.twig' with { method: method, isStatic: false } -%}
@@ -27,21 +27,24 @@ class {{ serviceName }}: NetworkService, {{ protocolName }} {
         self.init(configuration: NetworkServiceConfiguration(baseUrl: {{ serviceName }}.apiBaseUrl))
     }
 
-    func apiRequest<T: Decodable>(with parameters: ApiRequestParameters, decoder: JSONDecoder = JSONDecoder()) -> Single<T> {
-        return rxRequest(with: parameters, decoder: decoder).map { $0.model }.asSingle()
+    func apiRequest<T: Decodable>(with parametersSingle: Single<ApiRequestParameters>, decoder: JSONDecoder = JSONDecoder()) -> Single<T> {
+        return parametersSingle.flatMap {
+            self.rxRequest(with: $0, decoder: decoder).map { $0.model }.asSingle()
+        }
     }
 
-    func apiRequestParameters(relativeUrl: String,
-                              method: HTTPMethod = .get,
-                              parameters: Parameters? = nil,
-                              requestEncoding: ParameterEncoding? = nil,
-                              requestHeaders: HTTPHeaders? = nil) -> ApiRequestParameters {
-        return configuration.apiRequestParameters(relativeUrl: relativeUrl,
-                                                  method: method,
-                                                  parameters: parameters,
-                                                  requestEncoding: requestEncoding,
-                                                  requestHeaders: requestHeaders)
+    func deferredApiRequestParameters(relativeUrl: String,
+                                      method: HTTPMethod = .get,
+                                      parameters: Parameters? = nil,
+                                      requestEncoding: ParameterEncoding? = nil,
+                                      requestHeaders: HTTPHeaders? = nil) -> Single<ApiRequestParameters> {
+        return .deferredJust {
+            self.configuration.apiRequestParameters(relativeUrl: relativeUrl,
+                                                    method: method,
+                                                    parameters: parameters,
+                                                    requestEncoding: requestEncoding,
+                                                    requestHeaders: requestHeaders)
+        }
     }
-
 }
 {{ "\n" }}
