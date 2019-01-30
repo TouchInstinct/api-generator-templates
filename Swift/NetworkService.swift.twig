@@ -28,7 +28,9 @@ class {{ serviceName }}: NetworkService, {{ protocolName }} {
     }
 
     func apiRequest<T: Decodable>(with parameters: Single<ApiRequestParameters>, decoder: JSONDecoder = JSONDecoder()) -> Single<T> {
-        return rxRequest(with: parameters, decoder: decoder).map { $0.model }.asSingle()
+        return parameters.flatMap { parameters -> Single<T> in
+            self.rxRequest(with: parameters, decoder: decoder).map { $0.model }.asSingle()
+        }
     }
 
     func deferredApiRequestParameters(relativeUrl: String,
@@ -36,11 +38,17 @@ class {{ serviceName }}: NetworkService, {{ protocolName }} {
                               parameters: Parameters? = nil,
                               requestEncoding: ParameterEncoding? = nil,
                               requestHeaders: HTTPHeaders? = nil) -> Single<ApiRequestParameters> {
-        return configuration.apiRequestParameters(relativeUrl: relativeUrl,
-                                                  method: method,
-                                                  parameters: parameters,
-                                                  requestEncoding: requestEncoding,
-                                                  requestHeaders: requestHeaders)
+        return .deferred({ () -> Single<ApiRequestParameters> in
+            return .create(subscribe: { single -> Disposable in
+                let parameters = self.configuration.apiRequestParameters(relativeUrl: relativeUrl,
+                                                                    method: method,
+                                                                    parameters: parameters,
+                                                                    requestEncoding: requestEncoding,
+                                                                    requestHeaders: requestHeaders)
+                single(.success(parameters))
+                return Disposables.create()
+            })
+        })
     }
 
 }
