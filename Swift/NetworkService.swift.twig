@@ -34,22 +34,17 @@ class {{ serviceName }}: NetworkService, {{ protocolName }} {
     }
 
     func deferredApiRequestParameters(relativeUrl: String,
-                              method: HTTPMethod = .get,
-                              parameters: Parameters? = nil,
-                              requestEncoding: ParameterEncoding? = nil,
-                              requestHeaders: HTTPHeaders? = nil) -> Single<ApiRequestParameters> {
-        return .deferred({ () -> Single<ApiRequestParameters> in
-            return .create(subscribe: { single -> Disposable in
-                let parameters = self.configuration.apiRequestParameters(relativeUrl: relativeUrl,
-                                                                    method: method,
-                                                                    parameters: parameters,
-                                                                    requestEncoding: requestEncoding,
-                                                                    requestHeaders: requestHeaders)
-                single(.success(parameters))
-                return Disposables.create()
-            })
-        })
+                                      method: HTTPMethod = .get,
+                                      parameters: Parameters? = nil,
+                                      requestEncoding: ParameterEncoding? = nil,
+                                      requestHeaders: HTTPHeaders? = nil) -> Single<ApiRequestParameters> {
+        return .deferredJust {
+            self.configuration.apiRequestParameters(relativeUrl: relativeUrl,
+                                                    method: method,
+                                                    parameters: parameters,
+                                                    requestEncoding: requestEncoding,
+                                                    requestHeaders: requestHeaders)
+        }
     }
-
 }
 {{ "\n" }}
