@@ -27,8 +27,8 @@ class {{ serviceName }}: NetworkService, {{ protocolName }} {
         self.init(configuration: NetworkServiceConfiguration(baseUrl: {{ serviceName }}.apiBaseUrl))
     }
 
-    func apiRequest<T: Decodable>(with parameters: Single<ApiRequestParameters>, decoder: JSONDecoder = JSONDecoder()) -> Single<T> {
-        return parameters.flatMap {
+    func apiRequest<T: Decodable>(with parametersSingle: Single<ApiRequestParameters>, decoder: JSONDecoder = JSONDecoder()) -> Single<T> {
+        return parametersSingle.flatMap {
             self.rxRequest(with: $0, decoder: decoder).map { $0.model }.asSingle()
         }
     }
