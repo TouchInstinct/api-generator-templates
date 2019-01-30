@@ -28,8 +28,8 @@ class {{ serviceName }}: NetworkService, {{ protocolName }} {
     }
 
     func apiRequest<T: Decodable>(with parameters: Single<ApiRequestParameters>, decoder: JSONDecoder = JSONDecoder()) -> Single<T> {
-        return parameters.flatMap { parameters -> Single<T> in
-            self.rxRequest(with: parameters, decoder: decoder).map { $0.model }.asSingle()
+        return parameters.flatMap {
+            self.rxRequest(with: $0, decoder: decoder).map { $0.model }.asSingle()
         }
     }
 
