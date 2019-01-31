@@ -2,18 +2,19 @@
 
 <body class="main-page">
 <div class="aside aside-left">
-    <div class="header">
-        {%- include 'blocks/menu-header.html.twig' %}
-    </div>
-    <div class="content">
-        {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
+    <div class="aside__container">
+        <div class="header">
+            {%- include 'blocks/menu-header.html.twig' %}
+        </div>
+        <div class="content">
+            {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
 
-        <ul class="secondary">
-            <li><a>Android</a></li>
-            <li class="active"><a>iOS</a></li>
-            <li><a>Windows Phone</a></li>
-        </ul>
-
+            <ul class="secondary">
+                <li><a>Android</a></li>
+                <li class="active"><a>iOS</a></li>
+                <li><a>Windows Phone</a></li>
+            </ul>
+        </div>
     </div>
 </div>
 

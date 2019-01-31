@@ -2,22 +2,23 @@
 
 <body class="main-page">
 <div class="aside aside-left">
-    <div class="header">
-        {%- include 'blocks/menu-header.html.twig' %}
-    </div>
-    <div class="content">
-        {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
+    <div class="aside__container">
+        <div class="header">
+            {%- include 'blocks/menu-header.html.twig' %}
+        </div>
+        <div class="content">
+            {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
 
-        <ul class="secondary">
-        {% for menu in menus %}
-            {% include 'blocks/secondary-menu.html.twig' with {
-            menu: menu,
-            menuTitle: menu.title,
-            activeItemTypeName: name
-            } %}
-        {% endfor %}
-        </ul>
-
+            <ul class="secondary">
+            {% for menu in menus %}
+                {% include 'blocks/secondary-menu.html.twig' with {
+                menu: menu,
+                menuTitle: menu.title,
+                activeItemTypeName: name
+                } %}
+            {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 
