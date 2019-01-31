@@ -2,24 +2,25 @@
 
 <body class="main-page">
 <div class="aside aside-left">
-    <div class="header">
-        {%- include 'blocks/menu-header.html.twig' %}
-    </div>
-    <div class="content">
-        {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
+    <div class="aside__container">
+        <div class="header">
+            {%- include 'blocks/menu-header.html.twig' %}
+        </div>
+        <div class="content">
+            {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
 
-        <ul class="secondary">
-        {% include 'blocks/secondary-menu.html.twig' with {
-        menu: enumsMenu,
-        menuTitle: "Перечисления",
-        activeItemTypeName: name
-        } %}
-        {% include 'blocks/secondary-menu.html.twig' with {
-        menu: classesMenu,
-        menuTitle: "Объекты"
-        } %}
-        </ul>
-
+            <ul class="secondary">
+            {% include 'blocks/secondary-menu.html.twig' with {
+            menu: enumsMenu,
+            menuTitle: "Перечисления",
+            activeItemTypeName: name
+            } %}
+            {% include 'blocks/secondary-menu.html.twig' with {
+            menu: classesMenu,
+            menuTitle: "Объекты"
+            } %}
+            </ul>
+        </div>
     </div>
 </div>
 
