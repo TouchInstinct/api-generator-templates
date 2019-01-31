@@ -3,7 +3,7 @@
 <body class="main-page">
 <div class="aside aside-left">
     <div class="header">
-        <div class="title">{{ pageTitle }}</div>
+        {%- include 'blocks/menu-header.html.twig' %}
     </div>
     <div class="content">
         {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
@@ -26,7 +26,7 @@
             <p>Версия: {{ version }}</p>
 
             {% if buildVersion|length %}
-                <p>Build: {{ buildVersion }}</p>
+                <p>Сборка: {{ buildVersion }}</p>
             {% endif %}
 
             <p>{{ "now"|date("dd.MM.YYYY") }}</p>

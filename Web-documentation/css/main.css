@@ -25,43 +25,58 @@ body {
     display: flex;
 }
 
-.gutter {
-    cursor: col-resize;
-    background-image: url("../images/vertical-split.png");
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: 50% 200px;
+.btn {
+    padding: 1rem 1.15rem;
+    border: 0;
+    background-color: #0ca9e6;
+    color: white;
+    font-size: 1.42rem;
+    line-height: 1;
+    font-weight: 500;
 }
 
-.gutter:hover {
-    background-color: #333c47;
+.gutter {
+    z-index: 10;
+    cursor: col-resize;
 }
 
 .aside {
     display: inline-block;
     vertical-align: top;
     font-size: 14px;
+    position: relative;
+}
+
+.aside__container {
+    position: fixed;
+    overflow-y: auto;
+    max-height: 100vh;
+    width: inherit;
+    min-width: inherit;
 }
 
 .header {
-    height: 7rem;
+    min-height: 7rem;
     font-size: 14px;
 }
 
 .content {
-    min-height: calc(100vh - 7rem);
     font-size: 14px;
     line-height: 1rem;
 }
 
 .aside-left {
-    min-width: 300px;
+    min-width: 315px;
 }
 
 .aside-left .header {
     background-color: #333c48;
     border-right: 1px solid #323b46;
     border-bottom: 1px solid #2b333e;
+}
+
+.aside-right .content {
+    min-height: calc(100vh - 7rem);
 }
 
 .logo img {
@@ -156,19 +171,28 @@ body {
     background-color: #222933;
 }
 
-menu li {
+.navigation a {
     cursor: pointer;
+    color: inherit;
+    text-decoration: none;
 }
 
-.aside-left menu.main {
+.navigation .btn {
+    vertical-align: middle;
+    color: #fff;
+}
+
+.aside-left ul.navigation {
     list-style: none;
     margin: 0;
     background: #2b333e;
     padding: 0 0 2.2rem;
 }
 
-.aside-left menu.main li a {
-    display: block;
+.aside-left ul.navigation li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     line-height: 4rem;
     vertical-align: middle;
     padding-left: 3.57rem;
@@ -182,27 +206,31 @@ menu li {
     white-space: nowrap;
 }
 
-.aside-left menu.main > li a:hover,
-.aside-left menu.main > li.active a {
+.aside-left ul.navigation > li:hover,
+.aside-left ul.navigation > li.active {
     background-color: #222933;
     padding-left: 3.14rem;
     border-left: 0.43rem solid #0ca9e6;
-    color: white
+    color: white;
 }
 
-.aside-left menu.main > li:first-child + li.active {
+.aside-left ul.navigation > li:first-child + li.active {
     margin-top: 0;
 }
 
-.aside-left menu.secondary {
+.aside-left ul.secondary {
     list-style: none;
     margin: 0;
-    padding: 3.57rem 0 3.57rem 6.28rem;
+    padding: 3.57rem 0 3.57rem 3.57rem;
 }
 
-.aside-left menu.secondary li a {
+.aside-left ul.secondary a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.aside-left ul.secondary li {
     line-height: 2.64rem;
-    vertical-align: middle;
     font-size: 1.42rem;
     color: #0ca9e6;
     text-decoration: none;
@@ -211,37 +239,42 @@ menu li {
     text-overflow: ellipsis;
     white-space: nowrap;
     padding-right: 1.42rem;
-    display: inline-block;
     width: 100%;
 }
 
-.aside-left menu.secondary > li:not(.active) > a:hover {
+.aside-left ul.secondary > li:not(.active):hover {
     opacity: 0.8;
 }
 
-.aside-left menu.secondary > li.active > a {
+.aside-left ul.secondary > li.active {
     color: white
 }
 
-.aside-left menu.secondary > li.active menu.child {
+.aside-left ul.secondary > li.active ul.child {
     display: block;
 }
 
-.aside-left menu.child {
+.aside-left ul.child {
     display: none;
     list-style: none;
     margin: 6px 0;
-    padding: 0 3.75rem 0 1.57rem;
+    padding: 0 0 0 1.5rem;
     border-left: 1px solid #fff;
     min-width: 205px;
     width: auto;
 }
 
-.aside-left menu.child > li > a {
-    color: #7a7f85;
+.aside-left ul.child > a {
+    text-decoration: none;
+    color: inherit;
 }
 
-.aside-left menu.child > li.active > a {
+.aside-left ul.child > li {
+    color: #7a7f85;
+    padding-right: 0
+}
+
+.aside-left ul.child > li.active {
     color: #fff;
 }
 
@@ -260,10 +293,19 @@ menu li {
 .title {
     font-size: 2rem;
     line-height: 2.4rem;
-    padding-top: 2.2rem;
+    padding: 2.2rem 1.42rem 1.42rem 3.57rem;
     color: white;
-    padding-left: 4rem;
     font-weight: 700;
+}
+
+.title__hint {
+    font-size: 1.42rem;
+    font-weight: 400;
+    color: #7a7f85;
+}
+
+.title__hint:not(:first-child) {
+    margin-left: 10px;
 }
 
 .aside-right .content {
@@ -360,6 +402,11 @@ menu li {
     font-size: 1.4rem;
     margin: 0;
     line-height: 2rem;
+}
+
+.table .btn {
+    width: 100%;
+    margin-top: 1.71rem;
 }
 
 .row-header {
@@ -575,17 +622,6 @@ menu li {
     background-color: #f4f6f9;
 }
 
-.btn {
-    background-color: #0ca9e6;
-    border: 0;
-    color: white;
-    font-size: 1.42rem;
-    padding: 1.15rem;
-    width: 100%;
-    margin-top: 1.71rem;
-    font-weight: 500;
-}
-
 .part-example-response > .text-response {
     display: inline-block;
     width: calc(100% - 16rem);
@@ -603,7 +639,7 @@ span.text-string {
 }
 
 a.show-example-response {
-    color: #0275eb;
+    color: #0ca9e6;
     cursor: pointer;
 }
 
@@ -715,6 +751,7 @@ ol {
 
 
     .main-page {
+        display: block;
         min-width: 0;
         background-color: #ffffff;
     }

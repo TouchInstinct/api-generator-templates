@@ -3,12 +3,12 @@
 <body class="main-page">
 <div class="aside aside-left">
     <div class="header">
-        <div class="title">{{ pageTitle }}</div>
+        {%- include 'blocks/menu-header.html.twig' %}
     </div>
     <div class="content">
         {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
 
-        <menu class="secondary">
+        <ul class="secondary">
         {% include 'blocks/secondary-menu.html.twig' with {
         menu: enumsMenu,
         menuTitle: "Перечисления",
@@ -18,7 +18,7 @@
         menu: classesMenu,
         menuTitle: "Объекты"
         } %}
-        </menu>
+        </ul>
 
     </div>
 </div>
