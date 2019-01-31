@@ -3,16 +3,16 @@
 <body class="main-page">
 <div class="aside aside-left">
     <div class="header">
-        <div class="title">{{ pageTitle }}</div>
+        {%- include 'blocks/menu-header.html.twig' %}
     </div>
     <div class="content">
         {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
 
-        <menu class="secondary">
+        <ul class="secondary">
             <li><a>Android</a></li>
             <li class="active"><a>iOS</a></li>
             <li><a>Windows Phone</a></li>
-        </menu>
+        </ul>
 
     </div>
 </div>

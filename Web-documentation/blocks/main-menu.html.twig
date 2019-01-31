@@ -1,4 +1,4 @@
-<menu class="main">
+<ul class="navigation">
 
     {%- if mainMenu.indexMenuItem is not null %}
         <li {%- if mainMenu.indexMenuItem.active %} class="active" {%- endif -%}><a href="{{ mainMenu.indexMenuItem.path }}">Общие принципы построения API</a></li>
@@ -29,7 +29,12 @@
     {% endif %}
 
     {%- if mainMenu.allContents is not null %}
-        <li {%- if mainMenu.allContents.active %} class="active" {%- endif -%}><a href="{{ mainMenu.allContents.path }}">Версия для печати</a></li>
+        <li {%- if mainMenu.allContents.active %} class="active" {%- endif -%}>
+                <a href="{{ mainMenu.allContents.path }}">Версия для печати</a>
+                {% if buildVersion|length %}
+                        <a href="/{{ pageTitle|replace({ " ": "_" }) }}__v{{ version }}.b{{ buildVersion }}.pdf" target="_blank" class="btn">Скачать PDF</a>
+                {% endif %}
+        </li>
     {% endif %}
 
-</menu>
+</ul>

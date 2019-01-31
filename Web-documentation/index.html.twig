@@ -2,11 +2,13 @@
 
 <body class="main-page">
 <div class="aside aside-left">
-    <div class="header">
-        <div class="title">{{ pageTitle }}</div>
-    </div>
-    <div class="content">
-        {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
+    <div class="aside__container">
+        <div class="header">
+            {%- include 'blocks/menu-header.html.twig' %}
+        </div>
+        <div class="content">
+            {%- include 'blocks/main-menu.html.twig' with { mainMenu: mainMenu } %}
+        </div>
     </div>
 </div>
 

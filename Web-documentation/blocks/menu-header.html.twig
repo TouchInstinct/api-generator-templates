@@ -1,0 +1,6 @@
+<div class="title">
+    {{ pageTitle }}&ensp;
+    <span class="title__hint">{{ "now"|date("dd.MM.YYYY") }}</span><span
+    class="title__hint">Версия:&nbsp;{{ version }}</span>{% if buildVersion|length %}<span
+    class="title__hint">Сборка:&nbsp;{{ buildVersion }}</span>{% endif %}
+</div>
