@@ -181,6 +181,7 @@ body {
 .navigation .btn {
     vertical-align: middle;
     color: #fff;
+    width: auto;
 }
 
 .aside-left ul.navigation {
