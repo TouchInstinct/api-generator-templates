@@ -7,6 +7,7 @@
 {%- set hasGenerics = utils.valueTypeHasGenerics(type) != null %}
 {%- for field in allFieldsOrdered -%}
     {%- set fieldsHasGenericsOrNonEqutableCollections = default(fieldsHasGenericsOrNonEqutableCollections, false) or (utils.hasGenericsOrNonEqutableCollections(field.type) != null) -%}
+{%- set classAndFieldsHaveNotGenericsOrNonEqutableCollections = (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
 {%- endfor -%}
 
 import SwiftDate
@@ -14,9 +15,7 @@ import LeadKit
 
 /// {{ description }}
 {% if (not hasChilds) -%}final {% endif %}class {{ classType }}: {{ parentClassType }} {
-
     {% include 'blocks/class/coding-keys.twig' with { fields: fields } %}
-
     {% include 'blocks/class/fields.twig' with { fields: fields } %}
     // MARK: - Initializers
 
@@ -47,7 +46,7 @@ import LeadKit
         {%- endif %}
     }
 
-    {% if (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
+    {% if classAndFieldsHaveNotGenericsOrNonEqutableCollections -%}
     func isEqual(to other: {{ classType }}?) -> Bool {
         {% if (fields is empty) and (not hasParent) %}
         return false
@@ -56,25 +55,23 @@ import LeadKit
             return false
         }
 
-        return{%- if hasParent %} super.isEqual(to: other){%- endif %}{%- if (fields is not empty) and hasParent %} &&{% endif %} {% include 'blocks/class/fields-equal.twig' with { fields: fields } %}
-        {% endif %}
-    }{{ "\n" }}
+        return{%- if hasParent %} super.isEqual(to: other){%- endif %}{%- if (fields is not empty) and hasParent %} &&{% endif %} {% include 'blocks/class/fields-equal.twig' with { fields: fields } %} {% endif %}
+    }
     {%- endif %}
 }
 {{ "\n" }}
 
-{%- if (not hasChilds) and (not hasGenerics) and (not fieldsHasGenericsOrNonEqutableCollections) -%}
+{%- if (not hasChilds) and classAndFieldsHaveNotGenericsOrNonEqutableCollections -%}
 extension {{ type.baseTypeName }}: Equatable {
 
     static func ==(lhs: {{ classType }}, rhs: {{ classType }}) -> Bool {
         return lhs.isEqual(to: rhs)
     }
-
 }
 {{ "\n" }}
 {%- endif -%}
 
-{%- if not hasGenerics -%}
+{%- if classAndFieldsHaveNotGenericsOrNonEqutableCollections -%}
 extension {{ type.baseTypeName }} {
 
     static let new{{ type.baseTypeName }} = {{ type.baseTypeName }}({%- include 'blocks/class/fields-initialization-default-values.twig' with { fields: allFieldsOrdered } -%})
@@ -86,7 +83,6 @@ extension {{ type.baseTypeName }} {
     func copy{%- if hasChilds -%}{{ type.baseTypeName }}{%- endif -%}Without({%- include 'blocks/class/bool-parameters-fields.twig' with { fields: allFieldsOrdered } -%}) -> {{ type.baseTypeName }} {
         return {{ type.baseTypeName }}({%- include 'blocks/class/fields-without-initialization.twig' with { fields: allFieldsOrdered } -%})
     }
-
 }
 {{ "\n" }}
 {%- endif -%}

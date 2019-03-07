@@ -1,8 +1,6 @@
 {%- import 'macroses/common.utils.twig' as utils -%}
 {%- import 'macroses/enum.utils.twig' as enumutils -%}
 
-import Foundation
-
 /// {{ description }}
 ///
 {% for value in values -%}
@@ -10,6 +8,5 @@ import Foundation
 {% endfor -%}
 enum {{ name }}: {{ enumutils.enumType(valuesTypes) }}, Codable, RawRepresentable, CaseIterable {
     {% include 'blocks/enum/cases.twig' with { values: values } %}
-
 }
 {{ "\n" }}
