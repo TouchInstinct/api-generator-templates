@@ -15,9 +15,7 @@ import LeadKit
 
 /// {{ description }}
 {% if (not hasChilds) -%}final {% endif %}class {{ classType }}: {{ parentClassType }} {
-
     {% include 'blocks/class/coding-keys.twig' with { fields: fields } %}
-
     {% include 'blocks/class/fields.twig' with { fields: fields } %}
     // MARK: - Initializers
 
@@ -57,9 +55,8 @@ import LeadKit
             return false
         }
 
-        return{%- if hasParent %} super.isEqual(to: other){%- endif %}{%- if (fields is not empty) and hasParent %} &&{% endif %} {% include 'blocks/class/fields-equal.twig' with { fields: fields } %}
-        {% endif %}
-    }{{ "\n" }}
+        return{%- if hasParent %} super.isEqual(to: other){%- endif %}{%- if (fields is not empty) and hasParent %} &&{% endif %} {% include 'blocks/class/fields-equal.twig' with { fields: fields } %} {% endif %}
+    }
     {%- endif %}
 }
 {{ "\n" }}
@@ -70,7 +67,6 @@ extension {{ type.baseTypeName }}: Equatable {
     static func ==(lhs: {{ classType }}, rhs: {{ classType }}) -> Bool {
         return lhs.isEqual(to: rhs)
     }
-
 }
 {{ "\n" }}
 {%- endif -%}
@@ -87,7 +83,6 @@ extension {{ type.baseTypeName }} {
     func copy{%- if hasChilds -%}{{ type.baseTypeName }}{%- endif -%}Without({%- include 'blocks/class/bool-parameters-fields.twig' with { fields: allFieldsOrdered } -%}) -> {{ type.baseTypeName }} {
         return {{ type.baseTypeName }}({%- include 'blocks/class/fields-without-initialization.twig' with { fields: allFieldsOrdered } -%})
     }
-
 }
 {{ "\n" }}
 {%- endif -%}
