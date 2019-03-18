@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonValue
 /**
  * {{ description }}
  */
-enum class {{ name }}(val code: {{ utils.formatEnumValueType(valuesTypes) }}) {
+enum class {{ name }}(val code: {{ utils.formatEnumValueType(valuesTypes) }}, val description: String) {
 
     {%- include 'blocks/enum/cases.twig' with { valuesTypes: valuesTypes, values: values } %}
 
