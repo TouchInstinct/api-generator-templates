@@ -1,10 +1,4 @@
 {%- import '../../utils.twig' as utils -%}
 {%- for value in values %}
-    {%- if (value.description is not empty) %}
-
-    /**
-     * {{ value.description }}
-     */
-    {%- endif %}
     {{ value.nameUpperCaseWithUnderscope }}({{ utils.formatEnumValue(valuesTypes, value) }}, "{{ value.description }}"){%- if not (loop.last) %},{% else %};{% endif %}
 {%- endfor -%}
