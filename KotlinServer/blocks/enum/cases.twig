@@ -6,5 +6,5 @@
      * {{ value.description }}
      */
     {%- endif %}
-    {{ value.nameUpperCaseWithUnderscope }}({{ utils.formatEnumValue(valuesTypes, value) }}){%- if not (loop.last) %},{% else %};{% endif %}
+    {{ value.nameUpperCaseWithUnderscope }}({{ utils.formatEnumValue(valuesTypes, value) }}, "{{ value.description }}"){%- if not (loop.last) %},{% else %};{% endif %}
 {%- endfor -%}
