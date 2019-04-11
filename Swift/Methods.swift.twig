@@ -2,16 +2,14 @@ import LeadKit
 import RxSwift
 import Alamofire
 
-{% set protocolName = concat(networkServiceName, "NetworkProtocol") -%}
-
-extension {{ protocolName }} {
+extension {{ networkServiceName }} {
 
     {% for method in methods %}
     {%- include 'blocks/method/method-func.twig' with { method: method, isStatic: false } %}
     {% endfor %}
 }
 
-extension Singleton where Self: {{ protocolName }} {
+extension Singleton where Self: {{ networkServiceName }} {
 
     {% for method in methods %}
     {%- include 'blocks/method/method-func.twig' with { method: method, isStatic: true } %}
