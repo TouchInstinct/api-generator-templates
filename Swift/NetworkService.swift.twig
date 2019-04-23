@@ -7,7 +7,7 @@ import Alamofire
 
 protocol {{ protocolName }} {
 
-    func apiRequest<T: Decodable>(with parametersSingle: Single<ApiRequestParameters>, decoder: JSONDecoder) -> Single<T>
+    func apiRequest<T: Decodable>(with parametersSingle: Single<ApiRequestParameters>, additionalValidStatusCodes: Set<Int>, decoder: JSONDecoder) -> Single<T>
     func deferredApiRequestParameters(relativeUrl: String,
                               method: HTTPMethod,
                               parameters: Parameters?,
@@ -27,9 +27,9 @@ class {{ serviceName }}: NetworkService, {{ protocolName }} {
         self.init(configuration: NetworkServiceConfiguration(baseUrl: {{ serviceName }}.apiBaseUrl))
     }
 
-    func apiRequest<T: Decodable>(with parametersSingle: Single<ApiRequestParameters>, decoder: JSONDecoder = JSONDecoder()) -> Single<T> {
+    func apiRequest<T: Decodable>(with parametersSingle: Single<ApiRequestParameters>, additionalValidStatusCodes: Set<Int> = [], decoder: JSONDecoder = JSONDecoder()) -> Single<T> {
         return parametersSingle.flatMap {
-            self.rxRequest(with: $0, decoder: decoder).map { $0.model }.asSingle()
+            self.rxRequest(with: $0, additionalValidStatusCodes: additionalValidStatusCodes, decoder: decoder).map { $0.model }.asSingle()
         }
     }
 
