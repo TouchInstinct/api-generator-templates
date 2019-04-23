@@ -13,7 +13,8 @@
     /// {{ method.description }}
     {{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
                    requestEncoding: ParameterEncoding? = nil,
-                   requestHeaders: HTTPHeaders? = nil) -> Single<{{ method.responseType.type.typeName }}> {
+                   requestHeaders: HTTPHeaders? = nil,
+                   additionalValidStatusCodes: Set<Int> = []) -> Single<{{ method.responseType.type.typeName }}> {
 
         {% if isStatic -%}
           return shared.{{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyParamName }},{{ "\n                   " }}{%- endif -%}
@@ -26,7 +27,7 @@
                                               requestEncoding: requestEncoding,
                                               requestHeaders: requestHeaders)
 
-          return apiRequest(with: parameters, decoder: JSONDecoder())
+          return apiRequest(with: parameters, additionalValidStatusCodes: additionalValidStatusCodes, decoder: JSONDecoder())
           
         {%- endif %}
     }
