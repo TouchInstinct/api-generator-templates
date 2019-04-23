@@ -19,7 +19,8 @@
         {% if isStatic -%}
           return shared.{{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyParamName }},{{ "\n                   " }}{%- endif -%}
                    requestEncoding: requestEncoding,
-                   requestHeaders: requestHeaders)
+                   requestHeaders: requestHeaders,
+                   additionalValidStatusCodes: additionalValidStatusCodes)
         {%- else -%}
           let parameters = deferredApiRequestParameters(relativeUrl: "{{ method.url }}",
                                               method: .{{ methodType }},
