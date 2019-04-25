@@ -1,0 +1,53 @@
+{% macro decodeComplexField(field, decodingType) %}
+    {%- import _self as self -%}
+    {%- if field.optional or field.nullable -%}
+        if let {{ field.name }} = try container.decodeIfPresent({{- decodingType -}}.self, forKey: .{{- field.name -}}) {
+            {{ self.initExpr(field) }}
+        } else {
+            self.{{ field.name }} = nil
+        }
+    {%- else -%}
+        let {{ field.name }} = try container.decode({{- decodingType -}}.self, forKey: .{{- field.name -}})
+        {{ self.initExpr(field) }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro initExpr(field) %}
+    {%- if field.type.type.baseTypeName == "DateTime" -%}
+        if let date = ApiDateFormattingService.date(from: {{ field.name }}, format: .{{ dateFormatToName(field.type.dateFormat) }}, parsedIn: nil) {
+            self.{{ field.name }} = date
+        } else {
+            throw LeadKitError.failedToDecode(reason: "init?(string:format:fromRegion:) returned nil")
+        }
+    {%- elseif field.type.type.baseTypeName == "Color" -%}
+        if let color = UIColor(hexString: {{ field.name }}) {
+            self.{{ field.name }} = color
+        } else {
+            throw LeadKitError.failedToDecode(reason: "Unable to decode hex string")
+        }
+    {%- elseif field.type.type.baseTypeName == "Url" -%}
+        if let url = URL(string: {{ field.name }}) {
+            self.{{ field.name }} = url
+        } else {
+            throw LeadKitError.failedToDecode(reason: "Unable to decode URL from string")
+        }
+    {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
+        if let number = formatter.number(from: {{ field.name }}) {
+            self.{{ field.name }} = NSDecimalNumber(decimal: number.decimalValue)
+        } else {
+            throw LeadKitError.failedToDecode(reason: "Unable to decode decimal from string")
+        }
+    {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
+        self.{{ field.name }} = DateInRegion(seconds: TimeInterval({{ field.name }}), region: .local)
+    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
+        self.{{ field.name }} = NSDecimalNumber(decimal: {{ field.name }})
+    {%- endif -%}
+{% endmacro %}
+
+{% macro decodeThrowableField(field, init, errorMessage) %}
+    if let value = {{ init }} {
+        self.{{ field.name }} = url
+    } else {
+        throw LeadKitError.failedToDecode(reason: "{{ errorMessage }}")
+    }
+{% endmacro %}

@@ -10,6 +10,19 @@
     {{- expr -}}{%- if nullable or optional -%}?{%- endif -%}
 {% endmacro %}
 
+{% macro numberFormatterFrom(fields) %}
+    {%- set containsStringDecimal = false -%}
+    {%- for field in fields -%}
+        {%- if field.type.type.baseTypeName == "StringDecimal" -%}
+            {%- set containsStringDecimal = true -%}
+        {%- endif -%}
+    {%- endfor -%}
+    {%- if containsStringDecimal -%}
+        let formatter = NumberFormatter()
+        formatter.decimalSeparator = "."
+    {%- endif -%}
+{% endmacro %}
+
 {% macro formatValueType(valueType) %}
     {%- import _self as self -%}
 
@@ -17,12 +30,16 @@
         [{{ self.formatValueType(valueType.itemsType) }}]
     {%- elseif valueType.baseTypeName == "Map" -%}
         [{{ self.formatValueType(valueType.keysType) }}: {{ self.formatValueType(valueType.valuesType) }}]
-    {%- elseif valueType.baseTypeName == "DateTime" -%}
+    {%- elseif valueType.baseTypeName == "DateTime" or valueType.baseTypeName == "DateTimeTimestamp" -%}
         DateInRegion
     {%- elseif valueType.baseTypeName == "Long" -%}
         Int64
-    {%- elseif valueType.baseTypeName == "Decimal" -%}
+    {%- elseif valueType.baseTypeName == "Decimal" or valueType.baseTypeName == "StringDecimal" -%}
         NSDecimalNumber
+    {%- elseif valueType.baseTypeName == "Url" -%}
+        URL
+    {%- elseif valueType.baseTypeName == "Color" -%}
+        UIColor
     {%- else -%}
         {{ valueType.baseTypeName }}
     {%- endif -%}
@@ -34,14 +51,27 @@
     {%- if field.type.type.baseTypeName == "DateTime" -%}
         {{- self.formatEncodingDate(field) -}}
     {%- elseif field.type.type.baseTypeName == "Decimal" -%}
-        {%- if strong -%}
-            {{ field.name }}
-        {%- else -%}
-            {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}
-        {%- endif -%}
-        .decimalValue
+        {{ self.formatNullableOrOptional(field.name, strong) -}}.decimalValue
+    {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
+        Int({{ self.formatStrongOrNullableOptional(field, strong) -}}.timeIntervalSince1970)
+    {%- elseif field.type.type.baseTypeName == "Color" -%}
+        {{ self.formatStrongOrNullableOptional(field, strong) -}}.hexString
+    {%- elseif field.type.type.baseTypeName == "Url" -%}
+        {{ self.formatStrongOrNullableOptional(field, strong) -}}.absoluteString
+    {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
+        {{ self.formatStrongOrNullableOptional(field, strong) -}}.stringValue
     {%- else -%}
         {{ field.name }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro formatStrongOrNullableOptional(field, strong) %}
+    {%- import _self as self -%}
+
+    {%- if strong -%}
+        {{ field.name }}
+    {%- else -%}
+        {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}
     {%- endif -%}
 {% endmacro %}
 
@@ -63,6 +93,10 @@
     {% if field.type.type.baseTypeName == "DateTime" %}
         if let {{ field.name }} = {{ field.name }} {
             try container.encode({{- self.formatEncodingDate(field) -}}, forKey: .{{- field.name -}})
+        }
+    {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
+        if let {{ field.name }} = {{ field.name }} {
+            try container.encode(Int({{ field.name }}.timeIntervalSince1970), forKey: .{{- field.name -}})
         }
     {%- else -%}
         try container.encodeIfPresent({{- self.formatEncodingValue(field, false) -}}, forKey: .{{- field.name -}})
@@ -87,28 +121,16 @@
 
 {% macro decodeFromContainer(field) %}
     {%- import _self as self -%}
+    {%- import 'complexField.utils.twig' as complexFieldUtils -%}
 
-    {% if field.type.type.baseTypeName == "DateTime" %}
-        {{ self.decodeComplexField(field, "String") }}
+    {% if field.type.type.baseTypeName == "Color" or field.type.type.baseTypeName == "DateTime" or field.type.type.baseTypeName == "StringDecimal" or field.type.type.baseTypeName == "Url" %}
+        {{ complexFieldUtils.decodeComplexField(field, "String") -}}
+    {% elseif field.type.type.baseTypeName == "DateTimeTimestamp" %}
+        {{ complexFieldUtils.decodeComplexField(field, "Int") -}}
     {% elseif field.type.type.baseTypeName == "Decimal" %}
-        {{ self.decodeComplexField(field, "Decimal") }}
+        {{ complexFieldUtils.decodeComplexField(field, "Decimal") -}}
     {%- else -%}
         self.{{ field.name }} = try container.{{- self.formatOptionalDecode(field) -}}({{ self.formatValueType(field.type.type) }}.self, forKey: .{{ field.name }})
-    {%- endif -%}
-{% endmacro %}
-
-{% macro decodeComplexField(field, decodingType) %}
-    {%- import _self as self -%}
-
-    {%- if field.optional or field.nullable -%}
-        if let {{ field.name }} = try container.decodeIfPresent({{- decodingType -}}.self, forKey: .{{- field.name -}}) {
-            {{ self.initExpr(field) }}
-        } else {
-            self.{{ field.name }} = nil
-        }
-    {%- else -%}
-        let {{ field.name }} = try container.decode({{- decodingType -}}.self, forKey: .{{- field.name -}})
-        {{ self.initExpr(field) }}
     {%- endif -%}
 {% endmacro %}
 
@@ -117,18 +139,6 @@
         decodeIfPresent
     {%- else -%}
         decode
-    {%- endif -%}
-{% endmacro %}
-
-{% macro initExpr(field) %}
-    {%- if field.type.type.baseTypeName == "DateTime" -%}
-        if let date = ApiDateFormattingService.date(from: {{ field.name }}, format: .{{ dateFormatToName(field.type.dateFormat) }}, parsedIn: nil) {
-            self.{{ field.name }} = date
-        } else {
-            throw LeadKitError.failedToDecode(reason: "init?(string:format:fromRegion:) returned nil")
-        }
-    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
-        self.{{ field.name }} = NSDecimalNumber(decimal: {{ field.name }})
     {%- endif -%}
 {% endmacro %}
 
@@ -151,7 +161,7 @@
         [:]
     {%- elseif baseTypeName == "String" -%}
         ""
-    {%- elseif baseTypeName == "DateTime" -%}
+    {%- elseif baseTypeName == "DateTime" or baseTypeName == "DateTimeTimestamp" -%}
         Date().inDefaultRegion()
     {%- elseif baseTypeName == "Double" -%}
         0.0
@@ -159,8 +169,10 @@
         0
     {%- elseif baseTypeName == "Bool" -%}
         false
-    {%- elseif baseTypeName == "Decimal" -%}
+    {%- elseif baseTypeName == "Decimal" or baseTypeName == "StringDecimal" -%}
         .zero
+    {%- elseif baseTypeName == "Color" -%}
+        .white
     {%- elseif (field.type.values is not null) -%}
         {%- import _self as self -%}
 
