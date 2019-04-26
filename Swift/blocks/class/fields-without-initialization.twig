@@ -2,8 +2,8 @@
 
 {%- if fields is not empty -%}
 {%- for field in fields -%}
-	{%- if field.nullable or field.optional -%}
-    	{{ field.name }}: {{ field.name }} ? nil : self.{{ field.name }}{%- if not (loop.last) %}, {% endif %}
+    {%- if field.nullable or field.optional -%}
+        {{ field.name }}: {{ field.name }} ? nil : self.{{ field.name }}{%- if not (loop.last) %}, {% endif %}
     {%- endif -%}
 {%- endfor -%}
 {%- endif -%}
