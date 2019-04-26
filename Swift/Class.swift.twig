@@ -74,15 +74,7 @@ extension {{ type.baseTypeName }}: Equatable {
 {%- if classAndFieldsHaveNotGenericsOrNonEqutableCollections -%}
 extension {{ type.baseTypeName }} {
 
-    static let new{{ type.baseTypeName }} = {{ type.baseTypeName }}({%- include 'blocks/class/fields-initialization-default-values.twig' with { fields: allFieldsOrdered } -%})
-
-    func copy{%- if hasChilds -%}{{ type.baseTypeName }}{%- endif -%}With({%- include 'blocks/class/nullable-parameters-fields.twig' with { fields: allFieldsOrdered } -%}) -> {{ type.baseTypeName }} {
-        return {{ type.baseTypeName }}({%- include 'blocks/class/fields-optional-initialization.twig' with { fields: allFieldsOrdered } -%})
-    }
-
-    func copy{%- if hasChilds -%}{{ type.baseTypeName }}{%- endif -%}Without({%- include 'blocks/class/bool-parameters-fields.twig' with { fields: allFieldsOrdered } -%}) -> {{ type.baseTypeName }} {
-        return {{ type.baseTypeName }}({%- include 'blocks/class/fields-without-initialization.twig' with { fields: allFieldsOrdered } -%})
-    }
+    {% include 'blocks/class/copy-declaration.twig' with { hasChilds: hasChilds, type: type, fields: allFieldsOrdered } %}
 }
 {{ "\n" }}
 {%- endif -%}

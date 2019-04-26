@@ -123,11 +123,11 @@
     {%- import _self as self -%}
     {%- import 'complexField.utils.twig' as complexFieldUtils -%}
 
-    {% if field.type.type.baseTypeName == "Color" or field.type.type.baseTypeName == "DateTime" or field.type.type.baseTypeName == "StringDecimal" or field.type.type.baseTypeName == "Url" %}
+    {%- if field.type.type.baseTypeName == "Color" or field.type.type.baseTypeName == "DateTime" or field.type.type.baseTypeName == "StringDecimal" or field.type.type.baseTypeName == "Url" -%}
         {{ complexFieldUtils.decodeComplexField(field, "String") -}}
-    {% elseif field.type.type.baseTypeName == "DateTimeTimestamp" %}
+    {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
         {{ complexFieldUtils.decodeComplexField(field, "Int") -}}
-    {% elseif field.type.type.baseTypeName == "Decimal" %}
+    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
         {{ complexFieldUtils.decodeComplexField(field, "Decimal") -}}
     {%- else -%}
         self.{{ field.name }} = try container.{{- self.formatOptionalDecode(field) -}}({{ self.formatValueType(field.type.type) }}.self, forKey: .{{ field.name }})
@@ -146,40 +146,6 @@
     {%- import _self as self -%}
 
     {{- self.decapitalize(value.name) -}}
-{%- endmacro %}
-
-{% macro defaultValueForField(field) %}
-    {%- set nullable = field.nullable -%}
-    {%- set optional = field.optional -%}
-    {%- set baseTypeName = field.type.type.baseTypeName -%}
-
-    {%- if nullable or optional -%}
-        nil
-    {%- elseif baseTypeName == "Array" -%}
-        []
-    {%- elseif baseTypeName == "Map" -%}
-        [:]
-    {%- elseif baseTypeName == "String" -%}
-        ""
-    {%- elseif baseTypeName == "DateTime" or baseTypeName == "DateTimeTimestamp" -%}
-        Date().inDefaultRegion()
-    {%- elseif baseTypeName == "Double" -%}
-        0.0
-    {%- elseif baseTypeName == "Long" or baseTypeName == "Int" -%}
-        0
-    {%- elseif baseTypeName == "Bool" -%}
-        false
-    {%- elseif baseTypeName == "Decimal" or baseTypeName == "StringDecimal" -%}
-        .zero
-    {%- elseif baseTypeName == "Color" -%}
-        .white
-    {%- elseif (field.type.values is not null) -%}
-        {%- import _self as self -%}
-
-        .{{ self.enumValueName(first(field.type.values)) }}
-    {%- else -%}
-        .new{{ baseTypeName }}
-    {%- endif -%}
 {%- endmacro %}
 
 {% macro valueTypeHasGenerics(valueType) %}

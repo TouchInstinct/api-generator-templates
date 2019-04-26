@@ -16,11 +16,11 @@
     {%- import _self as self -%}
     {%- if field.type.type.baseTypeName == "DateTime" -%}
         {%- set dateTimeInit = 'ApiDateFormattingService.date(from: {{ field.name }}, format: .{{ dateFormatToName(field.type.dateFormat) }}, parsedIn: nil)' -%}
-        {{ self.decodeThrowableField(field, dateTimeInit, 'init?(string:format:fromRegion:) returned nil') }}
+        {{ self.decodeThrowableField(field, dateTimeInit, 'init?(string:format:fromRegion:) returned nil') -}}
     {%- elseif field.type.type.baseTypeName == "Color" -%}
-        {{ self.decodeThrowableField(field, 'UIColor(hexString: {{ field.name }})', 'Unable to decode hex string') }}
+        {{ self.decodeThrowableField(field, 'UIColor(hexString: {{ field.name }})', 'Unable to decode hex string') -}}
     {%- elseif field.type.type.baseTypeName == "Url" -%}
-        {{ self.decodeThrowableField(field, 'URL(string: {{ field.name }})', 'Unable to decode URL from string') }}
+        {{ self.decodeThrowableField(field, 'URL(string: {{ field.name }})', 'Unable to decode URL from string') -}}
     {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
         {{- self.decodeThrowableField(field, 'formatter.number(from: {{ field.name }})', 'Unable to decode decimal from string') -}}
     {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
@@ -30,10 +30,10 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro decodeThrowableField(field, init, errorMessage) %}
+{%- macro decodeThrowableField(field, init, errorMessage) -%}
     if let value = {{ init }} {
-        self.{{ field.name }} = url
-    } else {
-        throw LeadKitError.failedToDecode(reason: "{{ errorMessage }}")
-    }
-{% endmacro %}
+            self.{{ field.name }} = url
+        } else {
+            throw LeadKitError.failedToDecode(reason: "{{ errorMessage }}")
+        }
+{%- endmacro -%}

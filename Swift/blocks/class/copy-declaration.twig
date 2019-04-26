@@ -1,0 +1,21 @@
+{%- import '../../macroses/common.utils.twig' as utils -%}
+
+	func copy{%- if hasChilds -%}{{ type.baseTypeName }}{%- endif -%}With({%- include '../class/nullable-parameters-fields.twig' with { fields: allFieldsOrdered } -%}) -> {{ type.baseTypeName }} {
+    	return {{ type.baseTypeName }}({% include '../class/fields-optional-initialization.twig' with { fields: allFieldsOrdered } %})
+	}
+
+{%- set containsOptionalFields = false -%}
+{%- if allFieldsOrdered is not empty -%}
+    {%- for field in allFieldsOrdered -%}
+        {%- if field.nullable or field.optional -%}
+            {%- set containsOptionalFields = true -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
+
+{% if containsOptionalFields %}
+
+    func copy{%- if hasChilds -%}{{ type.baseTypeName }}{%- endif -%}Without({%- include '../class/bool-parameters-fields.twig' with { fields: allFieldsOrdered } -%}) -> {{ type.baseTypeName }} {
+        return {{ type.baseTypeName }}({%- include '../class/fields-without-initialization.twig' with { fields: allFieldsOrdered } -%})
+    }
+{% endif %}
