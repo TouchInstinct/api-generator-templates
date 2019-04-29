@@ -74,6 +74,8 @@ extension {{ type.baseTypeName }}: Equatable {
 {%- if classAndFieldsHaveNotGenericsOrNonEqutableCollections -%}
 extension {{ type.baseTypeName }} {
 
+    static let new{{ type.baseTypeName }} = {{ type.baseTypeName }}({%- include 'blocks/class/fields-initialization-default-values.twig' with { fields: allFieldsOrdered } -%})
+
     {% include 'blocks/class/copy-declaration.twig' with { hasChilds: hasChilds, type: type, fields: allFieldsOrdered } %}
 }
 {{ "\n" }}

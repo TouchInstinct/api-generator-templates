@@ -1,0 +1,29 @@
+{%- import 'macroses/common.utils.twig' as utils -%}
+
+import Foundation
+
+final class ApiNumberFormattingService {
+    
+    static let shared = ApiNumberFormattingService()
+    
+    func decimalNumber(from string: String) -> NSDecimalNumber? {
+        guard let number = numberFormatter.number(from: string) else {
+            return nil
+        }
+        return NSDecimalNumber(decimal: number.decimalValue)
+    }
+    
+    func string(from number: NSDecimalNumber) -> String {
+        return number.stringValue
+    }
+    
+    private init() {}
+    
+    private lazy var numberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.decimalSeparator = "."
+        return formatter
+    }()
+}
+
+{{ "\n" }}

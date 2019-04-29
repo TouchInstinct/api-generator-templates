@@ -10,19 +10,6 @@
     {{- expr -}}{%- if nullable or optional -%}?{%- endif -%}
 {% endmacro %}
 
-{% macro numberFormatterFrom(fields) %}
-    {%- set containsStringDecimal = false -%}
-    {%- for field in fields -%}
-        {%- if field.type.type.baseTypeName == "StringDecimal" -%}
-            {%- set containsStringDecimal = true -%}
-        {%- endif -%}
-    {%- endfor -%}
-    {%- if containsStringDecimal -%}
-        let formatter = NumberFormatter()
-        formatter.decimalSeparator = "."
-    {%- endif -%}
-{% endmacro %}
-
 {% macro formatValueType(valueType) %}
     {%- import _self as self -%}
 
@@ -59,7 +46,7 @@
     {%- elseif field.type.type.baseTypeName == "Url" -%}
         {{ self.formatStrongOrNullableOptional(field, strong) -}}.absoluteString
     {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
-        {{ self.formatStrongOrNullableOptional(field, strong) -}}.stringValue
+        ApiNumberFormattingService.shared.string(from: {{ field.name -}})
     {%- else -%}
         {{ field.name }}
     {%- endif -%}
@@ -89,15 +76,16 @@
 
 {% macro encodeIfPresent(field) %}
     {%- import _self as self -%}
+    {%- import 'complexField.utils.twig' as complexFieldUtils -%}
 
     {% if field.type.type.baseTypeName == "DateTime" %}
-        if let {{ field.name }} = {{ field.name }} {
-            try container.encode({{- self.formatEncodingDate(field) -}}, forKey: .{{- field.name -}})
-        }
+        {{ complexFieldUtils.encodeComplexFieldIfPresent(field, self.formatEncodingDate(field)) -}}
     {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
-        if let {{ field.name }} = {{ field.name }} {
-            try container.encode(Int({{ field.name }}.timeIntervalSince1970), forKey: .{{- field.name -}})
-        }
+        {%- set intInit = "Int(%s.timeIntervalSince1970)"|format(field.name) -%}
+        {{ complexFieldUtils.encodeComplexFieldIfPresent(field, intInit) -}}
+    {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
+        {%- set stringDecimalInit = "ApiNumberFormattingService.shared.string(from: %s)"|format(field.name) -%}
+        {{ complexFieldUtils.encodeComplexFieldIfPresent(field, stringDecimalInit) -}}
     {%- else -%}
         try container.encodeIfPresent({{- self.formatEncodingValue(field, false) -}}, forKey: .{{- field.name -}})
     {%- endif -%}
@@ -146,6 +134,42 @@
     {%- import _self as self -%}
 
     {{- self.decapitalize(value.name) -}}
+{%- endmacro %}
+
+{% macro defaultValueForField(field) %}
+    {%- set nullable = field.nullable -%}
+    {%- set optional = field.optional -%}
+    {%- set baseTypeName = field.type.type.baseTypeName -%}
+
+    {%- if nullable or optional -%}
+        nil
+    {%- elseif baseTypeName == "Array" -%}
+        []
+    {%- elseif baseTypeName == "Map" -%}
+        [:]
+    {%- elseif baseTypeName == "String" -%}
+        ""
+    {%- elseif baseTypeName == "DateTime" or baseTypeName == "DateTimeTimestamp" -%}
+        Date().inDefaultRegion()
+    {%- elseif baseTypeName == "Double" -%}
+        0.0
+    {%- elseif baseTypeName == "Long" or baseTypeName == "Int" -%}
+        0
+    {%- elseif baseTypeName == "Bool" -%}
+        false
+    {%- elseif baseTypeName == "Decimal" or baseTypeName == "StringDecimal" -%}
+        .zero
+    {%- elseif baseTypeName == "Color" -%}
+        .clear
+    {%- elseif baseTypeName == "Url" -%}
+        URL(string: "https://example.com")!
+    {%- elseif (field.type.values is not null) -%}
+        {%- import _self as self -%}
+
+        .{{ self.enumValueName(first(field.type.values)) }}
+    {%- else -%}
+        .new{{ baseTypeName }}
+    {%- endif -%}
 {%- endmacro %}
 
 {% macro valueTypeHasGenerics(valueType) %}
