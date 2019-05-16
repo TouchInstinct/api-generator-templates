@@ -46,7 +46,7 @@
     {%- elseif field.type.type.baseTypeName == "Url" -%}
         {{ self.formatStrongOrNullableOptional(field, strong) -}}.absoluteString
     {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
-        ApiNumberFormattingService.shared.string(from: {{ field.name -}})
+        {{- self.formatEncodingStringDecimal(field) -}}
     {%- else -%}
         {{ field.name }}
     {%- endif -%}
@@ -64,6 +64,10 @@
 
 {%- macro formatEncodingDate(field) -%}
     ApiDateFormattingService.string(from: {{ field.name -}}, format: .{{- dateFormatToName(field.type.dateFormat) -}})
+{%- endmacro -%}
+
+{%- macro formatEncodingStringDecimal(field) -%}
+    ApiNumberFormattingService.shared.string(from: {{ field.name -}}, format: .decimal)
 {%- endmacro -%}
 
 {% macro escapeIfNeeded(expr) %}
@@ -84,8 +88,7 @@
         {%- set intInit = "Int(%s.timeIntervalSince1970)"|format(field.name) -%}
         {{ complexFieldUtils.encodeComplexFieldIfPresent(field, intInit) -}}
     {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
-        {%- set stringDecimalInit = "ApiNumberFormattingService.shared.string(from: %s)"|format(field.name) -%}
-        {{ complexFieldUtils.encodeComplexFieldIfPresent(field, stringDecimalInit) -}}
+        {{ complexFieldUtils.encodeComplexFieldIfPresent(field, self.formatEncodingStringDecimal(field)) -}}
     {%- else -%}
         try container.encodeIfPresent({{- self.formatEncodingValue(field, false) -}}, forKey: .{{- field.name -}})
     {%- endif -%}

@@ -4,7 +4,6 @@
         return {{ type.baseTypeName }}({% include '../class/fields-optional-initialization.twig' with { fields: allFieldsOrdered } %})
     }
 
-{%- set containsOptionalFields = false -%}
 {%- if allFieldsOrdered is not empty -%}
     {%- for field in allFieldsOrdered -%}
         {%- if field.nullable or field.optional -%}

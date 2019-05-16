@@ -24,7 +24,7 @@
         {%- set urlInit = "URL(string: %s)"|format(field.name) -%}
         {{ self.decodeThrowableField(field, urlInit, 'Unable to decode URL from string') -}}
     {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
-        {%- set stringDecimalInit = "ApiNumberFormattingService.shared.decimalNumber(from: %s)"|format(field.name) -%}
+        {%- set stringDecimalInit = "ApiNumberFormattingService.shared.decimalNumber(from: %s, format: .decimal)"|format(field.name) -%}
         {{- self.decodeThrowableField(field, stringDecimalInit, 'Unable to decode decimal from string') -}}
     {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
         self.{{ field.name }} = DateInRegion(seconds: TimeInterval({{ field.name }}))
