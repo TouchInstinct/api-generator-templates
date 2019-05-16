@@ -12,7 +12,6 @@ enum ApiNumberFormat: NumberFormat {
 
         switch self {
         case .decimal:
-            let numberFormatter = NumberFormatter()
             numberFormatter.decimalSeparator = "."
             numberFormatter.minimumIntegerDigits = 1
             numberFormatter.maximumFractionDigits = 16
@@ -28,7 +27,7 @@ final class ApiNumberFormattingService: NumberFormattingService, Singleton {
     
     let formatters = computedFormatters
 
-    static let shared = ApiNumebrFormattingService()
+    static let shared = ApiNumberFormattingService()
 
     private init() {}
 
