@@ -9,14 +9,10 @@ enum ApiNumberFormat: NumberFormat {
 
     var numberFormatter: NumberFormatter {
         let numberFormatter = NumberFormatter()
+        numberFormatter.decimalSeparator = "."
+        numberFormatter.minimumIntegerDigits = 1
+        numberFormatter.maximumFractionDigits = 16
 
-        switch self {
-        case .decimal:
-            numberFormatter.decimalSeparator = "."
-            numberFormatter.minimumIntegerDigits = 1
-            numberFormatter.maximumFractionDigits = 16
-        }
-        
         return numberFormatter
     }
 }
@@ -24,7 +20,7 @@ enum ApiNumberFormat: NumberFormat {
 final class ApiNumberFormattingService: NumberFormattingService, Singleton {
 
     typealias NumberFormatType = ApiNumberFormat
-    
+
     let formatters = computedFormatters
 
     static let shared = ApiNumberFormattingService()
@@ -36,6 +32,13 @@ final class ApiNumberFormattingService: NumberFormattingService, Singleton {
             return nil
         }
         return NSDecimalNumber(decimal: number.decimalValue)
+    }
+}
+
+extension ApiNumberFormattingService {
+
+    static func decimalNumber(from string: String, format: ApiNumberFormat) -> NSDecimalNumber? {
+        return shared.decimalNumber(from: string, format: format)
     }
 }
 

@@ -38,13 +38,13 @@
     {%- if field.type.type.baseTypeName == "DateTime" -%}
         {{- self.formatEncodingDate(field) -}}
     {%- elseif field.type.type.baseTypeName == "Decimal" -%}
-        {{ self.formatNullableOrOptional(field.name, strong) -}}.decimalValue
+        {{ self.formatFieldName(field.name, strong) -}}.decimalValue
     {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
-        Int({{ self.formatStrongOrNullableOptional(field, strong) -}}.timeIntervalSince1970)
+        Int({{ self.formatFieldName(field, strong) -}}.timeIntervalSince1970)
     {%- elseif field.type.type.baseTypeName == "Color" -%}
-        {{ self.formatStrongOrNullableOptional(field, strong) -}}.hexString
+        {{ self.formatFieldName(field, strong) -}}.hexString
     {%- elseif field.type.type.baseTypeName == "Url" -%}
-        {{ self.formatStrongOrNullableOptional(field, strong) -}}.absoluteString
+        {{ self.formatFieldName(field, strong) -}}.absoluteString
     {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
         {{- self.formatEncodingStringDecimal(field) -}}
     {%- else -%}
@@ -52,7 +52,7 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro formatStrongOrNullableOptional(field, strong) %}
+{% macro formatFieldName(field, strong) %}
     {%- import _self as self -%}
 
     {%- if strong -%}
@@ -67,7 +67,7 @@
 {%- endmacro -%}
 
 {%- macro formatEncodingStringDecimal(field) -%}
-    ApiNumberFormattingService.shared.string(from: {{ field.name -}}, format: .decimal)
+    ApiNumberFormattingService.string(from: {{ field.name -}}, format: .decimal)
 {%- endmacro -%}
 
 {% macro escapeIfNeeded(expr) %}
