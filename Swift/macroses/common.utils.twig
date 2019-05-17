@@ -32,30 +32,30 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro formatEncodingValue(field, strong) %}
+{% macro formatEncodingValue(field, isStrongLinkCaptured) %}
     {%- import _self as self -%}
 
     {%- if field.type.type.baseTypeName == "DateTime" -%}
         {{- self.formatEncodingDate(field) -}}
-    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
-        {{ self.formatFieldName(field.name, strong) -}}.decimalValue
-    {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
-        Int({{ self.formatFieldName(field, strong) -}}.timeIntervalSince1970)
-    {%- elseif field.type.type.baseTypeName == "Color" -%}
-        {{ self.formatFieldName(field, strong) -}}.hexString
-    {%- elseif field.type.type.baseTypeName == "Url" -%}
-        {{ self.formatFieldName(field, strong) -}}.absoluteString
     {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
         {{- self.formatEncodingStringDecimal(field) -}}
+    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
+        {{ self.formatFieldName(field.name, isStrongLinkCaptured) -}}.decimalValue
+    {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
+        Int({{ self.formatFieldName(field, isStrongLinkCaptured) -}}.timeIntervalSince1970)
+    {%- elseif field.type.type.baseTypeName == "Color" -%}
+        {{ self.formatFieldName(field, isStrongLinkCaptured) -}}.hexString
+    {%- elseif field.type.type.baseTypeName == "Url" -%}
+        {{ self.formatFieldName(field, isStrongLinkCaptured) -}}.absoluteString
     {%- else -%}
         {{ field.name }}
     {%- endif -%}
 {% endmacro %}
 
-{% macro formatFieldName(field, strong) %}
+{% macro formatFieldName(field, isStrongLinkCaptured) %}
     {%- import _self as self -%}
 
-    {%- if strong -%}
+    {%- if isStrongLinkCaptured -%}
         {{ field.name }}
     {%- else -%}
         {{ self.formatNullableOrOptional(field.name, field.nullable, field.optional) -}}
@@ -70,25 +70,13 @@
     ApiNumberFormattingService.string(from: {{ field.name -}}, format: .decimal)
 {%- endmacro -%}
 
-{% macro escapeIfNeeded(expr) %}
-    {%- if expr == "default" or expr == "operator" -%}
-        `{{ expr }}`
-    {%- else -%}
-        {{ expr }}
-    {%- endif -%}
-{% endmacro %}
-
 {% macro encodeIfPresent(field) %}
     {%- import _self as self -%}
-    {%- import 'complexField.utils.twig' as complexFieldUtils -%}
-
-    {% if field.type.type.baseTypeName == "DateTime" %}
-        {{ complexFieldUtils.encodeComplexFieldIfPresent(field, self.formatEncodingDate(field)) -}}
-    {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
-        {%- set intInit = "Int(%s.timeIntervalSince1970)"|format(field.name) -%}
-        {{ complexFieldUtils.encodeComplexFieldIfPresent(field, intInit) -}}
-    {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
-        {{ complexFieldUtils.encodeComplexFieldIfPresent(field, self.formatEncodingStringDecimal(field)) -}}
+    {%- set baseTypeName = field.type.type.baseTypeName -%}
+    {% if baseTypeName == "DateTime" or baseTypeName == "DateTimeTimestamp" or baseTypeName == "StringDecimal" %}
+        if let {{ field.name }} = {{ field.name }} {
+            try container.encode({{- self.formatEncodingValue(field, true) -}}, forKey: .{{- field.name -}})
+        }
     {%- else -%}
         try container.encodeIfPresent({{- self.formatEncodingValue(field, false) -}}, forKey: .{{- field.name -}})
     {%- endif -%}
@@ -138,6 +126,14 @@
 
     {{- self.decapitalize(value.name) -}}
 {%- endmacro %}
+
+{% macro escapeIfNeeded(expr) %}
+    {%- if expr == "default" or expr == "operator" -%}
+        `{{ expr }}`
+    {%- else -%}
+        {{ expr }}
+    {%- endif -%}
+{% endmacro %}
 
 {% macro defaultValueForField(field) %}
     {%- set nullable = field.nullable -%}

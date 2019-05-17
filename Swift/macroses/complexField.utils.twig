@@ -40,9 +40,3 @@
             throw LeadKitError.failedToDecode(reason: "{{ errorMessage }}")
         }
 {%- endmacro -%}
-
-{%- macro encodeComplexFieldIfPresent(field, init) -%}
-    if let {{ field.name }} = {{ field.name }} {
-            try container.encode({{- init -}}, forKey: .{{- field.name -}})
-        }
-{%- endmacro -%}
