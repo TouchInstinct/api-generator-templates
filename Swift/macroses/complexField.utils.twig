@@ -19,7 +19,7 @@
         {{ self.decodeThrowableField(field, dateTimeInit, 'init?(string:format:fromRegion:) returned nil') -}}
     {%- elseif field.type.type.baseTypeName == "Color" -%}
         {%- set colorInit = "UIColor(hexString: %s)"|format(field.name) -%}
-        {{ self.decodeThrowableField(field, colorInit, 'Unable to decode hex string') -}}
+        {{ self.decodeThrowableField(field, colorInit, 'Unable to decode color from hex string') -}}
     {%- elseif field.type.type.baseTypeName == "Url" -%}
         {%- set urlInit = "URL(string: %s)"|format(field.name) -%}
         {{ self.decodeThrowableField(field, urlInit, 'Unable to decode URL from string') -}}
