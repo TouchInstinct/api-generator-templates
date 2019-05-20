@@ -1,0 +1,45 @@
+{%- import 'macroses/common.utils.twig' as utils -%}
+
+import LeadKit
+import Foundation
+
+enum ApiNumberFormat: NumberFormat {
+    
+    case decimal
+
+    var numberFormatter: NumberFormatter {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.decimalSeparator = "."
+        numberFormatter.minimumIntegerDigits = 1
+        numberFormatter.maximumFractionDigits = 16
+
+        return numberFormatter
+    }
+}
+
+final class ApiNumberFormattingService: NumberFormattingService, Singleton {
+
+    typealias NumberFormatType = ApiNumberFormat
+
+    let formatters = computedFormatters
+
+    static let shared = ApiNumberFormattingService()
+
+    private init() {}
+
+    func decimalNumber(from string: String, format: ApiNumberFormat) -> NSDecimalNumber? {
+        guard let number = number(from: string, format: format) else {
+            return nil
+        }
+        return NSDecimalNumber(decimal: number.decimalValue)
+    }
+}
+
+extension ApiNumberFormattingService {
+
+    static func decimalNumber(from string: String, format: ApiNumberFormat) -> NSDecimalNumber? {
+        return shared.decimalNumber(from: string, format: format)
+    }
+}
+
+{{ "\n" }}
