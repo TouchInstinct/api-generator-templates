@@ -40,7 +40,7 @@
     {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
         {{- self.formatEncodingStringDecimal(field) -}}
     {%- elseif field.type.type.baseTypeName == "Decimal" -%}
-        {{ self.formatFieldName(field.name, isStrongLinkCaptured) -}}.decimalValue
+        {{ self.formatFieldName(field, isStrongLinkCaptured) -}}.decimalValue
     {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
         Int({{ self.formatFieldName(field, isStrongLinkCaptured) -}}.timeIntervalSince1970)
     {%- elseif field.type.type.baseTypeName == "Color" -%}
