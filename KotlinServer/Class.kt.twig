@@ -9,12 +9,11 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import java.math.BigDecimal
 import java.time.ZonedDateTime
 
-{%- if (description is not empty) %}
-
+{% if (description is not empty) %}
 /**
  * {{ description }}
  */
-{%- endif %}
+{% endif -%}
 open class {% include 'blocks/class/classtype.twig' with { type: type } %} (
             {%- include 'blocks/class/constructor-fields-info.twig' with { fields: allFieldsOrdered, superclassesFields: superclassesFields } %}
 ){% include 'blocks/class/supertype.twig' with { type: type, parent: parent } %} {%- include 'blocks/class/fields-super-initialization.twig' with { fields: superclassesFields } -%}

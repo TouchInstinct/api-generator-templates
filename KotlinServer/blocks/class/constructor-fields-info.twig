@@ -2,7 +2,7 @@
 
 {%- for field in fields %}
     {%- if field.type.type.baseTypeName == "DateTime" %}
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "{{ field.type.dateFormat }}")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "{{ utils.getDateFormat(field) }}", timezone = "utc")
     {%- endif %}
     {%- if field.nullable %}
     @JsonInclude(JsonInclude.Include.ALWAYS)
