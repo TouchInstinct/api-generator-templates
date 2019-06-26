@@ -21,7 +21,7 @@ Map<{{ self.formatValueType(valueType.keysType, true, true) }}, {{ self.formatVa
 {%- elseif valueType.baseTypeName == "Array" -%}
 List<{{ self.formatValueType(valueType.itemsType, true, true) }}>
 {%- else -%}
-{{ valueType.baseTypeName }}
+{% include 'blocks/class/classtype.twig' with { type: valueType } %}
 {%- endif -%}
 {% endmacro %}
 
