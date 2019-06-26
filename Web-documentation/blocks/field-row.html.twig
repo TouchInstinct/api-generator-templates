@@ -28,9 +28,9 @@
 
 
         {%- if link is not null -%}
-            <a class="info" href="{{ link }}">{{- utils.formatNullable(valueType.typeName, nullable) -}}</a>
+            <a class="info" href="{{ link }}">{{- utils.formatNullableClassType(valueType, nullable) -}}</a>
         {%- else -%}
-            {{- utils.formatNullable(valueType.typeName, nullable) -}}
+            {{- utils.formatNullableClassType(valueType, nullable) -}}
         {%- endif -%}
     {%- endif -%}
 {%- endmacro -%}
