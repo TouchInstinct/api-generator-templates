@@ -2,6 +2,10 @@
 {{- expr -}}{%- if nullable -%}?{%- endif -%}
 {% endmacro %}
 
+{% macro formatNullableClassType(valueType, nullable) %}
+{% include 'blocks/classtype.twig' with { type: valueType } %}{%- if nullable -%}?{%- endif -%}
+{% endmacro %}
+
 {% macro optionalDescription(optional) %}
 {%- if optional -%}Нет{%- else -%}Да{%- endif -%}
 {% endmacro %}
