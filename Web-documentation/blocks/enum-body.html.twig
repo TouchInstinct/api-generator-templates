@@ -1,7 +1,7 @@
 <h2 class="subtitle" id="{{ structure.name }}">{{ structure.name }}</h2>
 
 <h3>Описание</h3>
-<p class="sub-header">{{ structure.description }}</p>
+<p class="sub-header">{{ structure.description | escape }}</p>
 
 <h3>Возможные значения</h3>
 <div class="table table--small">
@@ -13,7 +13,7 @@
         {% for value in structure.values %}
             <div class="row-body">
                 <div>{{ value.value }}</div>
-                <div>{{ value.description }}</div>
+                <div>{{ value.description | escape }}</div>
             </div>
         {% endfor %}
     </div>
