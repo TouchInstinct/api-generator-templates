@@ -46,6 +46,6 @@
             &nbsp;({{ field.type.dateFormat }})
         {%- endif -%}
     </div>
-    <div>{{ field.description }}</div>
+    <div>{{ field.description | escape }}</div>
     <div>{{ utils.optionalDescription(field.optional) }}</div>
 </div>

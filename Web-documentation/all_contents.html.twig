@@ -110,7 +110,7 @@
                             <div class="page-data section-helper">
                                 <h2 class="subtitle" id="{{ methodGroup.sectionTitle }}">{{ methodGroup.title }}</h2>
                                 {% if methodGroup.description is not null %}
-                                    <p>{{ methodGroup.description }}</p>
+                                    <p>{{ methodGroup.description | escape }}</p>
                                 {% endif %}
                                 {% if methodGroup.baseUrl is not empty %}
                                     <p>BaseUrl: {{ methodGroup.baseUrl }}</p>

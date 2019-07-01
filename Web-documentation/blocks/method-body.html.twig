@@ -1,4 +1,4 @@
-<h2 class="subtitle" id="{{ method.anchorPath }}">{{ method.description }}</h2>
+<h2 class="subtitle" id="{{ method.anchorPath }}">{{ method.description | escape }}</h2>
 
 <h3>Метод</h3>
 <p class="sub-header">{{ method.type }} {{ method.url }}</p>
@@ -120,7 +120,7 @@
 {% else %}
     {% for value in method.errorsEnumeration.values -%}
         {%- if value.value in method.errorsEnumeration.allowedValues %}
-            <p class="sub-header">#Код {{ value.value }} — {{ value.description }}</p>
+            <p class="sub-header">#Код {{ value.value }} — {{ value.description | escape }}</p>
         {%- endif -%}
     {%- endfor %}
 {% endif %}
@@ -130,7 +130,7 @@
     <p class="sub-header">Результат отсутствует</p>
 {% else %}
     {% if method.booleanResponseDescription is not empty %}
-        <p>{{ method.booleanResponseDescription }}. Тип Boolean.</p>
+        <p>{{ method.booleanResponseDescription | escape }}. Тип Boolean.</p>
     {% elseif method.responseFields is not empty %}
         <p>Объект следующей структуры:</p>
 

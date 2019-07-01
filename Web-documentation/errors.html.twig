@@ -29,7 +29,7 @@
                     {% for errorValue in errorType.values %}
                         <div class="row-body">
                             <div>{{ errorValue.value }}</div>
-                            <div>{{ errorValue.description }}</div>
+                            <div>{{ errorValue.description | escape }}</div>
                         </div>
                     {% endfor %}
                 </div>
