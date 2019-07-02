@@ -34,9 +34,7 @@ List<{{ self.formatValueType(valueType.itemsType, true, true) }}>
 {% endmacro %}
 
 {% macro addDescription(field) %}
-{%- if (field.description is not empty) -%}
-// {{ field.description }}
-{%- endif -%}
+{%- if (field.description is not empty) %} // {{ field.description }}{%- endif -%}
 {% endmacro %}
 
 {%- macro getDateFormat(field) -%}
