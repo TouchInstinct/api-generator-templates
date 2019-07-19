@@ -14,6 +14,8 @@
 Boolean
 {%- elseif valueType.baseTypeName == "DateTime" -%}
 ZonedDateTime
+{%- elseif valueType.baseTypeName == "Date" -%}
+LocalDate
 {%- elseif valueType.baseTypeName == "Decimal" -%}
 BigDecimal
 {%- elseif valueType.baseTypeName == "Map" -%}
