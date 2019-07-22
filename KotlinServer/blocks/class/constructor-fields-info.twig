@@ -1,7 +1,7 @@
 {%- import '../../utils.twig' as utils -%}
 
 {%- for field in fields %}
-    {%- if field.type.type.baseTypeName in ["DateTime", "Date"] %}
+    {%- if field.type.type.baseTypeName == "DateTime" %}
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "{{ utils.getDateFormat(field) }}", timezone = "utc")
     {%- endif %}
     {%- if field.nullable %}
