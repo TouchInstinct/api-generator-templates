@@ -42,7 +42,7 @@
     <div>{{ field.jsonName }}</div>
     <div>
         {{ self.formatValueType(field.type.type, field.nullable, objectsLinks, useAnchors) }}
-        {%- if field.type.type.typeName == "DateTime" -%}
+        {%- if field.type.type.typeName in ["DateTime", "Date"] -%}
             &nbsp;({{ field.type.dateFormat }})
         {%- endif -%}
     </div>
