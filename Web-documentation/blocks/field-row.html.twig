@@ -43,7 +43,7 @@
     <div>
         {{ self.formatValueType(field.type.type, field.nullable, objectsLinks, useAnchors) }}
         {%- if field.type.type.typeName in ["DateTime", "Date"] -%}
-            &nbsp;({{ field.type.dateFormat }})
+            &nbsp;({{ field.type.allDateFormats|join(', ') }})
         {%- endif -%}
     </div>
     <div>{{ field.description | escape }}</div>
