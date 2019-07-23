@@ -7,10 +7,10 @@
     {%- if field.type.type.baseTypeName == "Date" %}
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "{{ utils.getDateFormat(field) }}")
     {%- endif %}
-    {%- if field.nullable %}
-    @JsonInclude(JsonInclude.Include.ALWAYS)
-    {%- elseif field.optional %}
+    {%- if field.optional %}
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    {%- elseif field.nullable %}
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     {%- endif %}
     {% if not (field in superclassesFields) %}val {% endif %}{{ field.name }}: {{ utils.formatValueType(field.type.type, field.nullable, field.optional) }}{{ utils.writeNullCheckMark(field.nullable, field.optional) }} {%- if not (loop.last) %},{% endif %}{{ utils.addDescription(field) }}
 {%- endfor -%}
