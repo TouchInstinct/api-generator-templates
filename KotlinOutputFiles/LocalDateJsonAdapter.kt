@@ -1,7 +1,7 @@
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormatter
 
-class LocalDataJsonAdapter(
+class LocalDateJsonAdapter(
         formats: Array<String>
 ) : AbstractDateJsonAdapter<LocalDate>(formats) {
 

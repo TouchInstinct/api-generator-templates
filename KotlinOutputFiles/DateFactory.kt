@@ -18,7 +18,7 @@ class DateFactory : JsonAdapter.Factory {
                     ?: throw IllegalArgumentException("You should use Format annotation for DateTime and LocalDate fields")
 
             if (typeName == dateTimeName) DateTimeJsonAdapter(formatAnnotation.patterns)
-            else LocalDataJsonAdapter(formatAnnotation.patterns)
+            else LocalDateJsonAdapter(formatAnnotation.patterns)
 
         } else null
     }
