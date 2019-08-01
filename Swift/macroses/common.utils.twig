@@ -12,40 +12,42 @@
 
 {% macro formatValueType(valueType) %}
     {%- import _self as self -%}
+    {%- set baseTypeName = valueType.baseTypeName -%}
 
-    {%- if valueType.baseTypeName == "Array" -%}
+    {%- if baseTypeName == "Array" -%}
         [{{ self.formatValueType(valueType.itemsType) }}]
-    {%- elseif valueType.baseTypeName == "Map" -%}
+    {%- elseif baseTypeName == "Map" -%}
         [{{ self.formatValueType(valueType.keysType) }}: {{ self.formatValueType(valueType.valuesType) }}]
-    {%- elseif valueType.baseTypeName == "DateTime" or valueType.baseTypeName == "DateTimeTimestamp" -%}
+    {%- elseif baseTypeName == "Date" or baseTypeName == "DateTime" or baseTypeName == "DateTimeTimestamp" -%}
         DateInRegion
-    {%- elseif valueType.baseTypeName == "Long" -%}
+    {%- elseif baseTypeName == "Long" -%}
         Int64
-    {%- elseif valueType.baseTypeName == "Decimal" or valueType.baseTypeName == "StringDecimal" -%}
+    {%- elseif baseTypeName == "Decimal" or baseTypeName == "StringDecimal" -%}
         NSDecimalNumber
-    {%- elseif valueType.baseTypeName == "Url" -%}
+    {%- elseif baseTypeName == "Url" -%}
         URL
-    {%- elseif valueType.baseTypeName == "Color" -%}
+    {%- elseif baseTypeName == "Color" -%}
         UIColor
     {%- else -%}
-        {{ valueType.baseTypeName }}
+        {{ baseTypeName }}
     {%- endif -%}
 {% endmacro %}
 
 {% macro formatEncodingValue(field, isStrongLinkCaptured) %}
     {%- import _self as self -%}
+    {%- set baseTypeName = field.type.type.baseTypeName -%}
 
-    {%- if field.type.type.baseTypeName == "DateTime" -%}
+    {%- if baseTypeName == "Date" or baseTypeName == "DateTime" -%}
         {{- self.formatEncodingDate(field) -}}
-    {%- elseif field.type.type.baseTypeName == "StringDecimal" -%}
+    {%- elseif baseTypeName == "StringDecimal" -%}
         {{- self.formatEncodingStringDecimal(field) -}}
-    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
+    {%- elseif baseTypeName == "Decimal" -%}
         {{ self.formatFieldName(field, isStrongLinkCaptured) -}}.decimalValue
-    {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
+    {%- elseif baseTypeName == "DateTimeTimestamp" -%}
         Int({{ self.formatFieldName(field, isStrongLinkCaptured) -}}.timeIntervalSince1970)
-    {%- elseif field.type.type.baseTypeName == "Color" -%}
+    {%- elseif baseTypeName == "Color" -%}
         {{ self.formatFieldName(field, isStrongLinkCaptured) -}}.hexString
-    {%- elseif field.type.type.baseTypeName == "Url" -%}
+    {%- elseif baseTypeName == "Url" -%}
         {{ self.formatFieldName(field, isStrongLinkCaptured) -}}.absoluteString
     {%- else -%}
         {{ field.name }}
@@ -73,7 +75,7 @@
 {% macro encodeIfPresent(field) %}
     {%- import _self as self -%}
     {%- set baseTypeName = field.type.type.baseTypeName -%}
-    {% if baseTypeName == "DateTime" or baseTypeName == "DateTimeTimestamp" or baseTypeName == "StringDecimal" %}
+    {% if baseTypeName == "Date" or baseTypeName == "DateTime" or baseTypeName == "DateTimeTimestamp" or baseTypeName == "StringDecimal" %}
         if let {{ field.name }} = {{ field.name }} {
             try container.encode({{- self.formatEncodingValue(field, true) -}}, forKey: .{{- field.name -}})
         }
@@ -101,12 +103,12 @@
 {% macro decodeFromContainer(field) %}
     {%- import _self as self -%}
     {%- import 'complexField.utils.twig' as complexFieldUtils -%}
-
-    {%- if field.type.type.baseTypeName == "Color" or field.type.type.baseTypeName == "DateTime" or field.type.type.baseTypeName == "StringDecimal" or field.type.type.baseTypeName == "Url" -%}
+    {%- set baseTypeName = field.type.type.baseTypeName -%}
+    {%- if baseTypeName == "Color" or baseTypeName == "Date" or baseTypeName == "DateTime" or baseTypeName == "StringDecimal" or baseTypeName == "Url" -%}
         {{ complexFieldUtils.decodeComplexField(field, "String") -}}
-    {%- elseif field.type.type.baseTypeName == "DateTimeTimestamp" -%}
+    {%- elseif baseTypeName == "DateTimeTimestamp" -%}
         {{ complexFieldUtils.decodeComplexField(field, "Int") -}}
-    {%- elseif field.type.type.baseTypeName == "Decimal" -%}
+    {%- elseif baseTypeName == "Decimal" -%}
         {{ complexFieldUtils.decodeComplexField(field, "Decimal") -}}
     {%- else -%}
         self.{{ field.name }} = try container.{{- self.formatOptionalDecode(field) -}}({{ self.formatValueType(field.type.type) }}.self, forKey: .{{ field.name }})
@@ -148,7 +150,7 @@
         [:]
     {%- elseif baseTypeName == "String" -%}
         ""
-    {%- elseif baseTypeName == "DateTime" or baseTypeName == "DateTimeTimestamp" -%}
+    {%- elseif baseTypeName == "Date" or baseTypeName == "DateTime" or baseTypeName == "DateTimeTimestamp" -%}
         Date().inDefaultRegion()
     {%- elseif baseTypeName == "Double" -%}
         0.0
