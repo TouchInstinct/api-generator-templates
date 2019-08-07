@@ -12,7 +12,6 @@ abstract class AbstractDateJsonAdapter<T>(
 
     companion object {
         private const val CANT_FIND_ANY_FORMATTERS = "Can't find any DateTimeFormatter"
-        private const val LOCAL_DATE_CANNOT_BE_NULL = "LocalDate value can't be null"
     }
 
     private val formatters = formats.map(DateTimeFormat::forPattern)
@@ -35,7 +34,7 @@ abstract class AbstractDateJsonAdapter<T>(
         if (formatters.isEmpty()) throw IllegalArgumentException(CANT_FIND_ANY_FORMATTERS)
         value?.let {
             writer.value(toJsonInner(value, formatters.first()))
-        } ?: throw JsonEncodingException(LOCAL_DATE_CANNOT_BE_NULL)
+        } ?: throw JsonEncodingException("Value can't be null")
     }
 
     abstract fun fromJsonInner(value: String, dateTimeFormatter: DateTimeFormatter): T
