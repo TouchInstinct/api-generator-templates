@@ -11,8 +11,8 @@ abstract class AbstractDateJsonAdapter<T>(
 ) : JsonAdapter<T>() {
 
     companion object {
-        const val CANT_FIND_ANY_FORMATTERS = "Can't find any DateTimeFormatter"
-        const val LOCAL_DATE_CANNOT_BE_NULL = "LocalDate value can't be null"
+        private const val CANT_FIND_ANY_FORMATTERS = "Can't find any DateTimeFormatter"
+        private const val LOCAL_DATE_CANNOT_BE_NULL = "LocalDate value can't be null"
     }
 
     private val formatters = formats.map(DateTimeFormat::forPattern)

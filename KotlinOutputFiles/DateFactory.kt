@@ -7,20 +7,17 @@ import java.lang.reflect.Type
 class DateFactory : JsonAdapter.Factory {
 
     override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
-        val dateTimeName = DateTime::class.java.typeName
-        val localDateName = LocalDate::class.java.typeName
-        val typeName = type.typeName
-
-        return if (typeName == dateTimeName || typeName == localDateName) {
-            val formatAnnotation = annotations
-                    .map { it as? Format }
-                    .firstOrNull()
-                    ?: throw IllegalArgumentException("You should use Format annotation for DateTime and LocalDate fields")
-
-            if (typeName == dateTimeName) DateTimeJsonAdapter(formatAnnotation.patterns)
-            else LocalDateJsonAdapter(formatAnnotation.patterns)
-
-        } else null
+        return when (type.typeName) {
+            DateTime::class.java.typeName -> DateTimeJsonAdapter(getPatterns(annotations))
+            LocalDate::class.java.typeName -> LocalDateJsonAdapter(getPatterns(annotations))
+            else -> null
+        }
     }
+
+    private fun getPatterns(annotations: MutableSet<out Annotation>) = annotations
+            .map { it as? Format }
+            .firstOrNull()
+            ?.patterns
+            ?: throw IllegalArgumentException("You should use Format annotation for DateTime and LocalDate fields")
 
 }
