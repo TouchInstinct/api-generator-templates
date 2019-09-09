@@ -44,21 +44,15 @@
 {%- macro commonDateInit(field) -%}
     {%- import _self as self -%}
     {%- if field.type.dateFormats is not empty -%}
-        {{ self.dateInit(field.name, field.type.dateFormats[0]) }} 
-        {%- for dateFormat in field.type.dateFormats|slice(1, field.type.dateFormats|length) -%}
-            else {{ self.dateInit(field.name, dateFormat) }} 
+        {%- set formattedDateFormats = [] -%}
+        {%- for dateFormat in field.type.dateFormats -%}
+            {%- set formattedDateFormats = formattedDateFormats|merge([".%s"|format(dateFormatToName(dateFormat))]) -%}
         {%- endfor -%}
+        {%- set dateFormatsString = formattedDateFormats|join(', ') -%}
+        {%- set dateInit = "ApiDateFormattingService.date(from: %s, formats: [%s], parsedIn: nil)"|format(name, dateFormatsString) -%}
+        {{- self.decodeThrowableField(field, dateInit, "Unable to decode date from string") -}}
     {%- else -%}
-        {{ self.dateInit(field.name, field.type.dateFormat) }} 
+        {%- set dateInit = "ApiDateFormattingService.date(from: %s, format: .%s, parsedIn: nil)"|format(name, dateFormatToName(field.type.dateFormat)) -%}
+        {{- self.decodeThrowableField(field, dateInit, "Unable to decode date from string") -}}
     {%- endif -%}
-    else {
-            throw LeadKitError.failedToDecode(reason: "Unable to decode date from string")
-        }
-{%- endmacro -%}
-
-{%- macro dateInit(name, dateFormat) -%}
-    {%- set dateTimeInit = "ApiDateFormattingService.date(from: %s, format: .%s, parsedIn: nil)"|format(name, dateFormatToName(dateFormat)) -%}
-    if let value = {{ dateTimeInit }} {
-            self.{{ name }} = value
-        }
 {%- endmacro -%}
