@@ -49,10 +49,10 @@
             {%- set formattedDateFormats = formattedDateFormats|merge([".%s"|format(dateFormatToName(dateFormat))]) -%}
         {%- endfor -%}
         {%- set dateFormatsString = formattedDateFormats|join(', ') -%}
-        {%- set dateInit = "ApiDateFormattingService.date(from: %s, formats: [%s], parsedIn: nil)"|format(name, dateFormatsString) -%}
+        {%- set dateInit = "ApiDateFormattingService.date(from: %s, formats: [%s], parsedIn: nil)"|format(field.name, dateFormatsString) -%}
         {{- self.decodeThrowableField(field, dateInit, "Unable to decode date from string") -}}
     {%- else -%}
-        {%- set dateInit = "ApiDateFormattingService.date(from: %s, format: .%s, parsedIn: nil)"|format(name, dateFormatToName(field.type.dateFormat)) -%}
+        {%- set dateInit = "ApiDateFormattingService.date(from: %s, format: .%s, parsedIn: nil)"|format(field.name, dateFormatToName(field.type.dateFormat)) -%}
         {{- self.decodeThrowableField(field, dateInit, "Unable to decode date from string") -}}
     {%- endif -%}
 {%- endmacro -%}
