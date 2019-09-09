@@ -43,10 +43,14 @@
 
 {%- macro commonDateInit(field) -%}
     {%- import _self as self -%}
-    {{ self.dateInit(field.name, field.type.dateFormat) }} 
-    {%- for dateFormat in field.type.dateFormats -%}
-        else {{ self.dateInit(field.name, dateFormat) }} 
-    {%- endfor -%}
+    {%- if field.type.dateFormats is not empty -%}
+        {{ self.dateInit(field.name, field.type.dateFormats[0]) }} 
+        {%- for dateFormat in field.type.dateFormats|slice(1, field.type.dateFormats|length) -%}
+            else {{ self.dateInit(field.name, dateFormat) }} 
+        {%- endfor -%}
+    {%- else -%}
+        {{ self.dateInit(field.name, field.type.dateFormat) }} 
+    {%- endif -%}
     else {
             throw LeadKitError.failedToDecode(reason: "Unable to decode date from string")
         }
@@ -56,5 +60,5 @@
     {%- set dateTimeInit = "ApiDateFormattingService.date(from: %s, format: .%s, parsedIn: nil)"|format(name, dateFormatToName(dateFormat)) -%}
     if let value = {{ dateTimeInit }} {
             self.{{ name }} = value
-        } 
+        }
 {%- endmacro -%}

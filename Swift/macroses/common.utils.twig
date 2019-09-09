@@ -65,7 +65,11 @@
 {% endmacro %}
 
 {%- macro formatEncodingDate(field) -%}
-    ApiDateFormattingService.string(from: {{ field.name -}}, format: .{{- dateFormatToName(field.type.dateFormat) -}})
+    {%- if field.type.dateFormats is not empty -%}
+        ApiDateFormattingService.string(from: {{ field.name -}}, format: .{{- dateFormatToName(field.type.dateFormats[0]) -}})
+    {%- else -%}
+        ApiDateFormattingService.string(from: {{ field.name -}}, format: .{{- dateFormatToName(field.type.dateFormat) -}})
+    {%- endif -%}
 {%- endmacro -%}
 
 {%- macro formatEncodingStringDecimal(field) -%}
