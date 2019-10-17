@@ -9,4 +9,4 @@
 
 {%- set funcName = utils.decapitalize(method.name) -%}
 
-public {{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ " " }}{%- endif -%}requestEncoding: ParameterEncoding?, requestHeaders: HTTPHeaders?, additionalValidStatusCodes: Set<Int>) -> Single<{{ method.responseType.type.typeName }}>
+{{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ " " }}{%- endif -%}requestEncoding: ParameterEncoding?, requestHeaders: HTTPHeaders?, additionalValidStatusCodes: Set<Int>) -> Single<{{ method.responseType.type.typeName }}>
