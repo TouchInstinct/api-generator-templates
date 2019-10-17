@@ -6,7 +6,7 @@
 {% for value in values -%}
 /// - {{ utils.decapitalize(value.name) }}: {{ value.description }}
 {% endfor -%}
-enum {{ name }}: {{ enumutils.enumType(valuesTypes) }}, Codable, RawRepresentable, CaseIterable {
+public enum {{ name }}: {{ enumutils.enumType(valuesTypes) }}, Codable, RawRepresentable, CaseIterable {
     {% include 'blocks/enum/cases.twig' with { values: values } %}
 }
 {{ "\n" }}

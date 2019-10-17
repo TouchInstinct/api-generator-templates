@@ -3,11 +3,11 @@
 import LeadKit
 import Foundation
 
-enum ApiNumberFormat: NumberFormat {
+public enum ApiNumberFormat: NumberFormat {
     
     case decimal
 
-    var numberFormatter: NumberFormatter {
+    public var numberFormatter: NumberFormatter {
         let numberFormatter = NumberFormatter()
         numberFormatter.decimalSeparator = "."
         numberFormatter.minimumIntegerDigits = 1
@@ -17,17 +17,17 @@ enum ApiNumberFormat: NumberFormat {
     }
 }
 
-final class ApiNumberFormattingService: NumberFormattingService, Singleton {
+public final class ApiNumberFormattingService: NumberFormattingService, Singleton {
 
-    typealias NumberFormatType = ApiNumberFormat
+    public typealias NumberFormatType = ApiNumberFormat
 
-    let formatters = computedFormatters
+    public static let shared = ApiNumberFormattingService()
 
-    static let shared = ApiNumberFormattingService()
+    public let formatters = computedFormatters
 
     private init() {}
 
-    func decimalNumber(from string: String, format: ApiNumberFormat) -> NSDecimalNumber? {
+    public func decimalNumber(from string: String, format: ApiNumberFormat) -> NSDecimalNumber? {
         guard let number = number(from: string, format: format) else {
             return nil
         }
@@ -37,7 +37,7 @@ final class ApiNumberFormattingService: NumberFormattingService, Singleton {
 
 extension ApiNumberFormattingService {
 
-    static func decimalNumber(from string: String, format: ApiNumberFormat) -> NSDecimalNumber? {
+    public static func decimalNumber(from string: String, format: ApiNumberFormat) -> NSDecimalNumber? {
         return shared.decimalNumber(from: string, format: format)
     }
 }

@@ -6,28 +6,28 @@
 import LeadKit
 import SwiftDate
 
-enum ApiDateFormat: String, DateFormat {
+public enum ApiDateFormat: String, DateFormat {
 
     {% for format in dateFormats -%}
     case {{ format.name }} = "{{ format.format }}"
     {% endfor %}
-    var dateToStringFormat: DateToStringStyles {
+    public var dateToStringFormat: DateToStringStyles {
         return .custom(rawValue)
     }
 
-    var stringToDateFormat: StringToDateStyles {
+    public var stringToDateFormat: StringToDateStyles {
         return .custom(rawValue)
     }
 
 }
 
-final class ApiDateFormattingService: DateFormattingService, Singleton {
+public final class ApiDateFormattingService: DateFormattingService, Singleton {
 
-    typealias DateFormatType = ApiDateFormat
+    public typealias DateFormatType = ApiDateFormat
 
-    var currentRegion: Region = .local
+    public static let shared = ApiDateFormattingService()
 
-    static let shared = ApiDateFormattingService()
+    public var currentRegion: Region = .local
 
     private init() {}
 

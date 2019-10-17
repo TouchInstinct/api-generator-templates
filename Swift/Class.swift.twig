@@ -14,12 +14,12 @@ import SwiftDate
 import LeadKit
 
 /// {{ description }}
-{% if (not hasChilds) -%}final {% endif %}class {{ classType }}: {{ parentClassType }} {
+public {% if (not hasChilds) -%}final {% endif %}class {{ classType }}: {{ parentClassType }} {
     {% include 'blocks/class/coding-keys.twig' with { fields: fields } %}
     {% include 'blocks/class/fields.twig' with { fields: fields } %}
     // MARK: - Initializers
 
-    {% if (hasParent and (fields is empty)) %} override {% endif %}init({%- include 'blocks/class/init-parameters-fields.twig' with { fields: allFieldsOrdered } -%}) {
+    public {% if (hasParent and (fields is empty)) %} override {% endif %}init({%- include 'blocks/class/init-parameters-fields.twig' with { fields: allFieldsOrdered } -%}) {
         {%- include 'blocks/class/fields-initialization.twig' with { fields: fields } -%}
         {% if hasParent %}
         super.init({%- include 'blocks/class/fields-super-initialization.twig' with { fields: superclassesFields } -%})
@@ -27,7 +27,7 @@ import LeadKit
     }
 
     {% if hasParent or fields is not empty %}
-    required init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         {%- if fields is not empty %}
         {% include 'blocks/class/fields-initialization-from-decoder.twig' with { fields: fields} %}
         {%- endif -%}
@@ -37,7 +37,7 @@ import LeadKit
     }
     {% endif %}
 
-    {% if hasParent -%}override {% endif %}func encode(to encoder: Encoder) throws {
+    public {% if hasParent -%}override {% endif %}func encode(to encoder: Encoder) throws {
         {%- if fields is not empty %}
         {% include 'blocks/class/fields-encode-to-encoder.twig' with { fields: fields} %}
         {%- endif -%}
@@ -47,7 +47,7 @@ import LeadKit
     }
 
     {% if classAndFieldsHaveNotGenericsOrNonEqutableCollections -%}
-    func isEqual(to other: {{ classType }}?) -> Bool {
+    public func isEqual(to other: {{ classType }}?) -> Bool {
         {% if (fields is empty) and (not hasParent) %}
         return false
         {% else %}
@@ -64,7 +64,7 @@ import LeadKit
 {%- if (not hasChilds) and classAndFieldsHaveNotGenericsOrNonEqutableCollections -%}
 extension {{ type.baseTypeName }}: Equatable {
 
-    static func ==(lhs: {{ classType }}, rhs: {{ classType }}) -> Bool {
+    public static func ==(lhs: {{ classType }}, rhs: {{ classType }}) -> Bool {
         return lhs.isEqual(to: rhs)
     }
 }
@@ -74,7 +74,7 @@ extension {{ type.baseTypeName }}: Equatable {
 {%- if classAndFieldsHaveNotGenericsOrNonEqutableCollections -%}
 extension {{ type.baseTypeName }} {
 
-    static let new{{ type.baseTypeName }} = {{ type.baseTypeName }}({%- include 'blocks/class/fields-initialization-default-values.twig' with { fields: allFieldsOrdered } -%})
+    public static let new{{ type.baseTypeName }} = {{ type.baseTypeName }}({%- include 'blocks/class/fields-initialization-default-values.twig' with { fields: allFieldsOrdered } -%})
 
     {% include 'blocks/class/copy-declaration.twig' with { hasChilds: hasChilds, type: type, fields: allFieldsOrdered } %}
 }
