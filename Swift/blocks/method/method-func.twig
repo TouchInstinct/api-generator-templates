@@ -11,7 +11,7 @@
 {%- set funcName = utils.decapitalize(method.name) -%}
 
     /// {{ method.description }}
-    {{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
+    public {{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
                    requestEncoding: ParameterEncoding? = nil,
                    requestHeaders: HTTPHeaders? = nil,
                    additionalValidStatusCodes: Set<Int> = []) -> Single<{{ method.responseType.type.typeName }}> {
