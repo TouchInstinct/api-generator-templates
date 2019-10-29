@@ -28,7 +28,7 @@
     {%- elseif valueType.baseTypeName == "Color" -%}
         UIColor
     {%- else -%}
-        {{ valueType.baseTypeName }}
+        {{ valueType.typeName }}
     {%- endif -%}
 {% endmacro %}
 
