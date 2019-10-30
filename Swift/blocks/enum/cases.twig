@@ -1,12 +1,13 @@
 {%- import '../../macroses/common.utils.twig' as utils -%}
 {%- for value in values -%}
+{%- set enumValueName = utils.escapeIfNeeded(utils.enumValueName(value)) -%}
     {%- if valuesTypes == "STRING" %}
 {%- if value.name != value.value %}
-   case {{ utils.escapeIfNeeded(utils.enumValueName(value)) }} = "{{ value.value }}"
+   case {{ enumValueName }} = "{{ value.value }}"
 {%- else %}
-    case {{ utils.escapeIfNeeded(utils.enumValueName(value)) -}}
+    case {{ enumValueName -}}
 {% endif -%}
 {%- else %}
-    case {{ utils.escapeIfNeeded(utils.enumValueName(value)) }} = {{ value.value }}
+    case {{ enumValueName }} = {{ value.value }}
 {%- endif -%}
 {%- endfor -%}

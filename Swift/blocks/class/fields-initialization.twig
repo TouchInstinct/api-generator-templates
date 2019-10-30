@@ -1,4 +1,5 @@
 {%- import '../../macroses/common.utils.twig' as utils -%}
-        {%- for field in fields %}
-        self.{{ field.name }} = {{ field.name }}
+
+{%- for field in fields %}
+        self.{{ field.name }} = {{ utils.escapeIfNeeded(field.name) }}
 {%- endfor -%}

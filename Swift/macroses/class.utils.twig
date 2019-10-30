@@ -12,15 +12,17 @@
 
 {% macro classType(type) %}
     {%- import _self as self -%}
+    {%- import '../macroses/common.utils.twig' as utils -%}
 
-    {{- type.baseTypeName -}}{{- self.typeParameters(type.typeParameters, true) -}}
+    {{- utils.escapeIfNeeded(type.baseTypeName) -}}{{- self.typeParameters(type.typeParameters, true) -}}
 {% endmacro %}
 
 {% macro parentClassType(parent, parentTypeParameters) %}
     {%- import _self as self -%}
+    {%- import '../macroses/common.utils.twig' as utils -%}
 
     {%- if parent is not null %}
-        {{- parent.type.baseTypeName -}}
+        {{- utils.escapeIfNeeded(parent.type.baseTypeName) -}}
     {%- else -%}
         Codable
     {%- endif -%}
