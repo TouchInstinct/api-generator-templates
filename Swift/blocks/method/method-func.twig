@@ -14,7 +14,7 @@
     public {{ isStatic ? "static " : "" }}func {{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyTypeName }},{{ "\n                   " }}{%- endif -%}
                    requestEncoding: ParameterEncoding? = nil,
                    requestHeaders: HTTPHeaders? = nil,
-                   additionalValidStatusCodes: Set<Int> = []) -> Single<{{ method.responseType.type.typeName }}> {
+                   additionalValidStatusCodes: Set<Int> = []) -> Single<{{ utils.formatValueType(method.apiResponseType) }}> {
 
         {% if isStatic -%}
           return shared.{{ funcName }}({%- if hasBody -%}{{ bodyParamName }}: {{ bodyParamName }},{{ "\n                   " }}{%- endif -%}
