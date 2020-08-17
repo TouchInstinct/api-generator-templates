@@ -7,9 +7,14 @@ import java.lang.reflect.Type
 class DateFactory : JsonAdapter.Factory {
 
     override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
-        return when (type.typeName) {
-            DateTime::class.java.typeName -> DateTimeJsonAdapter(getPatterns(annotations))
-            LocalDate::class.java.typeName -> LocalDateJsonAdapter(getPatterns(annotations))
+        val typeName = when(type) {
+            is Class<*> -> type.canonicalName
+            else -> type.toString()
+        }
+
+        return when (typeName) {
+            DateTime::class.java.canonicalName -> DateTimeJsonAdapter(getPatterns(annotations))
+            LocalDate::class.java.canonicalName -> LocalDateJsonAdapter(getPatterns(annotations))
             else -> null
         }
     }
