@@ -6,7 +6,7 @@ import java.lang.reflect.Type
 
 class DateFactory : JsonAdapter.Factory {
 
-    override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
+    override fun create(type: Type, annotations: Set<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
         val typeName = when(type) {
             is Class<*> -> type.canonicalName
             else -> type.toString()
@@ -19,7 +19,7 @@ class DateFactory : JsonAdapter.Factory {
         }
     }
 
-    private fun getPatterns(annotations: MutableSet<out Annotation>) = annotations
+    private fun getPatterns(annotations: Set<out Annotation>) = annotations
             .map { it as? Format }
             .firstOrNull()
             ?.patterns
