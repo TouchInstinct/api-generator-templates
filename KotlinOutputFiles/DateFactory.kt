@@ -6,15 +6,20 @@ import java.lang.reflect.Type
 
 class DateFactory : JsonAdapter.Factory {
 
-    override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
-        return when (type.typeName) {
-            DateTime::class.java.typeName -> DateTimeJsonAdapter(getPatterns(annotations))
-            LocalDate::class.java.typeName -> LocalDateJsonAdapter(getPatterns(annotations))
+    override fun create(type: Type, annotations: Set<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
+        val typeName = when(type) {
+            is Class<*> -> type.canonicalName
+            else -> type.toString()
+        }
+
+        return when (typeName) {
+            DateTime::class.java.canonicalName -> DateTimeJsonAdapter(getPatterns(annotations))
+            LocalDate::class.java.canonicalName -> LocalDateJsonAdapter(getPatterns(annotations))
             else -> null
         }
     }
 
-    private fun getPatterns(annotations: MutableSet<out Annotation>) = annotations
+    private fun getPatterns(annotations: Set<out Annotation>) = annotations
             .map { it as? Format }
             .firstOrNull()
             ?.patterns
