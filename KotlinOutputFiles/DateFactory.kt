@@ -20,7 +20,7 @@ class DateFactory : JsonAdapter.Factory {
     }
 
     private fun getPatterns(annotations: Set<out Annotation>) = annotations
-            .map { it as? Format }
+            .mapNotNull { it as? Format }
             .firstOrNull()
             ?.patterns
             ?: throw IllegalArgumentException("You should use Format annotation for DateTime and LocalDate fields")
