@@ -2,11 +2,9 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonEncodingException
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
 import java.util.Arrays
 
-abstract class AbstractDateJsonAdapter<T>(
+abstract class AbstractCalendarJsonAdapter<T, FORMATTER>(
         private val formats: Array<String>
 ) : JsonAdapter<T>() {
 
@@ -14,7 +12,9 @@ abstract class AbstractDateJsonAdapter<T>(
         private const val CANT_FIND_ANY_FORMATTERS = "Can't find any DateTimeFormatter"
     }
 
-    private val formatters = formats.map(DateTimeFormat::forPattern)
+    private val formatters = formats.map(::createFormatter)
+
+    abstract fun createFormatter(pattern: String): FORMATTER
 
     override fun fromJson(reader: JsonReader): T? {
         val dateTimeString = reader.nextString()
@@ -37,8 +37,8 @@ abstract class AbstractDateJsonAdapter<T>(
         } ?: throw JsonEncodingException("Value can't be null")
     }
 
-    abstract fun fromJsonInner(value: String, dateTimeFormatter: DateTimeFormatter): T
+    abstract fun fromJsonInner(value: String, dateTimeFormatter: FORMATTER): T
 
-    abstract fun toJsonInner(value: T?, dateTimeFormatter: DateTimeFormatter) : String?
+    abstract fun toJsonInner(value: T?, dateTimeFormatter: FORMATTER): String?
 
 }

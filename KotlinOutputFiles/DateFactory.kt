@@ -1,7 +1,5 @@
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import org.joda.time.DateTime
-import org.joda.time.LocalDate
 import java.lang.reflect.Type
 
 class DateFactory : JsonAdapter.Factory {
@@ -12,11 +10,7 @@ class DateFactory : JsonAdapter.Factory {
             else -> type.toString()
         }
 
-        return when (typeName) {
-            DateTime::class.java.canonicalName -> DateTimeJsonAdapter(getPatterns(annotations))
-            LocalDate::class.java.canonicalName -> LocalDateJsonAdapter(getPatterns(annotations))
-            else -> null
-        }
+        return getCalendarAdapter(typeName, getPatterns(annotations))
     }
 
     private fun getPatterns(annotations: Set<out Annotation>) = annotations

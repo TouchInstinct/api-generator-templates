@@ -1,9 +1,9 @@
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormatter
 
-class DateTimeJsonAdapter(
+class DateTimeJodaTimeJsonAdapter(
         formats: Array<String>
-) : AbstractDateJsonAdapter<DateTime>(formats) {
+) : AbstractJodaTimeJsonAdapter<DateTime>(formats) {
 
     override fun fromJsonInner(value: String, dateTimeFormatter: DateTimeFormatter): DateTime {
         return DateTime.parse(value, dateTimeFormatter)
