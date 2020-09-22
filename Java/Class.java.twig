@@ -95,10 +95,10 @@ public class {% include 'blocks/class/classtype.twig' with { type: type } %} ext
     }
 {%- if (allFieldsOrdered is not empty) %}
 
-	//TODO: if TItems instance of arrayList then new ArrayList
-	{%- if (storageAttributes is not null) %}
-	@Ignore
-	{%- endif %}
+    //TODO: if TItems instance of arrayList then new ArrayList
+    {%- if (storageAttributes is not null) %}
+    @Ignore
+    {%- endif %}
     public {{ type.baseTypeName }}(
         {%- include 'blocks/class/init-parameters-fields.twig' with { fields: allFieldsOrdered } %}
     ) {
