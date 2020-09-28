@@ -5,8 +5,8 @@ import java.lang.reflect.Type
 class DateFactory : JsonAdapter.Factory {
 
     override fun create(type: Type, annotations: Set<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
-        val typeName = when(type) {
-            is Class<*> -> type.canonicalName
+        val typeName: String = when(type) {
+            is Class<*> -> type.canonicalName ?: type.toString()
             else -> type.toString()
         }
 
